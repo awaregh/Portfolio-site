@@ -25,7 +25,7 @@ export default function ContactSection() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
             <a
-              href="mailto:ahmed@example.com"
+              href="mailto:ahmedwaregh@gmail.com"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#3b82f6] text-white text-sm font-medium hover:bg-[#2563eb] transition-colors"
             >
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -37,7 +37,7 @@ export default function ContactSection() {
                   strokeLinejoin="round"
                 />
               </svg>
-              ahmed@example.com
+              ahmedwaregh@gmail.com
             </a>
             <a
               href="https://github.com/awaregh"
@@ -51,7 +51,7 @@ export default function ContactSection() {
               github.com/awaregh
             </a>
             <a
-              href="https://linkedin.com/in/ahmedwaregh"
+              href="https://linkedin.com/in/ahmedrswaregh"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#ffffff08] text-[#ededed] text-sm font-medium hover:bg-[#ffffff12] transition-colors border border-[rgba(255,255,255,0.08)]"

@@ -5,7 +5,7 @@ export default function Footer() {
         <span className="text-[#888888] text-sm">Ahmed Waregh</span>
         <div className="flex items-center gap-6">
           <a
-            href="mailto:ahmed@example.com"
+            href="mailto:ahmedwaregh@gmail.com"
             className="text-[#888888] hover:text-[#ededed] text-sm transition-colors"
           >
             Email
@@ -19,7 +19,7 @@ export default function Footer() {
             GitHub
           </a>
           <a
-            href="https://linkedin.com/in/ahmedwaregh"
+            href="https://linkedin.com/in/ahmedrswaregh"
             target="_blank"
             rel="noopener noreferrer"
             className="text-[#888888] hover:text-[#ededed] text-sm transition-colors"
