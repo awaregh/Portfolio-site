@@ -14,7 +14,7 @@ export default function Hero() {
         >
           {/* Availability badge */}
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#ffffff06] border border-[rgba(255,255,255,0.08)] text-xs text-[#888888] mb-8">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#3b82f6] animate-pulse" />
+            <span className="w-1.5 h-1.5 rounded-full bg-[#3b82f6] motion-safe:animate-pulse" />
             Available for senior & staff roles
           </div>
 
