@@ -1,10 +1,11 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import * as runtime from "react/jsx-runtime";
+import { evaluate } from "@mdx-js/mdx";
 import { getProjectBySlug, getAllProjectSlugs, ProjectFrontmatter } from "@/lib/projects";
-import { MDXRemote } from "next-mdx-remote/rsc";
 
 interface Props {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
@@ -13,7 +14,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props) {
-  const project = getProjectBySlug(params.slug);
+  const { slug } = await params;
+  const project = getProjectBySlug(slug);
   if (!project) return {};
   const fm = project.frontmatter as ProjectFrontmatter;
   return {
@@ -23,11 +25,17 @@ export async function generateMetadata({ params }: Props) {
 }
 
 export default async function ProjectPage({ params }: Props) {
-  const project = getProjectBySlug(params.slug);
+  const { slug } = await params;
+  const project = getProjectBySlug(slug);
   if (!project) notFound();
 
   const { frontmatter, content } = project;
   const fm = frontmatter as ProjectFrontmatter;
+
+  const { default: MDXContent } = await evaluate(content, {
+    ...runtime,
+    baseUrl: import.meta.url,
+  });
 
   return (
     <div className="min-h-screen pt-24 pb-24 px-6">
@@ -97,7 +105,7 @@ export default async function ProjectPage({ params }: Props) {
 
         {/* MDX Content */}
         <div className="prose">
-          <MDXRemote source={content} />
+          <MDXContent />
         </div>
       </div>
     </div>
