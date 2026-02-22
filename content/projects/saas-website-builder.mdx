@@ -1,0 +1,56 @@
+---
+title: SaaS Website Builder Infrastructure
+description: Backend platform powering dynamic site generation, versioned publishing, and multi-tenant content delivery at scale.
+tags: ["Node.js", "PostgreSQL", "S3", "CloudFront", "Docker", "BullMQ"]
+architecture: ["versioned rendering", "build workers", "storage pipeline", "multi-tenant"]
+---
+
+## Problem
+
+A SaaS website builder needs to turn user-created content — structured JSON from a visual editor — into live, production-grade websites, fast. The naive approach of rendering on-the-fly doesn't work at scale: too slow, too expensive, and too fragile when external dependencies fail. We needed a robust build pipeline that could publish thousands of sites, handle versioned deployments, support instant rollbacks, and serve content globally with low latency.
+
+## Architecture Overview
+
+The build pipeline is an **asynchronous distributed system** built around a job queue. When a user publishes their site, an event is emitted to a BullMQ queue. A pool of build workers picks up jobs, renders the site from the JSON content model into static HTML/CSS/JS assets, runs post-processing (image optimization, asset fingerprinting, CDN cache key generation), and uploads the result to S3 under a versioned key prefix. A publish record is written to PostgreSQL atomically with the S3 upload confirmation, and the CDN distribution is updated to point to the new version.
+
+Versioning was central to the design. Every publish produces an immutable snapshot stored at a content-addressed path in S3 (`/sites/{tenantId}/{version}/{assetPath}`). The active version pointer is a single DB row that can be updated atomically. This made rollback a one-row update followed by a CDN cache invalidation — no re-render required. Build workers are stateless containers that scale horizontally; they pull work, execute, and push results with no local state.
+
+## Technical Decisions
+
+- **Immutable versioned artifacts in S3** — treating each build output as immutable meant we could safely serve from CDN cache indefinitely for a given version. Cache busting became trivial: change the version pointer, not the content.
+- **Build worker isolation via Docker** — each build runs in a clean container with a read-only copy of the build runtime and tenant content injected as environment. This prevented cross-tenant content leakage and made the build environment reproducible and auditable.
+- **PostgreSQL as the single source of truth for routing** — the CDN origin server queries PostgreSQL (via a read replica) to resolve `{subdomain}.builder.io` → tenant → active version → S3 prefix. This kept routing logic centralized and made custom domain support straightforward.
+- **Image optimization as a build-time step** — resizing, format conversion (WebP), and compression happen during the build, not at serve time. This eliminated the need for an image proxy service and reduced CDN egress costs significantly.
+
+## Tradeoffs
+
+- **Build latency vs. simplicity** — an async build pipeline means there's a gap between "publish clicked" and "site live." For most users this was acceptable (5–15s), but we added an optimistic preview URL that served the in-progress build from S3 as soon as assets started uploading, reducing perceived latency.
+- **CDN cache invalidation cost at scale** — invalidating CloudFront caches costs per path per distribution. We batched invalidations and used wildcard patterns where possible, but this added complexity to the publish flow.
+- **PostgreSQL read replica lag** — routing queries hitting the read replica occasionally saw stale version pointers during high-write periods. We added a 1-second fallback to the primary for routing queries on cache miss to handle this edge case.
+
+## Challenges
+
+The most complex problem was **atomic publish**: ensuring that the CDN always serves a complete, consistent version of a site, never a partial state where some assets are the new version and some are the old. The solution was to upload all assets under the new version prefix before ever updating the active version pointer in the database. S3's eventual consistency model required careful ordering — we validated upload completeness by checking a manifest file written last.
+
+Handling **large sites** — thousands of pages, hundreds of assets — required rethinking the build worker model. Initially, a single worker handled an entire site build. At scale, we introduced **parallelized page rendering**: a coordinator job would fan out individual page jobs to a pool of workers, collect results, and run a final assembly step. This reduced build time for large sites from 90 seconds to under 12 seconds.
+
+## Reliability
+
+- **Build retries with exponential backoff** — failed builds are retried up to 3 times before being moved to a dead letter queue. Retry context includes the failure reason and stack trace, surfaced to the user as a detailed error message.
+- **Publish health checks** — after every publish, a synthetic monitor hits the live URL and verifies a content fingerprint. If the check fails, an automatic rollback to the previous version is triggered within 30 seconds.
+
+## Outcome
+
+The infrastructure handles over 50,000 site publishes per day across a multi-tenant user base. Median publish latency (publish click to live) is under 8 seconds for typical sites. The rollback capability has been used successfully to recover from content errors without any customer-impacting downtime.
+
+## Tech Stack
+
+- **Runtime:** Node.js 20, TypeScript
+- **Queue:** BullMQ (Redis)
+- **Database:** PostgreSQL 14
+- **Storage:** AWS S3
+- **CDN:** AWS CloudFront
+- **Build workers:** Docker on AWS ECS
+- **Image processing:** Sharp
+- **Infrastructure:** Terraform, AWS
+- **Observability:** Datadog, PagerDuty

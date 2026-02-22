@@ -1,0 +1,57 @@
+---
+title: AI Customer Support Platform
+description: Conversational AI backend with multi-tenant RAG pipeline, vector search, and real-time conversation orchestration.
+tags: ["Python", "PostgreSQL", "Pinecone", "OpenAI", "FastAPI", "Redis"]
+architecture: ["RAG pipeline", "vector search", "ingestion pipeline", "conversation orchestration"]
+---
+
+## Problem
+
+Businesses want AI support agents that actually know their product — not generic LLM responses, but answers grounded in their specific documentation, knowledge base, and historical ticket data. Building this reliably means solving two distinct hard problems: a **high-quality ingestion pipeline** that keeps the knowledge base current, and a **conversation engine** that retrieves the right context at runtime and produces accurate, citation-backed responses. All of this needed to be multi-tenant, with complete data isolation between customers.
+
+## Architecture Overview
+
+The system is built around a **Retrieval-Augmented Generation (RAG)** architecture. Each tenant has a dedicated namespace in Pinecone (vector database), ensuring complete isolation of their embedded knowledge. The ingestion pipeline processes source documents — PDFs, Markdown files, HTML pages, Zendesk exports — through a chunking, cleaning, and embedding stage, then upserts vectors into the tenant namespace with rich metadata (source URL, document ID, chunk index, last-updated timestamp) enabling source attribution.
+
+At conversation time, the orchestration layer takes the user's message, generates a query embedding, retrieves the top-K most semantically relevant chunks from the tenant's Pinecone namespace, and injects them as structured context into the system prompt. The LLM is instructed to answer only from provided context, cite sources, and return a structured confidence signal. Conversation history is stored in PostgreSQL and summarized into a rolling context window to maintain coherence over multi-turn sessions without hitting token limits.
+
+## Technical Decisions
+
+- **Pinecone namespaces for tenant isolation** — rather than running separate vector DB instances per tenant, namespaces provide logical isolation with a single operational footprint. Metadata filtering on namespace + tenant ID ensures zero cross-tenant retrieval.
+- **Hierarchical chunking strategy** — documents are chunked at the paragraph level, but with parent-document context included in the embedding metadata. At retrieval time, we fetch the chunk's surrounding context to provide the LLM with a more coherent passage rather than an isolated fragment.
+- **Async ingestion with deduplication** — ingestion jobs are queued in Redis and deduplicated by document hash. This means re-ingesting a source that hasn't changed is a no-op, avoiding unnecessary embedding API calls and keeping costs linear with actual content changes.
+- **FastAPI with async I/O** — the conversation endpoint is highly I/O-bound (vector DB query, LLM API call, DB reads/writes). FastAPI's async model allowed us to handle high concurrency on modest compute, with the orchestration layer composing async calls efficiently.
+
+## Tradeoffs
+
+- **Chunk size vs. retrieval precision** — smaller chunks increase retrieval precision but lose surrounding context; larger chunks preserve context but hurt precision. We landed on 512-token chunks with a 64-token overlap, tuned empirically against a golden dataset of support queries.
+- **Pinecone latency at high QPS** — at sustained high query load, Pinecone p99 latency climbed. We added a Redis cache for query embeddings and a short-TTL cache for frequently retrieved chunks (common questions tend to retrieve the same top-K chunks repeatedly).
+- **LLM hallucination on edge cases** — when retrieved context doesn't contain a good answer, naive prompting leads to hallucinated responses. We implemented a **retrieval confidence gate**: if the top retrieved chunk's similarity score is below a threshold, the response falls back to a graceful "I don't have information on that" rather than hallucinating.
+
+## Challenges
+
+The hardest engineering problem was **maintaining retrieval quality as knowledge bases grew**. Early in a tenant's lifecycle, with a small knowledge base, retrieval was highly precise. As customers ingested thousands of documents, retrieval quality degraded — unrelated documents started appearing in top-K results. The fix involved building a **re-ranking layer**: after the initial Pinecone vector retrieval, a cross-encoder model re-ranks the candidates for the specific query, dramatically improving precision on large knowledge bases.
+
+**Conversation coherence over long sessions** was the other major challenge. A naive approach of passing all history exceeds context windows quickly. We implemented a **rolling summary**: every 6 turns, the conversation history is summarized by GPT-3.5-turbo into a compact structured summary, which replaces the raw transcript in the context. The full transcript is preserved in PostgreSQL for audit and fine-tuning purposes, but only the summary travels with the live conversation.
+
+## Reliability
+
+- **Ingestion pipeline observability** — every ingestion job emits structured events: documents processed, chunks generated, embedding API latency, upsert success/failure. A per-tenant ingestion health dashboard allows support teams to identify customers with stale knowledge bases.
+- **Graceful degradation when Pinecone is unavailable** — the orchestration layer falls back to a PostgreSQL full-text search index as a lower-quality retrieval source, allowing conversations to continue (with reduced accuracy) during vector DB outages.
+
+## Outcome
+
+The platform reached production with 30+ enterprise tenants, processing over 200,000 support conversations per month. Answer accuracy (measured by a human evaluation sample) improved from 61% with generic GPT-4 to 84% with the full RAG pipeline. Average conversation response latency (vector retrieval + LLM inference) was consistently under 2.8 seconds.
+
+## Tech Stack
+
+- **Runtime:** Python 3.11
+- **Framework:** FastAPI (async)
+- **Vector DB:** Pinecone
+- **LLM:** OpenAI GPT-4, GPT-3.5-turbo, text-embedding-3-small
+- **Database:** PostgreSQL 15 (pgvector for fallback)
+- **Cache / Queue:** Redis
+- **Orchestration:** LangChain (customized)
+- **Re-ranking:** Sentence Transformers (cross-encoder)
+- **Infrastructure:** Docker, Kubernetes (EKS)
+- **Observability:** OpenTelemetry, Grafana

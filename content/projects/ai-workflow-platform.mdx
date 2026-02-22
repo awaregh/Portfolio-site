@@ -1,0 +1,56 @@
+---
+title: AI Workflow Automation Platform
+description: Multi-tenant SaaS platform orchestrating AI workflows, integrations, and automations at scale.
+tags: ["Node.js", "PostgreSQL", "Prisma", "BullMQ", "WebSockets", "OpenAI"]
+architecture: ["event-driven", "distributed workers", "multi-tenant", "workflow state machine"]
+---
+
+## Problem
+
+Building automations at scale means handling wildly unpredictable execution paths — user-defined steps that call external APIs, process AI model outputs, branch on conditions, and fan out into parallel sub-workflows. The challenge wasn't any single technical problem, but orchestrating all of this reliably across hundreds of concurrent tenant workspaces, with full observability and zero cross-tenant bleed.
+
+## Architecture Overview
+
+The core of the platform is a **workflow state machine** backed by PostgreSQL. Each workflow run is a row with a serialized state graph, current node pointer, and execution context. Workers pull jobs from BullMQ queues, advance the state machine one step at a time, and re-enqueue the next step. This made it trivial to implement retries, timeouts, and mid-run debugging — every state transition is a durable write.
+
+Tenant isolation was handled at the schema level: each tenant gets its own PostgreSQL schema, with a connection pool scoped per schema via a middleware layer. This allowed us to offer genuine data isolation without the operational overhead of per-tenant databases, while keeping query routing transparent to the application layer. All background workers were tenant-aware by construction.
+
+## Technical Decisions
+
+- **BullMQ over direct DB polling** — gave us rate limiting, priority queues, and concurrency controls per job type without building a custom scheduler. The Redis-backed queue also provided natural backpressure when worker capacity was saturated.
+- **Event sourcing for workflow history** — each step transition is an immutable event appended to a history table. This enabled full replay, time-travel debugging, and audit logging without additional infrastructure.
+- **WebSockets for real-time execution feedback** — rather than polling, clients subscribe to a workflow execution channel. The backend emits granular step events over WebSocket, giving users live step-by-step visibility during long-running workflows.
+- **OpenAI integration as a first-class step type** — rather than generic HTTP call steps, AI steps include prompt versioning, token metering per tenant, and structured output parsing with fallback handling.
+
+## Tradeoffs
+
+- **Schema-per-tenant adds migration complexity** — running schema migrations across thousands of tenant schemas required a custom migration runner that could apply changes in batches with rollback checkpoints. This was non-trivial to build but paid off in isolation guarantees.
+- **State machine serialization limits expressiveness** — complex branching workflows sometimes hit the limits of what we could represent cleanly in the state graph schema, requiring deliberate design constraints on what workflow shapes were supported.
+- **BullMQ at scale requires Redis memory management** — at high throughput, job data accumulates in Redis. We implemented a compaction strategy to move completed job metadata to cold storage after TTL expiration.
+
+## Challenges
+
+The hardest problem was **partial failure recovery**. A workflow step might complete its side effect (e.g., send an email) but fail before writing the state transition, causing a retry to re-execute an already-completed step. The solution was idempotency keys on every external call, combined with a step-level deduplication table. Each step could declare itself idempotent, and the executor would check before executing.
+
+Tenant onboarding latency was also a significant challenge early on. Creating a new schema, running migrations, and seeding default data could take 8–12 seconds — unacceptable for a self-serve sign-up flow. We solved this with **schema prewarming**: a background job maintains a pool of empty, fully-migrated schemas ready to be claimed on signup, reducing onboarding time to under 200ms.
+
+## Reliability
+
+- **Dead letter queues** for every job type, with alerting on DLQ depth and automated escalation to on-call for sustained failures.
+- **Per-tenant circuit breakers** to prevent a noisy tenant from saturating worker capacity, combined with fair-share scheduling to maintain SLO compliance across the tenant pool.
+
+## Outcome
+
+The platform reached production handling over 2 million workflow executions per month across 500+ active tenant workspaces. P99 step execution latency held under 800ms. The event-sourced history model became a key selling point for enterprise customers requiring full audit trails.
+
+## Tech Stack
+
+- **Runtime:** Node.js 20, TypeScript
+- **Framework:** Express.js
+- **ORM:** Prisma with multi-schema support
+- **Queue:** BullMQ (Redis)
+- **Database:** PostgreSQL 15 (schema-per-tenant)
+- **AI:** OpenAI API (GPT-4, embeddings)
+- **Real-time:** WebSockets via ws library
+- **Observability:** OpenTelemetry, Prometheus, Grafana
+- **Infrastructure:** Docker, Kubernetes (GKE)
