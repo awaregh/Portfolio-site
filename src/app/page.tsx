@@ -5,6 +5,7 @@ import FocusAreas from "@/components/FocusAreas";
 import AboutSection from "@/components/AboutSection";
 import TechStackSection from "@/components/TechStackSection";
 import ContactSection from "@/components/ContactSection";
+import Link from "next/link";
 import { projects } from "@/lib/projects";
 
 export default function Home() {
@@ -23,6 +24,29 @@ export default function Home() {
           {projects.map((project) => (
             <ProjectCard key={project.slug} {...project} />
           ))}
+        </div>
+        <div className="mt-10 text-center">
+          <Link
+            href="/projects"
+            className="inline-flex items-center gap-2 text-[#888888] hover:text-[#ededed] text-sm transition-colors group"
+          >
+            View all projects
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 14 14"
+              fill="none"
+              className="transition-transform group-hover:translate-x-0.5"
+            >
+              <path
+                d="M3 7H11M7 3L11 7L7 11"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </Link>
         </div>
       </section>
       <FocusAreas />
