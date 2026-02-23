@@ -1,5 +1,6 @@
 import Hero from "@/components/Hero";
 import RecruiterSummary from "@/components/RecruiterSummary";
+import PinnedRepos from "@/components/PinnedRepos";
 import ProjectCard from "@/components/ProjectCard";
 import FocusAreas from "@/components/FocusAreas";
 import AboutSection from "@/components/AboutSection";
@@ -13,6 +14,7 @@ export default function Home() {
     <>
       <Hero />
       <RecruiterSummary />
+      <PinnedRepos />
       <section id="projects" className="py-24 px-6 max-w-5xl mx-auto">
         <h2 className="text-2xl font-semibold tracking-tight text-[#ededed] mb-2">
           Selected Projects
