@@ -1,0 +1,177 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  EDITOR
+  VIEWER
+}
+
+enum TenantPlan {
+  FREE
+  PRO
+  ENTERPRISE
+}
+
+enum SiteVersionStatus {
+  BUILDING
+  READY
+  FAILED
+  SUPERSEDED
+}
+
+enum BuildJobStatus {
+  QUEUED
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+model Tenant {
+  id           String     @id @default(uuid())
+  name         String
+  slug         String     @unique
+  plan         TenantPlan @default(FREE)
+  customDomain String?    @unique @map("custom_domain")
+  settings     Json       @default("{}")
+  createdAt    DateTime   @default(now()) @map("created_at")
+  updatedAt    DateTime   @updatedAt @map("updated_at")
+
+  users     User[]
+  sites     Site[]
+  buildJobs BuildJob[]
+
+  @@map("tenants")
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  name         String
+  role         UserRole @default(EDITOR)
+  tenantId     String   @map("tenant_id")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  tenant       Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  siteVersions SiteVersion[]
+
+  @@index([tenantId])
+  @@map("users")
+}
+
+model Site {
+  id              String   @id @default(uuid())
+  tenantId        String   @map("tenant_id")
+  name            String
+  slug            String
+  subdomain       String   @unique
+  customDomain    String?  @unique @map("custom_domain")
+  settings        Json     @default("{}")
+  activeVersionId String?  @unique @map("active_version_id")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  tenant        Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  activeVersion SiteVersion? @relation("ActiveVersion", fields: [activeVersionId], references: [id])
+  versions      SiteVersion[] @relation("SiteVersions")
+  pages         Page[]
+  assets        Asset[]
+
+  @@unique([tenantId, slug])
+  @@index([tenantId])
+  @@index([subdomain])
+  @@map("sites")
+}
+
+model SiteVersion {
+  id             String            @id @default(uuid())
+  siteId         String            @map("site_id")
+  version        Int
+  s3Prefix       String            @map("s3_prefix")
+  manifestHash   String?           @map("manifest_hash")
+  status         SiteVersionStatus @default(BUILDING)
+  publishedAt    DateTime?         @map("published_at")
+  buildDurationMs Int?             @map("build_duration_ms")
+  pageCount      Int               @default(0) @map("page_count")
+  assetSize      BigInt            @default(0) @map("asset_size")
+  createdById    String            @map("created_by_id")
+  createdAt      DateTime          @default(now()) @map("created_at")
+
+  site      Site       @relation("SiteVersions", fields: [siteId], references: [id], onDelete: Cascade)
+  createdBy User       @relation(fields: [createdById], references: [id])
+  activeSite Site?     @relation("ActiveVersion")
+  buildJobs BuildJob[]
+  assets    Asset[]
+
+  @@unique([siteId, version])
+  @@index([siteId])
+  @@index([status])
+  @@map("site_versions")
+}
+
+model Page {
+  id             String   @id @default(uuid())
+  siteId         String   @map("site_id")
+  path           String
+  title          String
+  content        Json     @default("{}")
+  seoTitle       String?  @map("seo_title")
+  seoDescription String?  @map("seo_description")
+  isPublished    Boolean  @default(true) @map("is_published")
+  sortOrder      Int      @default(0) @map("sort_order")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  site Site @relation(fields: [siteId], references: [id], onDelete: Cascade)
+
+  @@unique([siteId, path])
+  @@index([siteId])
+  @@map("pages")
+}
+
+model BuildJob {
+  id            String         @id @default(uuid())
+  siteVersionId String         @map("site_version_id")
+  tenantId      String         @map("tenant_id")
+  status        BuildJobStatus @default(QUEUED)
+  startedAt     DateTime?      @map("started_at")
+  completedAt   DateTime?      @map("completed_at")
+  error         String?
+  workerId      String?        @map("worker_id")
+  retryCount    Int            @default(0) @map("retry_count")
+
+  siteVersion SiteVersion @relation(fields: [siteVersionId], references: [id], onDelete: Cascade)
+  tenant      Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([siteVersionId])
+  @@index([tenantId])
+  @@index([status])
+  @@map("build_jobs")
+}
+
+model Asset {
+  id          String   @id @default(uuid())
+  siteId      String   @map("site_id")
+  versionId   String   @map("version_id")
+  fileName    String   @map("file_name")
+  s3Key       String   @map("s3_key")
+  contentType String   @map("content_type")
+  size        BigInt   @default(0)
+  hash        String?
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  site    Site        @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  version SiteVersion @relation(fields: [versionId], references: [id], onDelete: Cascade)
+
+  @@index([siteId])
+  @@index([versionId])
+  @@index([s3Key])
+  @@map("assets")
+}

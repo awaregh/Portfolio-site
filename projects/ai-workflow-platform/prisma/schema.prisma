@@ -1,0 +1,160 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Plan {
+  FREE
+  PRO
+  ENTERPRISE
+}
+
+enum UserRole {
+  ADMIN
+  MEMBER
+}
+
+enum RunStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum StepStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+  SKIPPED
+}
+
+enum StepType {
+  AI_COMPLETION
+  HTTP_REQUEST
+  CONDITION
+  TRANSFORM
+  DELAY
+  WEBHOOK
+}
+
+model Tenant {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  apiKey    String   @unique @default(cuid())
+  plan      Plan     @default(FREE)
+  settings  Json     @default("{}")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users     User[]
+  workflows Workflow[]
+  runs      WorkflowRun[]
+
+  @@index([slug])
+  @@index([apiKey])
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  role         UserRole @default(MEMBER)
+  tenantId     String
+  createdAt    DateTime @default(now())
+
+  tenant    Tenant     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  workflows Workflow[] @relation("CreatedBy")
+
+  @@index([tenantId])
+  @@index([email])
+}
+
+model Workflow {
+  id          String   @id @default(cuid())
+  name        String
+  description String   @default("")
+  tenantId    String
+  definition  Json
+  version     Int      @default(1)
+  isActive    Boolean  @default(true)
+  createdById String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tenant    Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  createdBy User          @relation("CreatedBy", fields: [createdById], references: [id])
+  runs      WorkflowRun[]
+
+  @@index([tenantId])
+  @@index([tenantId, isActive])
+  @@index([createdById])
+}
+
+model WorkflowRun {
+  id            String    @id @default(cuid())
+  workflowId    String
+  tenantId      String
+  status        RunStatus @default(PENDING)
+  input         Json      @default("{}")
+  output        Json?
+  startedAt     DateTime?
+  completedAt   DateTime?
+  error         String?
+  currentStepId String?
+
+  workflow Workflow       @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  tenant   Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  steps    WorkflowStep[]
+  events   WorkflowEvent[]
+
+  @@index([workflowId])
+  @@index([tenantId])
+  @@index([tenantId, status])
+  @@index([workflowId, status])
+}
+
+model WorkflowStep {
+  id             String     @id @default(cuid())
+  runId          String
+  stepKey        String
+  type           StepType
+  status         StepStatus @default(PENDING)
+  input          Json?
+  output         Json?
+  error          String?
+  startedAt      DateTime?
+  completedAt    DateTime?
+  retryCount     Int        @default(0)
+  idempotencyKey String     @unique
+
+  run    WorkflowRun     @relation(fields: [runId], references: [id], onDelete: Cascade)
+  events WorkflowEvent[]
+
+  @@index([runId])
+  @@index([runId, stepKey])
+  @@index([idempotencyKey])
+}
+
+model WorkflowEvent {
+  id        String   @id @default(cuid())
+  runId     String
+  stepId    String?
+  type      String
+  payload   Json     @default("{}")
+  timestamp DateTime @default(now())
+
+  run  WorkflowRun   @relation(fields: [runId], references: [id], onDelete: Cascade)
+  step WorkflowStep? @relation(fields: [stepId], references: [id], onDelete: SetNull)
+
+  @@index([runId])
+  @@index([runId, type])
+  @@index([stepId])
+}

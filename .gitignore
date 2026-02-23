@@ -5,3 +5,12 @@ node_modules/
 dist/
 *.log
 .DS_Store
+package-lock.json
+
+# Project build artifacts
+projects/*/node_modules/
+projects/*/dist/
+projects/*/.env
+projects/*/__pycache__/
+projects/*/.venv/
+projects/*/*.egg-info/
