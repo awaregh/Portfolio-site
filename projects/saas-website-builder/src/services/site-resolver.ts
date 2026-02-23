@@ -66,6 +66,7 @@ export async function resolveSite(
       activeVersionId: site.activeVersion.id,
       s3Prefix: site.activeVersion.s3Prefix,
       version: site.activeVersion.version,
+      expiresAt: 0,
     };
 
     setCachedSite(subdomain, siteInfo);

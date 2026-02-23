@@ -18,7 +18,7 @@ export function errorHandler(
     };
 
     if (err instanceof ValidationError && err.details) {
-      body.error = { ...body.error, details: err.details };
+      body.error = { ...(body.error as Record<string, unknown>), details: err.details };
     }
 
     if (err.statusCode >= 500) {

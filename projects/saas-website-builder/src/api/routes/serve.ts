@@ -11,7 +11,7 @@ router.get("/:subdomain/*", handleServe);
 
 async function handleServe(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
-    const { subdomain } = req.params;
+    const subdomain = String(req.params.subdomain);
     const rawPath = (req.params[0] || "").replace(/^\/+/, "");
     const pagePath = rawPath === "" ? "/" : `/${rawPath}`;
 

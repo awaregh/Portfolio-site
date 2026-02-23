@@ -1,6 +1,7 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { z } from "zod";
 import { prisma } from "../../lib/prisma";
+import { Prisma } from "@prisma/client";
 import { authenticate } from "../middleware/auth";
 import {
   NotFoundError,
@@ -135,7 +136,7 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
         name: data.name,
         slug: data.slug,
         subdomain: data.subdomain,
-        settings: data.settings ?? {},
+        settings: (data.settings ?? {}) as Prisma.InputJsonValue,
       },
     });
 
@@ -149,7 +150,7 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
 router.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
   try {
     const site = await prisma.site.findFirst({
-      where: { id: req.params.id, tenantId: tenantId(req) },
+      where: { id: req.params.id as string, tenantId: tenantId(req) },
       include: {
         activeVersion: true,
         _count: { select: { pages: true, versions: true } },
@@ -157,7 +158,7 @@ router.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
     });
 
     if (!site) {
-      throw new NotFoundError("Site", req.params.id);
+      throw new NotFoundError("Site", req.params.id as string);
     }
 
     res.json({ data: site });
@@ -171,17 +172,17 @@ router.put("/:id", async (req: Request, res: Response, next: NextFunction) => {
     const data = updateSiteSchema.parse(req.body);
 
     const site = await prisma.site.findFirst({
-      where: { id: req.params.id, tenantId: tenantId(req) },
+      where: { id: req.params.id as string, tenantId: tenantId(req) },
     });
     if (!site) {
-      throw new NotFoundError("Site", req.params.id);
+      throw new NotFoundError("Site", req.params.id as string);
     }
 
     const updated = await prisma.site.update({
-      where: { id: req.params.id },
+      where: { id: req.params.id as string },
       data: {
         ...(data.name && { name: data.name }),
-        ...(data.settings && { settings: data.settings }),
+        ...(data.settings && { settings: data.settings as Prisma.InputJsonValue }),
         ...(data.customDomain !== undefined && { customDomain: data.customDomain }),
       },
     });
@@ -195,15 +196,15 @@ router.put("/:id", async (req: Request, res: Response, next: NextFunction) => {
 router.delete("/:id", async (req: Request, res: Response, next: NextFunction) => {
   try {
     const site = await prisma.site.findFirst({
-      where: { id: req.params.id, tenantId: tenantId(req) },
+      where: { id: req.params.id as string, tenantId: tenantId(req) },
     });
     if (!site) {
-      throw new NotFoundError("Site", req.params.id);
+      throw new NotFoundError("Site", req.params.id as string);
     }
 
-    await prisma.site.delete({ where: { id: req.params.id } });
+    await prisma.site.delete({ where: { id: req.params.id as string } });
 
-    logger.info({ siteId: req.params.id }, "Site deleted");
+    logger.info({ siteId: req.params.id as string }, "Site deleted");
     res.status(204).send();
   } catch (error) {
     next(error);
@@ -215,21 +216,21 @@ router.delete("/:id", async (req: Request, res: Response, next: NextFunction) =>
 router.post("/:id/publish", async (req: Request, res: Response, next: NextFunction) => {
   try {
     const site = await prisma.site.findFirst({
-      where: { id: req.params.id, tenantId: tenantId(req) },
+      where: { id: req.params.id as string, tenantId: tenantId(req) },
       include: { _count: { select: { pages: true } } },
     });
     if (!site) {
-      throw new NotFoundError("Site", req.params.id);
+      throw new NotFoundError("Site", req.params.id as string);
     }
 
     if (site._count.pages === 0) {
       throw new ValidationError("Cannot publish a site with no pages");
     }
 
-    const result = await triggerBuild(req.params.id, req.auth!.userId);
+    const result = await triggerBuild(req.params.id as string, req.auth!.userId);
 
     logger.info(
-      { siteId: req.params.id, versionId: result.siteVersion.id },
+      { siteId: req.params.id as string, versionId: result.siteVersion.id },
       "Build triggered"
     );
 
@@ -250,16 +251,16 @@ router.post("/:id/rollback", async (req: Request, res: Response, next: NextFunct
     const { versionId } = rollbackSchema.parse(req.body);
 
     const site = await prisma.site.findFirst({
-      where: { id: req.params.id, tenantId: tenantId(req) },
+      where: { id: req.params.id as string, tenantId: tenantId(req) },
     });
     if (!site) {
-      throw new NotFoundError("Site", req.params.id);
+      throw new NotFoundError("Site", req.params.id as string);
     }
 
-    const updated = await rollback(req.params.id, versionId);
+    const updated = await rollback(req.params.id as string, versionId);
 
     logger.info(
-      { siteId: req.params.id, versionId },
+      { siteId: req.params.id as string, versionId },
       "Site rolled back"
     );
 
@@ -280,15 +281,15 @@ router.get("/:id/versions", async (req: Request, res: Response, next: NextFuncti
     const skip = (page - 1) * limit;
 
     const site = await prisma.site.findFirst({
-      where: { id: req.params.id, tenantId: tenantId(req) },
+      where: { id: req.params.id as string, tenantId: tenantId(req) },
     });
     if (!site) {
-      throw new NotFoundError("Site", req.params.id);
+      throw new NotFoundError("Site", req.params.id as string);
     }
 
     const [versions, total] = await Promise.all([
       prisma.siteVersion.findMany({
-        where: { siteId: req.params.id },
+        where: { siteId: req.params.id as string },
         include: {
           createdBy: { select: { id: true, name: true, email: true } },
           buildJobs: {
@@ -301,7 +302,7 @@ router.get("/:id/versions", async (req: Request, res: Response, next: NextFuncti
         skip,
         take: limit,
       }),
-      prisma.siteVersion.count({ where: { siteId: req.params.id } }),
+      prisma.siteVersion.count({ where: { siteId: req.params.id as string } }),
     ]);
 
     res.json({
@@ -325,20 +326,20 @@ router.get("/:id/pages", async (req: Request, res: Response, next: NextFunction)
     const skip = (page - 1) * limit;
 
     const site = await prisma.site.findFirst({
-      where: { id: req.params.id, tenantId: tenantId(req) },
+      where: { id: req.params.id as string, tenantId: tenantId(req) },
     });
     if (!site) {
-      throw new NotFoundError("Site", req.params.id);
+      throw new NotFoundError("Site", req.params.id as string);
     }
 
     const [pages, total] = await Promise.all([
       prisma.page.findMany({
-        where: { siteId: req.params.id },
+        where: { siteId: req.params.id as string },
         orderBy: { sortOrder: "asc" },
         skip,
         take: limit,
       }),
-      prisma.page.count({ where: { siteId: req.params.id } }),
+      prisma.page.count({ where: { siteId: req.params.id as string } }),
     ]);
 
     res.json({
@@ -355,14 +356,14 @@ router.post("/:id/pages", async (req: Request, res: Response, next: NextFunction
     const data = createPageSchema.parse(req.body);
 
     const site = await prisma.site.findFirst({
-      where: { id: req.params.id, tenantId: tenantId(req) },
+      where: { id: req.params.id as string, tenantId: tenantId(req) },
     });
     if (!site) {
-      throw new NotFoundError("Site", req.params.id);
+      throw new NotFoundError("Site", req.params.id as string);
     }
 
     const existingPage = await prisma.page.findUnique({
-      where: { siteId_path: { siteId: req.params.id, path: data.path } },
+      where: { siteId_path: { siteId: req.params.id as string, path: data.path } },
     });
     if (existingPage) {
       throw new ConflictError(`A page with path '${data.path}' already exists`);
@@ -370,10 +371,10 @@ router.post("/:id/pages", async (req: Request, res: Response, next: NextFunction
 
     const pageRecord = await prisma.page.create({
       data: {
-        siteId: req.params.id,
+        siteId: req.params.id as string,
         path: data.path,
         title: data.title,
-        content: data.content,
+        content: data.content as Prisma.InputJsonValue,
         seoTitle: data.seoTitle,
         seoDescription: data.seoDescription,
         isPublished: data.isPublished,
@@ -394,22 +395,27 @@ router.put(
       const data = updatePageSchema.parse(req.body);
 
       const site = await prisma.site.findFirst({
-        where: { id: req.params.id, tenantId: tenantId(req) },
+        where: { id: req.params.id as string, tenantId: tenantId(req) },
       });
       if (!site) {
-        throw new NotFoundError("Site", req.params.id);
+        throw new NotFoundError("Site", req.params.id as string);
       }
 
       const page = await prisma.page.findFirst({
-        where: { id: req.params.pageId, siteId: req.params.id },
+        where: { id: req.params.pageId as string, siteId: req.params.id as string },
       });
       if (!page) {
-        throw new NotFoundError("Page", req.params.pageId);
+        throw new NotFoundError("Page", req.params.pageId as string);
       }
 
+      const { content, ...rest } = data;
+
       const updated = await prisma.page.update({
-        where: { id: req.params.pageId },
-        data,
+        where: { id: req.params.pageId as string },
+        data: {
+          ...rest,
+          ...(content && { content: content as Prisma.InputJsonValue }),
+        },
       });
 
       res.json({ data: updated });
@@ -424,20 +430,20 @@ router.delete(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const site = await prisma.site.findFirst({
-        where: { id: req.params.id, tenantId: tenantId(req) },
+        where: { id: req.params.id as string, tenantId: tenantId(req) },
       });
       if (!site) {
-        throw new NotFoundError("Site", req.params.id);
+        throw new NotFoundError("Site", req.params.id as string);
       }
 
       const page = await prisma.page.findFirst({
-        where: { id: req.params.pageId, siteId: req.params.id },
+        where: { id: req.params.pageId as string, siteId: req.params.id as string },
       });
       if (!page) {
-        throw new NotFoundError("Page", req.params.pageId);
+        throw new NotFoundError("Page", req.params.pageId as string);
       }
 
-      await prisma.page.delete({ where: { id: req.params.pageId } });
+      await prisma.page.delete({ where: { id: req.params.pageId as string } });
 
       res.status(204).send();
     } catch (error) {
