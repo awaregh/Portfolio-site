@@ -16,6 +16,8 @@ export interface Project {
   tags: string[];
   architecture: string[];
   repoPath?: string;
+  githubUrl?: string;
+  quickStart?: string;
 }
 
 export const projects: Project[] = [
@@ -32,6 +34,8 @@ export const projects: Project[] = [
       "state machine",
     ],
     repoPath: "projects/ai-workflow-platform",
+    githubUrl: "https://github.com/awaregh/Portfolio-site/tree/main/projects/ai-workflow-platform",
+    quickStart: "git clone https://github.com/awaregh/Portfolio-site.git && cd Portfolio-site/projects/ai-workflow-platform && docker compose up -d",
   },
   {
     slug: "saas-website-builder",
@@ -46,6 +50,8 @@ export const projects: Project[] = [
       "multi-tenant",
     ],
     repoPath: "projects/saas-website-builder",
+    githubUrl: "https://github.com/awaregh/Portfolio-site/tree/main/projects/saas-website-builder",
+    quickStart: "git clone https://github.com/awaregh/Portfolio-site.git && cd Portfolio-site/projects/saas-website-builder && docker compose up -d",
   },
   {
     slug: "ai-customer-support",
@@ -60,6 +66,8 @@ export const projects: Project[] = [
       "conversation orchestration",
     ],
     repoPath: "projects/ai-customer-support",
+    githubUrl: "https://github.com/awaregh/Portfolio-site/tree/main/projects/ai-customer-support",
+    quickStart: "git clone https://github.com/awaregh/Portfolio-site.git && cd Portfolio-site/projects/ai-customer-support && docker compose up -d",
   },
 ];
 
