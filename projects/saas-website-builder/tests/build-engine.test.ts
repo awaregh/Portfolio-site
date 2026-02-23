@@ -1,3 +1,4 @@
+import { createHash } from "crypto";
 import { describe, it, expect } from "vitest";
 import { renderPage } from "../src/services/renderer";
 import { PageContent, SiteSettings } from "../src/types";
@@ -426,8 +427,6 @@ describe("Version Management", () => {
 
 describe("Build Manifest", () => {
   it("creates valid manifest structure", () => {
-    const { createHash } = require("crypto");
-
     const pages = [
       { path: "/", s3Key: "sites/t/s/1/index.html", title: "Home", hash: "abc123", size: 5000 },
       { path: "/about", s3Key: "sites/t/s/1/about/index.html", title: "About", hash: "def456", size: 3000 },

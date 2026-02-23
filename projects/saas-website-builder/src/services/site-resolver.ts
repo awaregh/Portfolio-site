@@ -72,15 +72,16 @@ export async function resolveSite(
   }
 
   // 2. Determine S3 key from path
-  const isAsset = /\.\w+$/.test(path);
+  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+  const isAsset = /\.\w+$/.test(normalizedPath);
   let s3Key: string;
 
   if (isAsset) {
     // Static asset: /css/style.css → {prefix}/css/style.css
-    s3Key = `${siteInfo.s3Prefix}${path}`;
+    s3Key = `${siteInfo.s3Prefix}${normalizedPath}`;
   } else {
     // Page: / → {prefix}/index.html, /about → {prefix}/about/index.html
-    const pageFile = path === "/" ? "index.html" : `${path.slice(1)}/index.html`;
+    const pageFile = normalizedPath === "/" ? "index.html" : `${normalizedPath.slice(1)}/index.html`;
     s3Key = `${siteInfo.s3Prefix}/${pageFile}`;
   }
 
