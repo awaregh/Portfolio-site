@@ -16,7 +16,7 @@ const app = express();
 
 // ── Global Middleware ─────────────────────────────────────────────────
 
-app.use(helmet({ contentSecurityPolicy: false }));
+app.use(helmet());
 app.use(cors());
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
@@ -38,7 +38,7 @@ const apiLimiter = rateLimit({
 
 // ── Routes ───────────────────────────────────────────────────────────
 
-app.use("/api/health", healthRoutes);
+app.use("/api/health", apiLimiter, healthRoutes);
 app.use("/api/auth", apiLimiter, authRoutes);
 app.use("/api/sites", apiLimiter, sitesRoutes);
 app.use("/serve", serveRoutes);
