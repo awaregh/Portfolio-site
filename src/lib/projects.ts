@@ -15,6 +15,7 @@ export interface Project {
   description: string;
   tags: string[];
   architecture: string[];
+  repoPath?: string;
 }
 
 export const projects: Project[] = [
@@ -30,6 +31,7 @@ export const projects: Project[] = [
       "multi-tenant",
       "state machine",
     ],
+    repoPath: "projects/ai-workflow-platform",
   },
   {
     slug: "saas-website-builder",
@@ -43,6 +45,7 @@ export const projects: Project[] = [
       "storage pipeline",
       "multi-tenant",
     ],
+    repoPath: "projects/saas-website-builder",
   },
   {
     slug: "ai-customer-support",
@@ -56,6 +59,7 @@ export const projects: Project[] = [
       "ingestion pipeline",
       "conversation orchestration",
     ],
+    repoPath: "projects/ai-customer-support",
   },
 ];
 
