@@ -80,7 +80,8 @@ A production-grade backend platform for dynamic site generation, versioned publi
 
 ```bash
 # Clone and enter the project
-cd projects/saas-website-builder
+git clone https://github.com/awaregh/saas-website-builder.git
+cd saas-website-builder
 
 # Install dependencies
 npm install

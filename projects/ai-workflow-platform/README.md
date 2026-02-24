@@ -120,7 +120,8 @@ A multi-tenant SaaS backend for orchestrating AI-powered workflows at scale. Bui
 
 ```bash
 # Clone and install
-cd projects/ai-workflow-platform
+git clone https://github.com/awaregh/ai-workflow-platform.git
+cd ai-workflow-platform
 npm install
 
 # Configure environment

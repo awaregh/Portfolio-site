@@ -1,0 +1,85 @@
+name: Pin repositories to GitHub profile
+
+# Requires a Personal Access Token stored as the secret PIN_REPOS_TOKEN.
+# Create a classic PAT at https://github.com/settings/tokens with the
+# `public_repo` scope, then add it to this repo under:
+#   Settings → Secrets and variables → Actions → New repository secret
+#   Name: PIN_REPOS_TOKEN
+
+on:
+  workflow_dispatch:
+
+jobs:
+  pin:
+    runs-on: ubuntu-latest
+    permissions: {}
+    steps:
+      - name: Pin repos to @awaregh profile
+        env:
+          GH_TOKEN: ${{ secrets.PIN_REPOS_TOKEN }}
+        run: |
+          node << 'EOF'
+          const https = require('https');
+
+          function graphql(query) {
+            return new Promise((resolve, reject) => {
+              const body = JSON.stringify({ query });
+              const req = https.request(
+                {
+                  hostname: 'api.github.com',
+                  path: '/graphql',
+                  method: 'POST',
+                  headers: {
+                    Authorization: `Bearer ${process.env.GH_TOKEN}`,
+                    'Content-Type': 'application/json',
+                    'Content-Length': Buffer.byteLength(body),
+                    'User-Agent': 'pin-repos-workflow',
+                  },
+                },
+                (res) => {
+                  let data = '';
+                  res.on('data', (chunk) => (data += chunk));
+                  res.on('end', () => {
+                    const json = JSON.parse(data);
+                    if (json.errors) reject(new Error(JSON.stringify(json.errors)));
+                    else resolve(json);
+                  });
+                }
+              );
+              req.on('error', reject);
+              req.write(body);
+              req.end();
+            });
+          }
+
+          async function main() {
+            // Fetch the node IDs for the three project repos
+            const { data } = await graphql(`{
+              r1: repository(owner: "awaregh", name: "ai-workflow-platform") { id }
+              r2: repository(owner: "awaregh", name: "saas-website-builder") { id }
+              r3: repository(owner: "awaregh", name: "ai-customer-support") { id }
+            }`);
+
+            const ids = [data.r1.id, data.r2.id, data.r3.id];
+            console.log('Repository node IDs:', ids);
+
+            // Pin all three repos to the profile
+            const result = await graphql(`mutation {
+              updateUserPinnedItems(input: {
+                pinnedItemIds: [${ids.map((id) => `"${id}"`).join(', ')}]
+              }) {
+                pinnedItems {
+                  totalCount
+                }
+              }
+            }`);
+
+            const count = result.data?.updateUserPinnedItems?.pinnedItems?.totalCount;
+            console.log(`✓ Pinned ${count} repositories to github.com/awaregh`);
+          }
+
+          main().catch((err) => {
+            console.error(err);
+            process.exit(1);
+          });
+          EOF

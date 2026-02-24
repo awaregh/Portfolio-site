@@ -92,7 +92,8 @@ All queries are scoped by `tenant_id` for strict multi-tenant isolation.
 
 ```bash
 # Clone and navigate
-cd projects/ai-customer-support
+git clone https://github.com/awaregh/ai-customer-support.git
+cd ai-customer-support
 
 # Copy environment config
 cp .env.example .env
@@ -112,6 +113,10 @@ docker compose exec app alembic upgrade head
 
 ```bash
 # Prerequisites: Python 3.11+, PostgreSQL 16 with pgvector, Redis 7
+
+# Clone and navigate
+git clone https://github.com/awaregh/ai-customer-support.git
+cd ai-customer-support
 
 # Install dependencies
 pip install -r requirements.txt
