@@ -1,0 +1,56 @@
+---
+title: Real-Time Data Processing Pipeline
+description: High-throughput streaming pipeline for ingesting, transforming, and routing millions of events per second with exactly-once delivery guarantees.
+tags: ["Go", "Kafka", "ClickHouse", "Kubernetes", "gRPC"]
+architecture: ["stream processing", "exactly-once delivery", "schema registry", "backpressure control"]
+---
+
+## Problem
+
+A platform generating tens of millions of user events per day needed a reliable streaming backbone: ingest raw events from dozens of producer services, apply per-tenant transformations and enrichment, and fan-out to multiple downstream consumers — analytics, alerting, billing, and a data warehouse — with **exactly-once delivery** guarantees and full schema evolution support. Dropped or duplicated events meant incorrect billing and broken dashboards.
+
+## Architecture Overview
+
+The pipeline is built around **Apache Kafka** as the durable log. Producers publish schema-versioned events to per-topic Kafka partitions. A fleet of **Go-based consumer workers** (compiled to lean binaries, deployed as Kubernetes Deployments) pull from Kafka, validate and enrich each event against a **Schema Registry**, apply tenant-specific transformation rules stored in a config service, and route enriched records to sink connectors: **ClickHouse** (analytics), a downstream Kafka topic (alerting), and a billing aggregation service via gRPC.
+
+Backpressure is handled explicitly: consumer workers maintain in-flight counters and pause partition consumption when the sink is slow, preventing unbounded memory growth under load spikes. Offsets are committed only after all sinks acknowledge the write, ensuring exactly-once semantics end-to-end.
+
+## Technical Decisions
+
+- **Go for consumer workers** — the pipeline is CPU-light and I/O-heavy. Go's goroutine model and low GC overhead made it easy to run hundreds of concurrent partition consumers per node with predictable latency.
+- **Schema Registry with Avro** — every event type is registered with a versioned Avro schema. Consumers deserialize against the registered schema version embedded in the message header, allowing producers to evolve schemas without breaking downstream consumers.
+- **ClickHouse for analytics sink** — ClickHouse's columnar storage and native batch-insert API handle our write throughput (>2M inserts/sec at peak) while enabling sub-second analytical queries over billions of rows.
+- **Kubernetes horizontal scaling** — consumer worker Deployments scale on Kafka consumer-group lag metrics via KEDA (Kubernetes Event-Driven Autoscaling), keeping lag near zero without over-provisioning.
+
+## Tradeoffs
+
+- **Exactly-once vs. throughput** — achieving exactly-once required idempotent Kafka producers (enabled) and transactional offset commits. This added ~8% latency overhead compared to at-least-once, which was acceptable given the billing accuracy requirement.
+- **Schema evolution constraints** — Avro's backward compatibility rules restrict certain schema changes (e.g., renaming fields requires a deprecation cycle). This introduced schema governance overhead but prevented silent data corruption from schema drift.
+- **ClickHouse insert batching** — ClickHouse performs best with large batch inserts (thousands of rows). We buffer events in memory for up to 500ms or 5,000 records before flushing, introducing a small delay in analytics freshness.
+
+## Challenges
+
+**Handling partition rebalances without message loss** was the hardest operational challenge. During a rolling deployment, Kafka triggers a consumer-group rebalance. If in-flight messages haven't been fully sunk when partitions are revoked, the next consumer restarts processing from the last committed offset — causing duplicates. We implemented a **rebalance listener** that blocks partition revocation until all in-flight messages complete their sink writes, eliminating duplicates at the cost of a brief processing pause during deploys.
+
+**Schema Registry availability** was a single point of failure for deserialization. We added a local schema cache (LRU, TTL 10 minutes) in each consumer worker so that a Schema Registry outage doesn't halt processing — workers continue with cached schemas.
+
+## Reliability
+
+- **Dead-letter queue (DLQ)** — events that fail transformation or schema validation after three retries are routed to a DLQ topic with structured error metadata. A separate process monitors DLQ depth and alerts on-call when it exceeds threshold.
+- **Consumer lag alerting** — per-topic, per-partition consumer lag is exported as Prometheus metrics. Lag > 30 seconds triggers a PagerDuty alert; lag > 5 minutes triggers auto-scaling.
+- **Replay support** — since all events are retained in Kafka for 7 days, any downstream sink can be replayed from a specific offset, allowing recovery from data corruption or new sink onboarding without re-generating events.
+
+## Outcome
+
+The pipeline processes **40M+ events per day** at peak, with end-to-end latency (producer publish to ClickHouse availability) of under **350ms at p95**. Consumer lag has stayed below 10 seconds even during traffic spikes 6× above baseline. The billing sink has achieved zero duplicate charges since launch.
+
+## Tech Stack
+
+- **Runtime:** Go 1.22
+- **Message broker:** Apache Kafka (MSK)
+- **Schema management:** Confluent Schema Registry (Avro)
+- **Analytics sink:** ClickHouse
+- **Inter-service communication:** gRPC
+- **Autoscaling:** KEDA on Kubernetes (EKS)
+- **Observability:** Prometheus, Grafana, OpenTelemetry
+- **Infrastructure:** Docker, Kubernetes, Terraform

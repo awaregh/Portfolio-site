@@ -6,6 +6,7 @@ import FocusAreas from "@/components/FocusAreas";
 import AboutSection from "@/components/AboutSection";
 import TechStackSection from "@/components/TechStackSection";
 import ContactSection from "@/components/ContactSection";
+import ResearchSection from "@/components/ResearchSection";
 import Link from "next/link";
 import { projects } from "@/lib/projects";
 
@@ -52,6 +53,7 @@ export default function Home() {
         </div>
       </section>
       <FocusAreas />
+      <ResearchSection />
       <AboutSection />
       <TechStackSection />
       <ContactSection />
