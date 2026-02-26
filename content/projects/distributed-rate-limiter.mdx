@@ -1,0 +1,60 @@
+---
+title: Distributed Rate Limiter Service
+description: Token-bucket and sliding-window rate limiting deployed as a standalone service with multi-region consistency, gRPC API, and sidecar-ready design.
+tags: ["Go", "Redis", "gRPC", "Prometheus", "Docker"]
+architecture: ["token bucket", "sliding window", "multi-region sync", "sidecar-ready"]
+---
+
+## Problem
+
+A growing API platform needed request-rate enforcement across dozens of microservices — per-user, per-tenant, and per-endpoint — with sub-millisecond overhead. Each service was reimplementing rate limiting ad hoc: different algorithms, inconsistent limits, and no shared state, so a burst from one service didn't count against the shared quota of another. The result was quota bypass, inconsistent user experience, and no single place to tune or audit rate limit policies.
+
+## Architecture Overview
+
+The rate limiter is deployed as a **standalone Go service** exposing a **gRPC API** (`Check` and `Decrement` RPCs). Upstream services call it synchronously before processing a request; the entire round-trip adds under 1ms in the same availability zone.
+
+State is stored in **Redis** using two algorithms selectable per-policy:
+
+- **Token bucket** — suited for burst-tolerant APIs. Implemented using a Lua script that atomically reads the current bucket level, refills tokens proportional to elapsed time, and decrements. Lua atomicity eliminates race conditions without distributed locks.
+- **Sliding window log** — suited for strict per-second enforcement. Uses a Redis sorted set where members are request timestamps; expired entries are pruned on each check. Provides precise rate calculation without the boundary artifacts of fixed windows.
+
+Policies (limit, window, algorithm, burst allowance) are stored in a **config store** (Postgres-backed, cached in-process) and resolved by a composite key: `tenant_id + user_id + endpoint`. Policy changes propagate to all service instances within 30 seconds via a Redis pub/sub invalidation channel.
+
+## Technical Decisions
+
+- **gRPC over HTTP** — gRPC's binary framing and HTTP/2 multiplexing reduced per-request overhead compared to REST. Proto-defined request/response schemas also make policy debugging straightforward.
+- **Lua scripts for atomicity** — Redis Lua scripts execute atomically on the server, avoiding the classic TOCTOU (check-then-act) race condition in distributed rate limiting without requiring MULTI/EXEC transactions, which have higher overhead.
+- **Sidecar-compatible design** — the service binary is stateless and reads policy from environment variables, making it trivially deployable as a Kubernetes sidecar or Envoy ext_authz backend for services that can't tolerate the network hop to a remote instance.
+- **Multi-region Redis replication** — for global APIs, we replicate rate limit state to regional Redis replicas with async writes to the primary. Reads are local (fast); writes propagate within ~100ms. Slightly relaxed consistency is acceptable — a burst of a few extra requests during replication lag doesn't violate SLAs.
+
+## Tradeoffs
+
+- **Synchronous call in request path** — calling the rate limiter synchronously adds latency to every request. We mitigated this with connection pooling, low-latency Redis placement in the same AZ, and a configurable **fail-open** mode: if the rate limiter is unreachable, requests are allowed through rather than failing, preserving availability over strict enforcement during outages.
+- **Redis as SPOF** — Redis is a dependency for every checked request. We deploy Redis with Sentinel-managed failover (< 30s RTO) and maintain a local in-process fallback using an approximate token bucket with a short TTL to handle brief Redis unavailability without fail-open mode.
+- **Sliding window memory usage** — the sliding window log approach stores one sorted set entry per request per window. At high request rates (thousands/sec per key), this accumulates significant memory. We cap the log size and fall back to token bucket semantics when the cap is hit.
+
+## Challenges
+
+**Clock skew between services** caused token refill drift when services were deployed across hosts with unsynchronized clocks. Even small skew (~50ms) led to systematic under- or over-counting of tokens for high-frequency callers. We solved this by using **Redis server time** (via `TIME` command) as the authoritative timestamp in all Lua scripts, eliminating client-side clock dependence entirely.
+
+**Policy hot-reload without dropped requests** required careful cache invalidation design. A naive approach — clearing the in-process policy cache on pub/sub notification — caused a thundering herd of Postgres reads when many instances received the invalidation simultaneously. We replaced it with a **jittered re-fetch**: each instance waits a random 0–5 second delay before re-fetching from Postgres, spreading the load across the invalidation window.
+
+## Reliability
+
+- **Prometheus metrics** — every `Check` call emits `rate_limiter_allowed_total`, `rate_limiter_rejected_total`, and `rate_limiter_check_duration_seconds` labeled by tenant, endpoint, and algorithm. Rejection spikes alert the on-call team before customers notice quota abuse.
+- **Admin gRPC API** — a separate admin RPC allows support engineers to inspect current bucket state, temporarily raise limits for a specific tenant, or force-flush a limit during an incident, without a deployment.
+- **Integration test suite** — the test suite spins up a real Redis instance (via testcontainers) and verifies limit enforcement under concurrent load using Go's `testing/synctest` tooling.
+
+## Outcome
+
+Deployed as a shared service across 18 microservices. Average `Check` RPC latency: **0.4ms p50, 1.1ms p99** in the same AZ. Rate limit bypass incidents dropped from ~3/month (with ad hoc per-service implementations) to zero. Policy changes (new limits, new endpoints) that previously required service deployments now propagate in under 30 seconds with no downtime.
+
+## Tech Stack
+
+- **Runtime:** Go 1.22
+- **State store:** Redis 7 (with Sentinel)
+- **API:** gRPC (Protocol Buffers)
+- **Policy store:** PostgreSQL
+- **Observability:** Prometheus, Grafana
+- **Infrastructure:** Docker, Kubernetes, Helm
+- **Testing:** testcontainers-go

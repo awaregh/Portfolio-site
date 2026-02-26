@@ -71,4 +71,42 @@ export const projects: Project[] = [
     quickStart:
       "git clone https://github.com/awaregh/ai-customer-support.git && cd ai-customer-support && docker compose up -d",
   },
+  {
+    slug: "real-time-data-pipeline",
+    title: "Real-Time Data Processing Pipeline",
+    description:
+      "High-throughput streaming pipeline for ingesting, transforming, and routing millions of events per second.",
+    tags: ["Go", "Kafka", "ClickHouse", "Kubernetes", "gRPC"],
+    architecture: [
+      "stream processing",
+      "exactly-once delivery",
+      "schema registry",
+      "backpressure control",
+    ],
+    language: "Go",
+    languageColor: "#00ADD8",
+    repoPath: "projects/real-time-data-pipeline",
+    githubUrl: "https://github.com/awaregh/real-time-data-pipeline",
+    quickStart:
+      "git clone https://github.com/awaregh/real-time-data-pipeline.git && cd real-time-data-pipeline && docker compose up -d",
+  },
+  {
+    slug: "distributed-rate-limiter",
+    title: "Distributed Rate Limiter Service",
+    description:
+      "Token-bucket and sliding-window rate limiting as a standalone service, supporting multi-region consistency.",
+    tags: ["Go", "Redis", "gRPC", "Prometheus", "Docker"],
+    architecture: [
+      "token bucket",
+      "sliding window",
+      "multi-region sync",
+      "sidecar-ready",
+    ],
+    language: "Go",
+    languageColor: "#00ADD8",
+    repoPath: "projects/distributed-rate-limiter",
+    githubUrl: "https://github.com/awaregh/distributed-rate-limiter",
+    quickStart:
+      "git clone https://github.com/awaregh/distributed-rate-limiter.git && cd distributed-rate-limiter && docker compose up -d",
+  },
 ];

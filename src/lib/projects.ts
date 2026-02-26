@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
+import { projects } from "./projectsData";
 export type { Project } from "./projectsData";
 export { projects } from "./projectsData";
 

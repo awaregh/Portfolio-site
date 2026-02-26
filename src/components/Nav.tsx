@@ -34,6 +34,7 @@ export default function Nav() {
         <nav className="flex items-center gap-6">
           {[
             { label: "Work", href: "/projects" },
+            { label: "Research", href: "/research" },
             { label: "About", href: "#about" },
             { label: "Contact", href: "#contact" },
           ].map(({ label, href }) => (
