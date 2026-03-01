@@ -3,6 +3,7 @@ import Link from "next/link";
 import * as runtime from "react/jsx-runtime";
 import { evaluate } from "@mdx-js/mdx";
 import { getProjectBySlug, getAllProjectSlugs, ProjectFrontmatter, projects } from "@/lib/projects";
+import ProjectDemoEmbed from "@/components/ProjectDemoEmbed";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -143,6 +144,9 @@ export default async function ProjectPage({ params }: Props) {
         <div className="prose">
           <MDXContent />
         </div>
+
+        {/* Demo embed */}
+        <ProjectDemoEmbed slug={slug} />
 
         {/* Quick Start */}
         {currentProject?.quickStart && (
