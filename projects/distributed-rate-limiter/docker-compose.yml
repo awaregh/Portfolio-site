@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    command: redis-server --save "" --appendonly no
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ratelimiter
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: ratelimiter
+    ports:
+      - "5432:5432"
+
+  rate-limiter:
+    build: .
+    depends_on: [redis, postgres]
+    ports:
+      - "50052:50052"
+      - "9090:9090"
+    environment:
+      REDIS_ADDR: redis:6379
+      POSTGRES_DSN: postgres://ratelimiter:password@postgres:5432/ratelimiter?sslmode=disable
+      GRPC_PORT: "50052"
+      PROMETHEUS_PORT: "9090"
+      FAIL_OPEN: "true"
+    restart: unless-stopped

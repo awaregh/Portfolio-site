@@ -11,7 +11,10 @@ export interface Project {
   repoPath?: string;
   githubUrl?: string;
   quickStart?: string;
+  demoUrl?: string;
 }
+
+const REPO_BASE = "https://github.com/awaregh/Portfolio-site/tree/main/projects";
 
 export const projects: Project[] = [
   {
@@ -29,9 +32,10 @@ export const projects: Project[] = [
     language: "TypeScript",
     languageColor: "#3178c6",
     repoPath: "projects/ai-workflow-platform",
-    githubUrl: "https://github.com/awaregh/ai-workflow-platform",
+    githubUrl: `${REPO_BASE}/ai-workflow-platform`,
     quickStart:
-      "git clone https://github.com/awaregh/ai-workflow-platform.git && cd ai-workflow-platform && docker compose up -d",
+      "git clone https://github.com/awaregh/Portfolio-site.git && cd Portfolio-site/projects/ai-workflow-platform && docker compose up -d",
+    demoUrl: "/projects/ai-workflow-platform/demo",
   },
   {
     slug: "saas-website-builder",
@@ -48,9 +52,10 @@ export const projects: Project[] = [
     language: "TypeScript",
     languageColor: "#3178c6",
     repoPath: "projects/saas-website-builder",
-    githubUrl: "https://github.com/awaregh/saas-website-builder",
+    githubUrl: `${REPO_BASE}/saas-website-builder`,
     quickStart:
-      "git clone https://github.com/awaregh/saas-website-builder.git && cd saas-website-builder && docker compose up -d",
+      "git clone https://github.com/awaregh/Portfolio-site.git && cd Portfolio-site/projects/saas-website-builder && docker compose up -d",
+    demoUrl: "/projects/saas-website-builder/demo",
   },
   {
     slug: "ai-customer-support",
@@ -67,9 +72,10 @@ export const projects: Project[] = [
     language: "Python",
     languageColor: "#3572A5",
     repoPath: "projects/ai-customer-support",
-    githubUrl: "https://github.com/awaregh/ai-customer-support",
+    githubUrl: `${REPO_BASE}/ai-customer-support`,
     quickStart:
-      "git clone https://github.com/awaregh/ai-customer-support.git && cd ai-customer-support && docker compose up -d",
+      "git clone https://github.com/awaregh/Portfolio-site.git && cd Portfolio-site/projects/ai-customer-support && docker compose up -d",
+    demoUrl: "/projects/ai-customer-support/demo",
   },
   {
     slug: "real-time-data-pipeline",
@@ -86,9 +92,10 @@ export const projects: Project[] = [
     language: "Go",
     languageColor: "#00ADD8",
     repoPath: "projects/real-time-data-pipeline",
-    githubUrl: "https://github.com/awaregh/real-time-data-pipeline",
+    githubUrl: `${REPO_BASE}/real-time-data-pipeline`,
     quickStart:
-      "git clone https://github.com/awaregh/real-time-data-pipeline.git && cd real-time-data-pipeline && docker compose up -d",
+      "git clone https://github.com/awaregh/Portfolio-site.git && cd Portfolio-site/projects/real-time-data-pipeline && docker compose up -d",
+    demoUrl: "/projects/real-time-data-pipeline/demo",
   },
   {
     slug: "distributed-rate-limiter",
@@ -105,8 +112,9 @@ export const projects: Project[] = [
     language: "Go",
     languageColor: "#00ADD8",
     repoPath: "projects/distributed-rate-limiter",
-    githubUrl: "https://github.com/awaregh/distributed-rate-limiter",
+    githubUrl: `${REPO_BASE}/distributed-rate-limiter`,
     quickStart:
-      "git clone https://github.com/awaregh/distributed-rate-limiter.git && cd distributed-rate-limiter && docker compose up -d",
+      "git clone https://github.com/awaregh/Portfolio-site.git && cd Portfolio-site/projects/distributed-rate-limiter && docker compose up -d",
+    demoUrl: "/projects/distributed-rate-limiter/demo",
   },
 ];

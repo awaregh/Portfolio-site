@@ -11,6 +11,7 @@ interface ProjectCardProps {
   repoPath?: string;
   githubUrl?: string;
   quickStart?: string;
+  demoUrl?: string;
 }
 
 export default function ProjectCard({
@@ -20,6 +21,7 @@ export default function ProjectCard({
   slug,
   architecture,
   githubUrl,
+  demoUrl,
 }: ProjectCardProps) {
   return (
     <div className="rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#111111] p-6 sm:p-7 hover:border-[rgba(255,255,255,0.14)] hover:bg-[#141414] transition-all duration-200 group">
@@ -107,6 +109,17 @@ export default function ProjectCard({
           </svg>
           Read Case Study
         </Link>
+        {demoUrl && (
+          <Link
+            href={demoUrl}
+            className="inline-flex items-center gap-1.5 text-xs text-[#3b82f6] hover:text-[#60a5fa] transition-colors font-medium"
+          >
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            Live Demo
+          </Link>
+        )}
         {githubUrl && (
           <a
             href={githubUrl}
