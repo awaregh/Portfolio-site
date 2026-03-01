@@ -1,0 +1,24 @@
+services:
+  fraud-api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - ARTIFACTS_DIR=/app/artifacts
+      - LOG_LEVEL=INFO
+    volumes:
+      - ../artifacts:/app/artifacts
+    restart: unless-stopped
+
+  train:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    command: python -m src.models.train
+    environment:
+      - ARTIFACTS_DIR=/app/artifacts
+    volumes:
+      - ../artifacts:/app/artifacts
+      - ../data:/app/data

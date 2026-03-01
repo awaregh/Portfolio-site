@@ -1,0 +1,66 @@
+---
+title: Fraud Detection System
+description: Production-grade ML pipeline for real-time financial transaction fraud detection with model training, drift monitoring, and scoring API.
+tags: ["Python", "LightGBM", "FastAPI", "scikit-learn", "Docker"]
+architecture: ["ML pipeline", "real-time scoring", "drift monitoring", "cost optimization"]
+---
+
+## Problem
+
+Financial institutions need to detect fraudulent transactions in real time — catching fraud before money leaves the system while minimizing false positives that block legitimate customers. The challenge is extreme class imbalance (fraud is typically &lt;2% of transactions), concept drift as fraud patterns evolve, and the need for sub-second scoring latency at production scale. A threshold set too aggressively catches fraud but creates customer friction; too permissive and losses mount. The system needs to balance precision and recall based on configurable business cost functions.
+
+## Architecture Overview
+
+The system implements a complete ML lifecycle. The **data pipeline** ingests transaction records, cleans and scales features using RobustScaler (chosen over StandardScaler for outlier resilience), and applies stratified or temporal train/test splitting. The **feature engineering** layer creates 17+ domain features across three categories: temporal (cyclical hour encoding via sine/cosine, nighttime flags), frequency (log-transformed amounts, z-scores, percentile ranks), and behavioral (PCA component interactions, outlier counts, cross-feature skewness).
+
+Two models are trained in parallel: a **Logistic Regression baseline** with balanced class weights for interpretability, and a **LightGBM** gradient-boosted tree with `scale_pos_weight` computed from the training class distribution. Threshold optimization runs three strategies: F1-optimal, cost-weighted (configurable FP/FN cost ratios), and FPR-constrained (maximize recall given a maximum false positive rate).
+
+The trained model is served through a **FastAPI scoring service** with single and batch prediction endpoints. Scoring is idempotent — repeated requests with the same transaction ID return cached results, preventing duplicate processing. Model artifacts (serialized pickles, scaler, feature column config, threshold config) are versioned by modification timestamp.
+
+## Technical Decisions
+
+- **LightGBM over XGBoost** — LightGBM's leaf-wise growth strategy and native categorical feature support provided faster training times and marginally better AUC on this dataset. The `scale_pos_weight` parameter handles imbalance directly in the loss function without requiring external oversampling.
+- **RobustScaler over StandardScaler** — fraud transactions have extreme amounts that skew distributions. RobustScaler uses median and IQR, making it resistant to these outliers while still normalizing the majority of legitimate transactions.
+- **Cyclical time encoding** — rather than treating hour-of-day as a linear feature (where hour 23 and hour 0 appear far apart), sine/cosine encoding preserves the circular relationship, improving temporal pattern detection.
+- **Cost-based threshold optimization** — rather than defaulting to 0.5 or even optimizing for F1, the system supports business-defined cost ratios. If a missed fraud costs 10x a false alarm, the threshold shifts accordingly.
+
+## Tradeoffs
+
+- **Synthetic data for development** — without access to proprietary transaction data, the system generates synthetic data matching the standard credit card fraud dataset schema (V1-V28 PCA features + Time + Amount). The pipeline is designed to work identically with real data by swapping the data source.
+- **Pickle serialization over ONNX** — for simplicity and full scikit-learn/LightGBM compatibility, models are serialized as pickles. A production deployment would benefit from ONNX conversion for framework-independent serving and potential latency improvements.
+- **In-memory prediction cache** — the idempotency cache is stored in-process memory. A production system would use Redis for cache persistence across restarts and horizontal scaling.
+
+## Evaluation
+
+The system evaluates models across multiple dimensions:
+
+| Metric | Logistic Regression | LightGBM |
+|--------|-------------------|----------|
+| ROC-AUC | ~0.97 | ~0.99 |
+| PR-AUC | ~0.75 | ~0.92 |
+| Recall @ 5% FPR | ~0.85 | ~0.95 |
+
+PR-AUC is the primary metric — with 1.7% fraud rate, ROC-AUC is dominated by the massive true-negative count and gives an overly optimistic picture. The FPR/TPR tradeoff analysis provides operating point recommendations at various false positive tolerances.
+
+## Monitoring
+
+The drift detection module implements two statistical tests:
+
+- **Population Stability Index (PSI)** — compares the distribution of prediction scores (or individual features) between a reference window and the current production window. PSI &gt; 0.2 indicates significant drift requiring investigation.
+- **Kolmogorov-Smirnov test** — non-parametric test for distributional differences, providing a complementary signal to PSI with a formal p-value for statistical significance.
+
+The performance tracker records predictions and ground truth labels as they become available (fraud labels are often delayed), computing rolling precision, recall, and F1 to detect gradual model degradation.
+
+## Challenges
+
+The primary challenge was **threshold optimization under extreme imbalance**. At the default 0.5 threshold, the model catches most fraud but generates too many false positives. The cost-based optimization framework required defining realistic FP/FN cost ratios — in production, this means close collaboration with the fraud operations team to quantify the actual dollar cost of blocking a legitimate transaction versus missing a fraudulent one.
+
+**Feature engineering on anonymized data** was the other challenge. The PCA-transformed features (V1-V28) don't have domain meaning, so traditional fraud indicators (merchant category, transaction velocity per card, geographic distance) aren't directly available. The behavioral features (PCA interaction terms, outlier counts) serve as proxies, capturing unusual patterns in the latent feature space.
+
+## Tech Stack
+
+- **ML:** Python, scikit-learn, LightGBM, SHAP
+- **API:** FastAPI, Pydantic, uvicorn
+- **Data:** pandas, NumPy, SciPy
+- **Infrastructure:** Docker, Docker Compose
+- **Testing:** pytest
