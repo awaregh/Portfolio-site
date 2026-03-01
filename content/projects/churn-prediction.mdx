@@ -1,0 +1,91 @@
+---
+title: Customer Churn Prediction System
+description: End-to-end ML system predicting SaaS customer churn with gradient boosting, survival analysis, uplift modeling, SHAP explainability, and a production FastAPI scoring service.
+tags: ["Python", "XGBoost", "LightGBM", "FastAPI", "SHAP", "lifelines", "scikit-learn", "Docker"]
+architecture: ["gradient boosting", "survival analysis", "uplift modeling", "drift monitoring"]
+---
+
+## Problem
+
+Customer churn is one of the most costly challenges in SaaS — acquiring a new customer is typically 5–7× more expensive than retaining an existing one. The business question isn't simply "who is likely to leave?" but rather: **who will leave, when, what's driving them out, and which customers will actually respond to a retention intervention?** Answering all four questions in a single, production-deployable system requires combining predictive modeling, survival analysis, causal inference, and real-time explainability.
+
+## Architecture Overview
+
+The system is structured as a layered ML pipeline exposed through a FastAPI microservice:
+
+```
+Raw Data → Preprocessing → Feature Engineering
+       → Model Training (LR / XGBoost / CoxPH / Uplift)
+       → Evaluation (ROC-AUC, calibration, lift, ROI sim)
+       → SHAP Explainability → FastAPI Scoring API → Drift Monitoring
+```
+
+A **synthetic SaaS dataset** (5,000 customers, configurable) is generated with realistic churn signals: tenure, monthly spend, support ticket volume, login frequency, feature adoption score, contract type, and industry. Time-based splits simulate production conditions — models are trained on earlier cohorts and evaluated on a held-out 3-month window.
+
+## Models
+
+**Logistic Regression** serves as the interpretable baseline with class-weighted training to handle the natural 15–25 % churn imbalance. It provides a fast sanity check and a transparent linear decision boundary.
+
+**XGBoost and LightGBM** are the primary scoring models. Both use `scale_pos_weight` for imbalance, early stopping on a validation set, and are serialised with `joblib` for the API. XGBoost consistently achieves ROC-AUC > 0.82 on the holdout window.
+
+**Cox Proportional Hazards** (via lifelines) reframes churn as a survival problem. Instead of a binary "will they churn?", CoxPH outputs a per-customer survival curve answering "how long until they churn?" — enabling prioritisation by time-to-risk rather than raw probability.
+
+**T-Learner Uplift Model** separates customers who would churn with or without intervention from those who respond to retention outreach. Two independent LightGBM models estimate E[Y|T=1, X] and E[Y|T=0, X]; the difference is the Conditional Average Treatment Effect (CATE). Targeting the highest-CATE customers maximises intervention ROI.
+
+## Technical Decisions
+
+- **Time-based splits over random K-fold** — shuffling training and test data leaks future information into historical models, inflating metrics. A strict chronological split reflects real production conditions where the model is trained on the past and deployed to score the future.
+- **SHAP TreeExplainer for gradient boosting** — SHAP provides consistent, theoretically grounded attribution (Shapley values) rather than permutation importance or Gini-based feature importance. Local explanations (per customer) are returned by the API so downstream teams understand each prediction.
+- **CoxPH over accelerated failure time** — CoxPH makes no parametric assumption about the baseline hazard, making it more robust to the irregular churn patterns common in SaaS (high early churn, low mid-tenure churn, increasing long-tenure churn at contract renewal).
+- **PSI + KS drift detection** — Population Stability Index (PSI) measures distributional shift in prediction scores; the Kolmogorov-Smirnov test detects feature-level drift. Together they give an early warning system for model degradation without requiring labelled production data.
+
+## Evaluation
+
+| Model | ROC-AUC | Brier Score | Notes |
+|-------|---------|-------------|-------|
+| Logistic Regression | ~0.78 | ~0.15 | Interpretable baseline |
+| XGBoost | ~0.84 | ~0.12 | Best binary classifier |
+| LightGBM | ~0.83 | ~0.12 | Faster training, similar performance |
+| Cox PH | ~0.79 C-index | — | Time-to-event survival model |
+| T-Learner Uplift | — | — | CATE estimation for targeting |
+
+The **retention impact simulation** converts model outputs into business terms: given a set of churn probabilities, an intervention cost, an assumed CLV, and a conversion rate, it calculates expected ROI and the optimal customer segment to target (maximising net value saved).
+
+## Challenges
+
+The main ML engineering challenge was **preventing leakage** in a system with multiple model types. The survival model uses tenure as both a feature and the time dimension — naive feature engineering that computes rates per observation date can inadvertently incorporate future tenure information. The solution was to compute all derived features strictly from data available at the observation timestamp.
+
+**Uplift model evaluation** is hard without a true A/B test. We used synthetic treatment assignment with a known ground-truth effect, allowing AUUC (Area Under the Uplift Curve) to be computed and verified against the true CATE. In production, this would be replaced with a randomised holdout.
+
+## API
+
+The FastAPI service exposes three endpoints behind API-key authentication:
+
+- `POST /api/v1/predict` — real-time single-customer scoring; returns churn probability, risk tier (low / medium / high), top-5 SHAP risk factors, and CoxPH median survival estimate
+- `POST /api/v1/predict/batch` — batch scoring for up to hundreds of customers per request
+- `GET /api/v1/model/info` — model version and training metadata
+
+On first launch with no saved model, the service automatically trains on the synthetic dataset — useful for demos and CI. In production, a pre-trained model artefact is loaded from `MODEL_PATH`.
+
+A standalone `batch_score.py` script handles large offline CSV scoring jobs without spinning up the API server.
+
+## Monitoring
+
+Drift monitoring runs as a scheduled check comparing a reference scoring window (training distribution) against a current window:
+
+- **PSI > 0.2** on prediction scores triggers a model retraining alert
+- **KS statistic** flags individual features with significant distributional shift, helping attribute *why* the model is drifting (e.g., a new customer acquisition channel changing the tenure distribution)
+
+## Outcome
+
+The system is designed as a production-ready template for any SaaS retention team. The synthetic dataset produces realistic churn distributions; swapping in real customer data requires only updating the ingestion step. The API, monitoring, and explainability layers are immediately deployable with no structural changes.
+
+## Tech Stack
+
+- **Runtime:** Python 3.11
+- **ML:** scikit-learn, XGBoost, LightGBM, lifelines
+- **Explainability:** SHAP
+- **API:** FastAPI, uvicorn, pydantic v2
+- **Monitoring:** scipy (KS test), custom PSI
+- **Packaging:** Docker, docker-compose
+- **Testing:** pytest, httpx
