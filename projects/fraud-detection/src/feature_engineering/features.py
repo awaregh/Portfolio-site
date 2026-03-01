@@ -31,7 +31,8 @@ def add_temporal_features(df: pd.DataFrame, time_col: str = "Time") -> pd.DataFr
     df["hour_cos"] = np.cos(2 * np.pi * df["hour_of_day"] / 24)
 
     # Time since midnight (normalized)
-    df["time_normalized"] = df[time_col] / df[time_col].max() if df[time_col].max() > 0 else 0
+    max_time = df[time_col].max()
+    df["time_normalized"] = df[time_col] / max_time if max_time > 0 else 0.0
 
     # Is nighttime transaction (between 11pm and 6am)
     df["is_night"] = ((df["hour_of_day"] >= 23) | (df["hour_of_day"] <= 6)).astype(int)

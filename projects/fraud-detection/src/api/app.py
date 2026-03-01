@@ -40,7 +40,10 @@ _feature_columns: list[str] = []
 _threshold: float = 0.5
 _model_version: str = "unknown"
 _start_time: float = time.time()
+# In-memory cache for idempotent scoring. In production, replace with Redis
+# for persistence across restarts and horizontal scaling.
 _prediction_cache: dict[str, FraudPrediction] = {}
+_CACHE_MAX_SIZE = 10000
 
 ARTIFACTS_DIR = Path(os.getenv("ARTIFACTS_DIR", "artifacts"))
 
@@ -84,10 +87,17 @@ def load_model_artifacts(artifacts_dir: Path | None = None) -> None:
     logger.info("Model artifacts loaded (version=%s, threshold=%.4f)", _model_version, _threshold)
 
 
-@app.on_event("startup")
-async def startup_event() -> None:
-    """Load model artifacts on application startup."""
+from contextlib import asynccontextmanager
+
+
+@asynccontextmanager
+async def lifespan(application: FastAPI):
+    """Load model artifacts on startup."""
     load_model_artifacts()
+    yield
+
+
+app.router.lifespan_context = lifespan
 
 
 def _prepare_features(txn: TransactionRequest) -> pd.DataFrame:
@@ -159,7 +169,10 @@ def _score_transaction(txn: TransactionRequest) -> FraudPrediction:
         cached=False,
     )
 
-    # Cache for idempotency
+    # Cache for idempotency (bounded to prevent unbounded memory growth)
+    if len(_prediction_cache) >= _CACHE_MAX_SIZE:
+        oldest_key = next(iter(_prediction_cache))
+        del _prediction_cache[oldest_key]
     _prediction_cache[txn.transaction_id] = prediction
     return prediction
 

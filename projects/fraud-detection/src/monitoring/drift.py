@@ -169,6 +169,7 @@ class DriftDetector:
             "total_features": n_features,
             "drifted_features_count": len(drifted_features),
             "top_drifted": feature_results[:top_k],
+            # Flag overall drift if >30% of features drifted (configurable threshold)
             "overall_drift": len(drifted_features) > n_features * 0.3,
         }
 
