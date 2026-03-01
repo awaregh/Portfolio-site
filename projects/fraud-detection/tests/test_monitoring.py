@@ -40,7 +40,7 @@ class TestDriftDetector:
         cur = rng.normal(0.1, 0.05, 800)
         detector = DriftDetector(reference_predictions=ref)
         result = detector.check_prediction_drift(cur)
-        assert result["drift_detected"] is False
+        assert result["drift_detected"] == False
 
     def test_feature_drift_detection(self):
         rng = np.random.RandomState(42)
