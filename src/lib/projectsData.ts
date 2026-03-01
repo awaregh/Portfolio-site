@@ -18,6 +18,26 @@ const REPO_BASE = "https://github.com/awaregh/Portfolio-site/tree/main/projects"
 
 export const projects: Project[] = [
   {
+    slug: "churn-prediction",
+    title: "Churn Prediction & Causal Analysis System",
+    description:
+      "Production-grade SaaS churn prediction with survival analysis, uplift modelling, SHAP explainability, and a real-time scoring API.",
+    tags: ["Python", "LightGBM", "FastAPI", "scikit-learn", "lifelines", "SHAP"],
+    architecture: [
+      "survival analysis",
+      "uplift modelling",
+      "drift monitoring",
+      "real-time scoring",
+    ],
+    language: "Python",
+    languageColor: "#3572A5",
+    repoPath: "projects/churn-prediction",
+    githubUrl: `${REPO_BASE}/churn-prediction`,
+    quickStart:
+      "git clone https://github.com/awaregh/Portfolio-site.git && cd Portfolio-site/projects/churn-prediction && docker compose up -d",
+    demoUrl: "/projects/churn-prediction/demo",
+  },
+  {
     slug: "ai-workflow-platform",
     title: "AI Workflow Automation Platform",
     description:

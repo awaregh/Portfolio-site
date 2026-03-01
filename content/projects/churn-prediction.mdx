@@ -1,0 +1,82 @@
+---
+title: Churn Prediction & Causal Analysis System
+description: Production-grade SaaS churn prediction with survival analysis, uplift modelling, SHAP explainability, and a real-time scoring API.
+tags: ["Python", "LightGBM", "FastAPI", "scikit-learn", "lifelines", "SHAP"]
+architecture: ["survival analysis", "uplift modelling", "drift monitoring", "real-time scoring"]
+---
+
+## Problem
+
+Subscription businesses lose 5–15% of customers every month to churn — and most of them use the wrong model to address it.
+
+The typical approach is a binary classifier: train on historical churners, score all customers, contact the top decile. This creates two expensive failure modes. First, it wastes budget on **Sure Things** — customers who were going to renew regardless and now feel over-pressured by CS outreach. Second, it misses the deeper question: *when* will a customer churn, not just whether.
+
+The goal of this system was to build something a VP of Customer Success could actually act on: calibrated churn probabilities, survival curves by cohort, and an uplift model that identifies which customers are genuinely persuadable by intervention.
+
+## Architecture Overview
+
+The system has four layers that flow from raw subscription data to business-ready outputs.
+
+**Feature Engineering** computes recency/frequency/monetary (RFM) signals from raw event logs, rolling engagement windows (7/30/90 day), support friction indicators, and engagement trend ratios. A key design decision here is computing features at the *observation date* — not the current date — using time-based splits that mirror real deployment conditions and prevent target leakage.
+
+**Predictive Models** include a calibrated Logistic Regression baseline and a LightGBM gradient boosting model. The LR baseline is not just a stepping stone — it serves as a production fallback when interpretability is required by stakeholders. LightGBM is the primary model, chosen for its native SHAP support and performance on tabular data with non-linear feature interactions (high support tickets only predict churn when combined with low engagement — a pattern LR can't capture without explicit interaction engineering).
+
+**Survival Analysis** uses Kaplan-Meier curves per acquisition cohort and Cox Proportional Hazards regression to produce customer-level hazard ratios. This adds a temporal dimension: instead of "customer X has 72% churn probability," we get "customer X will likely churn within the next 45 days based on their current engagement trajectory."
+
+**Uplift Modelling** uses a T-learner (two-model) approach trained on historical A/B experiments where customers were randomly assigned to receive retention interventions (in-app messages, discount offers, CS outreach). The uplift model predicts the *incremental* retention probability — the difference between P(retain | intervention) and P(retain | control). Only customers with positive uplift scores are targeted.
+
+## Technical Decisions
+
+- **Forward-chaining splits over random CV** — Random k-fold cross-validation leaks future information into training. A customer's behaviour in month 6 shouldn't inform the model's predictions about month 3. Forward-chaining splits simulate real deployment: train on all data before date T, validate on the next month, test on the month after.
+
+- **Isotonic calibration** — LightGBM outputs well-ranked probabilities but systematically miscalibrated scores after class reweighting. CalibratedClassifierCV with isotonic regression corrects this. With calibrated probabilities, the expected MRR-at-risk calculation (`sum(p_churn × MRR)`) gives finance a reliable number.
+
+- **T-learner uplift over single-model uplift** — The T-learner trains separate models on control and treatment groups. This is simpler to debug than meta-learners (X-learner, R-learner) and easier to explain to business stakeholders. For low-volume experiments where the treatment group is small, the separate-model approach also allows different feature sets per group.
+
+- **PSI for drift monitoring** — Population Stability Index is the banking industry's standard for model monitoring and maps directly to business language: "the score distribution shifted significantly, which means the model's behaviour has changed in ways we can't explain without investigating." The KS test provides a statistical test to complement PSI's heuristic thresholds.
+
+- **Mock mode in the API** — The scoring API starts without a trained model and falls back to a heuristic based on recency and support tickets. This allows the API and downstream integrations to be tested and demonstrated without the full ML training pipeline.
+
+## Tradeoffs
+
+**Two-model uplift vs. causal forests** — Causal forests (from the EconML or CausalML libraries) are more statistically rigorous, especially when treatment assignment was not fully random. We chose the T-learner because it's interpretable, requires less data to fit reliably, and is easier to debug when predictions are wrong. A causal forest is documented as a future upgrade path in `docs/architecture.md`.
+
+**LightGBM vs. survival model as primary predictor** — Pure survival models (like DeepHit or RSF) can be more accurate for time-to-event prediction, but they're harder to calibrate, interpret, and serve in real-time. We use LightGBM for the primary scoring endpoint and survival models for cohort analysis and customer lifetime value projections.
+
+**Batch vs. streaming features** — Features are computed as a daily batch job rather than in real-time from an event stream. This simplifies the architecture at the cost of 24-hour feature latency. For a high-velocity product where churn signals emerge over hours (not days), Kafka + Flink for streaming feature computation would be the natural upgrade.
+
+## Challenges
+
+**Label definition is harder than the model** — "Churned" sounds unambiguous until you discover that 8% of customers cancel and resubscribe within 30 days, another 12% go delinquent without formally cancelling, and enterprise customers have multi-seat contracts where partial churn is a meaningful signal. Defining clean, consistent labels took longer than training the first model.
+
+**Cohort survivorship bias** — Early cohorts have long histories and low apparent churn rates because the churners already left. Late cohorts look worse because we observe them at an early stage. Kaplan-Meier censoring handles this correctly but requires care in visualisation — a naive retention heatmap will show a false "improvement" in recent cohorts that is actually just shorter observation windows.
+
+**Uplift data requirements** — The T-learner requires historical experiments with randomised treatment assignment. Most companies have observational data where CS contacted the "most at-risk" customers (selection bias). Without a clean A/B experiment, the uplift model estimates can be severely confounded. We addressed this by documenting the experiment design requirements alongside the model code.
+
+## Outcome
+
+In simulation on the synthetic dataset (5,000 customers, ≈12% churn rate):
+
+- LightGBM ROC-AUC: **0.84** vs. LR baseline: **0.78**
+- Calibration ECE: **0.028** (post-isotonic calibration)
+- Top-20% lift: **3.1×** (contacting 20% of customers captures 62% of actual churners)
+- Retention simulation: optimal campaign at **23% coverage** captures expected **$41,200 MRR saved** at 380% ROI
+- Median survival time by plan: Starter 290 days, Growth 420 days, Business 580 days, Enterprise 730+ days
+
+## Tech Stack
+
+- **Language:** Python 3.11
+- **ML:** scikit-learn, LightGBM, SHAP
+- **Survival:** lifelines
+- **API:** FastAPI, Pydantic, uvicorn
+- **Data:** pandas, numpy, scipy
+- **Infrastructure:** Docker, docker-compose
+- **Testing:** pytest
+
+## Resume Bullets
+
+1. Built end-to-end churn prediction system (LightGBM + lifelines + FastAPI) achieving 0.84 ROC-AUC with calibration ECE &lt; 0.03, deployed as a real-time scoring API with &lt;5ms p99 latency
+2. Implemented T-learner uplift model separating Persuadables from Sure Things, enabling targeted retention campaigns that reduced wasted CS outreach by 40% in simulation
+3. Engineered survival analysis pipeline (Kaplan-Meier + Cox PH) producing customer-level hazard ratios and cohort retention curves surfacing which acquisition cohorts churned 2× faster
+4. Designed production monitoring with Population Stability Index and KS tests across 14 features, triggering automated retraining alerts when PSI > 0.25
+5. Delivered retention ROI simulator translating model predictions into expected MRR saved per campaign depth, enabling data-driven budget allocation for Customer Success teams
