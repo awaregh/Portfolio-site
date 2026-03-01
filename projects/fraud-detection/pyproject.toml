@@ -1,0 +1,28 @@
+[project]
+name = "fraud-detection"
+version = "1.0.0"
+description = "Production-grade fraud detection system with ML pipeline, real-time API, and monitoring"
+requires-python = ">=3.10"
+dependencies = [
+    "pandas>=2.0",
+    "numpy>=1.24",
+    "scikit-learn>=1.3",
+    "lightgbm>=4.0",
+    "fastapi>=0.100",
+    "uvicorn>=0.23",
+    "pydantic>=2.0",
+    "scipy>=1.11",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4",
+    "httpx>=0.24",
+]
+explainability = [
+    "shap>=0.42",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

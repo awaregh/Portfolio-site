@@ -18,6 +18,25 @@ const REPO_BASE = "https://github.com/awaregh/Portfolio-site/tree/main/projects"
 
 export const projects: Project[] = [
   {
+    slug: "fraud-detection",
+    title: "Fraud Detection System",
+    description:
+      "Production-grade ML pipeline for real-time financial transaction fraud detection with model training, drift monitoring, and scoring API.",
+    tags: ["Python", "LightGBM", "FastAPI", "scikit-learn", "Docker"],
+    architecture: [
+      "ML pipeline",
+      "real-time scoring",
+      "drift monitoring",
+      "cost optimization",
+    ],
+    language: "Python",
+    languageColor: "#3572A5",
+    repoPath: "projects/fraud-detection",
+    githubUrl: `${REPO_BASE}/fraud-detection`,
+    quickStart:
+      "git clone https://github.com/awaregh/Portfolio-site.git && cd Portfolio-site/projects/fraud-detection && pip install -r requirements.txt && python -c \"from src.models.train import run_training_pipeline; run_training_pipeline()\"",
+  },
+  {
     slug: "ai-workflow-platform",
     title: "AI Workflow Automation Platform",
     description:
