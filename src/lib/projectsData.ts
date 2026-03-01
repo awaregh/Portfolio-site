@@ -117,4 +117,23 @@ export const projects: Project[] = [
       "git clone https://github.com/awaregh/Portfolio-site.git && cd Portfolio-site/projects/distributed-rate-limiter && docker compose up -d",
     demoUrl: "/projects/distributed-rate-limiter/demo",
   },
+  {
+    slug: "churn-prediction",
+    title: "Customer Churn Prediction System",
+    description:
+      "End-to-end ML system predicting SaaS customer churn with XGBoost, survival analysis, uplift modeling, SHAP explainability, and a production FastAPI scoring service.",
+    tags: ["Python", "XGBoost", "LightGBM", "FastAPI", "SHAP", "lifelines"],
+    architecture: [
+      "gradient boosting",
+      "survival analysis",
+      "uplift modeling",
+      "drift monitoring",
+    ],
+    language: "Python",
+    languageColor: "#3572A5",
+    repoPath: "projects/churn-prediction",
+    githubUrl: `${REPO_BASE}/churn-prediction`,
+    quickStart:
+      "git clone https://github.com/awaregh/Portfolio-site.git && cd Portfolio-site/projects/churn-prediction && cp .env.example .env && docker compose up --build",
+  },
 ];
