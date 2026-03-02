@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 
 const DEMO_COMPONENTS: Record<string, React.ComponentType> = {
+  "fraud-detection": dynamic(() => import("./demos/FraudDetectionEmbed")),
   "ai-workflow-platform": dynamic(() => import("./demos/AIWorkflowPlatformEmbed")),
   "saas-website-builder": dynamic(() => import("./demos/SaasWebsiteBuilderEmbed")),
   "ai-customer-support": dynamic(() => import("./demos/AICustomerSupportEmbed")),
@@ -12,6 +13,7 @@ const DEMO_COMPONENTS: Record<string, React.ComponentType> = {
 };
 
 const DEMO_DESCRIPTIONS: Record<string, string> = {
+  "fraud-detection": "Submit transactions to the scoring API and see real-time fraud predictions with feature importance explanations.",
   "ai-workflow-platform": "Select a workflow template, then press Run to watch each step execute in real time.",
   "saas-website-builder": "Pick a template, name your site, and hit Publish to simulate the full build pipeline.",
   "ai-customer-support": "Chat with an AI agent backed by a simulated RAG pipeline. Try the suggested questions or ask your own.",
