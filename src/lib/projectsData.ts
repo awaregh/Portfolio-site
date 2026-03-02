@@ -35,6 +35,7 @@ export const projects: Project[] = [
     githubUrl: `${REPO_BASE}/fraud-detection`,
     quickStart:
       "git clone https://github.com/awaregh/Portfolio-site.git && cd Portfolio-site/projects/fraud-detection && pip install -r requirements.txt && python -c \"from src.models.train import run_training_pipeline; run_training_pipeline()\"",
+    demoUrl: "/projects/fraud-detection/demo",
   },
   {
     slug: "ai-workflow-platform",
