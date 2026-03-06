@@ -82,8 +82,8 @@ export default function IaCMaintainabilityEmbed() {
     }
 
     const drifted = MODULE_DRIFT[selectedModuleId] ?? [];
-    const module = MODULES.find((m) => m.id === selectedModuleId)!;
-    const inSync = module.resourceCount - drifted.length;
+    const selectedModule = MODULES.find((m) => m.id === selectedModuleId)!;
+    const inSync = selectedModule.resourceCount - drifted.length;
     const result: ModuleReport = { moduleId: selectedModuleId, drifted, inSync };
     setReport(result);
     setCheckStep("done");
