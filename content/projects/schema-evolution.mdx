@@ -1,0 +1,38 @@
+---
+title: Schema Evolution in Long-Lived Systems
+description: Research implementation of eight real-world schema evolution scenarios across a three-service microservices architecture, covering PostgreSQL migrations, REST API versioning, and event schema evolution with backward compatibility patterns.
+tags: ["Python", "PostgreSQL", "FastAPI", "Kafka", "Docker"]
+architecture: ["backward compatibility", "API versioning", "event schema evolution", "database migrations"]
+---
+
+## Problem
+
+Long-lived production systems inevitably need to evolve their schemas — database tables gain columns, API payloads change shape, and event contracts shift. Making these changes without breaking existing consumers is one of the hardest problems in distributed systems. Direct "big bang" migrations cause downtime and data loss; backward-compatible patterns preserve continuity but add complexity. This project implements and compares both approaches across eight real-world scenarios.
+
+## Architecture Overview
+
+The system is built as a three-service microservices architecture where each service owns its database and communicates through both REST APIs and event streams. Eight schema evolution scenarios are implemented, each with both the **unsafe direct approach** and the **backward-compatible pattern**, allowing direct comparison of migration safety, complexity, and operational risk.
+
+Scenarios cover three categories of schema evolution:
+
+- **Database migrations** — column additions, type changes, table splits
+- **REST API versioning** — field renames, nested object restructuring, endpoint deprecation
+- **Event schema evolution** — payload changes across producers and consumers with schema registry integration
+
+## Technical Decisions
+
+- **Dual implementation per scenario** — every scenario has both the naive "break everything" version and the production-safe backward-compatible version, making the cost/benefit tradeoff concrete and measurable
+- **PostgreSQL for migrations** — real database migrations with Alembic, not mocked — tests verify that data survives the transition
+- **Kafka for events** — event schema evolution tested with actual message serialization and deserialization across schema versions
+
+## Tradeoffs
+
+- **Research focus over production deployment** — the system prioritizes demonstrating patterns clearly over building a deployable production platform
+- **Controlled environment** — scenarios use synthetic data and controlled service interactions to isolate the schema evolution mechanics from other distributed systems concerns
+
+## Tech Stack
+
+- **Backend:** Python, FastAPI
+- **Database:** PostgreSQL, Alembic
+- **Messaging:** Kafka
+- **Infrastructure:** Docker, Docker Compose

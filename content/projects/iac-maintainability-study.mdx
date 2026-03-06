@@ -1,0 +1,45 @@
+---
+title: IaC Maintainability Study
+description: Comprehensive empirical study examining how structural design decisions in Terraform infrastructure-as-code affect long-term maintainability, drift susceptibility, and change management complexity.
+tags: ["Terraform", "HCL", "AWS", "Python"]
+architecture: ["infrastructure as code", "drift detection", "maintainability metrics", "reference architectures"]
+---
+
+## Problem
+
+Infrastructure-as-code adoption is widespread, but teams rarely have empirical data to guide structural decisions — should Terraform code be organized as a monolith, composed of small modules, layered by concern, or split by domain? Each approach has different implications for maintainability, drift susceptibility, and change management complexity. This study provides controlled measurements across six organizational strategies.
+
+## Architecture Overview
+
+Six reference implementations deploy identical AWS infrastructure using different Terraform organizational strategies:
+
+1. **Monolithic** — all resources in one root module
+2. **Small Composable** — one module per AWS service
+3. **Domain-Based** — modules grouped by business domain
+4. **Layer-Based** — network → compute → data → security → observability layers
+5. **Workspace-Based** — single codebase, per-environment workspaces
+6. **State-Per-Stack** — independent state files per logical stack
+
+Each variant deploys: VPC with public/private subnets across 3 AZs, ECS Fargate cluster, RDS PostgreSQL (Multi-AZ), S3 with versioning and encryption, IAM roles, and CloudWatch dashboards.
+
+## Metrics Collected
+
+| Metric | Description |
+|--------|-------------|
+| Module Count | Number of distinct modules |
+| Coupling Score | Graph edge-to-node ratio |
+| Total LOC | Lines of Terraform code |
+| Change Surface | Resources affected per typical change |
+| Drift Detection Time | Time from drift introduction to detection |
+| Blast Radius | Resources impacted by a change |
+
+## Drift Scenarios
+
+Six categories of drift are studied: out-of-band changes, version drift, provider default drift, data source nondeterminism, partial apply / state issues, and IAM / config drift.
+
+## Tech Stack
+
+- **IaC:** Terraform, HCL
+- **Cloud:** AWS (VPC, ECS, RDS, S3, IAM, CloudWatch)
+- **Analysis:** Python, Jupyter, pandas, matplotlib
+- **Visualization:** Graphviz

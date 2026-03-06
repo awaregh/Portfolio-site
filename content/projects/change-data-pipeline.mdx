@@ -1,0 +1,34 @@
+---
+title: Change Data Capture Pipeline
+description: CDC pipeline that streams database changes into an event log, supports consumers, replay, and schema evolution with a demo consumer that builds projections.
+tags: ["Python", "PostgreSQL", "Kafka", "Docker"]
+architecture: ["CDC", "event sourcing", "stream processing", "schema evolution"]
+---
+
+## Problem
+
+Modern data architectures need to react to database changes in real time — syncing search indices, updating caches, building materialized views, and feeding analytics pipelines. Polling-based approaches introduce latency and load; CDC (Change Data Capture) streams changes as they happen, enabling event-driven architectures without modifying application code.
+
+## Architecture Overview
+
+The pipeline captures row-level changes from PostgreSQL using logical decoding (or Debezium), streams them into a Kafka-compatible event log, and provides consumer infrastructure for building projections. The system supports replay from any point in the event stream and handles schema evolution as the source database evolves.
+
+A demo consumer demonstrates how to build and maintain read-optimized projections from the change stream, handling creates, updates, and deletes with exactly-once semantics.
+
+## Technical Decisions
+
+- **PostgreSQL logical decoding** — captures changes at the WAL level without triggers or application modification
+- **Kafka as the event log** — provides durable, replayable event storage with partition-based ordering guarantees
+- **Consumer replay support** — consumers can reprocess the full event history to rebuild projections from scratch
+
+## Tradeoffs
+
+- **Eventual consistency** — projections lag behind the source by the streaming delay, which is acceptable for most read-model use cases but not for strong consistency requirements
+- **Schema coupling** — consumers must handle schema changes in the event stream gracefully, which the schema evolution support addresses
+
+## Tech Stack
+
+- **Backend:** Python
+- **Database:** PostgreSQL (logical decoding)
+- **Messaging:** Kafka / Redpanda
+- **Infrastructure:** Docker, Docker Compose
