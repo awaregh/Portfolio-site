@@ -25,6 +25,7 @@ const POLICIES: Policy[] = [
   { tenantId: "acme-corp", endpoint: "POST /api/chat", limit: 10, windowSec: 10, algorithm: "token-bucket" },
   { tenantId: "fintech-co", endpoint: "GET /api/data", limit: 30, windowSec: 10, algorithm: "sliding-window" },
   { tenantId: "retail-inc", endpoint: "POST /api/orders", limit: 5, windowSec: 10, algorithm: "token-bucket" },
+  { tenantId: "media-group", endpoint: "GET /api/stream", limit: 20, windowSec: 5, algorithm: "sliding-window" },
 ];
 
 let reqCounter = 0;
@@ -34,6 +35,7 @@ export default function DistributedRateLimiterEmbed() {
   const [results, setResults] = useState<CheckResult[]>([]);
   const [counters, setCounters] = useState<Record<string, number>>({});
   const [burstRunning, setBurstRunning] = useState(false);
+  const [compareMode, setCompareMode] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const key = `${selectedPolicy.tenantId}:${selectedPolicy.endpoint}`;
@@ -82,6 +84,7 @@ export default function DistributedRateLimiterEmbed() {
 
   const allowed = results.filter((r) => r.allowed).length;
   const rejected = results.filter((r) => !r.allowed).length;
+  const allowRate = results.length ? Math.round((allowed / results.length) * 100) : null;
   const avgLatency = results.length
     ? (results.reduce((acc, r) => acc + r.latencyMs, 0) / results.length).toFixed(1)
     : "—";
@@ -89,11 +92,12 @@ export default function DistributedRateLimiterEmbed() {
   return (
     <div>
       {/* Stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-2 sm:grid-cols-5 gap-4 mb-6">
         {[
           { label: "Requests Checked", value: results.length.toString() },
           { label: "Allowed", value: allowed.toString(), color: "#22c55e" },
           { label: "Rejected", value: rejected.toString(), color: "#ef4444" },
+          { label: "Allow Rate %", value: allowRate !== null ? `${allowRate}%` : "—", color: allowRate !== null ? (allowRate >= 50 ? "#22c55e" : "#ef4444") : undefined },
           { label: "Avg Latency", value: avgLatency !== "—" ? `${avgLatency}ms` : "—" },
         ].map((m) => (
           <div key={m.label} className="rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#111111] p-4">
@@ -107,7 +111,19 @@ export default function DistributedRateLimiterEmbed() {
         {/* Policy config */}
         <div className="space-y-5">
           <div className="rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#111111] p-5">
-            <p className="text-xs text-[#888888] uppercase tracking-widest font-medium mb-3">Policy</p>
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-xs text-[#888888] uppercase tracking-widest font-medium">Policy</p>
+              <button
+                onClick={() => setCompareMode((c) => !c)}
+                className={`text-xs px-2.5 py-1 rounded-lg border transition-colors ${
+                  compareMode
+                    ? "border-[#3b82f6]/50 bg-[#3b82f6]/10 text-[#3b82f6]"
+                    : "border-[rgba(255,255,255,0.08)] text-[#888888] hover:text-[#ededed]"
+                }`}
+              >
+                Compare Algorithms
+              </button>
+            </div>
             <div className="space-y-2">
               {POLICIES.map((p) => (
                 <button
@@ -134,30 +150,90 @@ export default function DistributedRateLimiterEmbed() {
           {/* Bucket visualiser */}
           <div className="rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#111111] p-5">
             <p className="text-xs text-[#888888] uppercase tracking-widest font-medium mb-3">
-              Token Bucket
+              {compareMode ? "Algorithm Comparison" : "Token Bucket"}
             </p>
-            <div className="relative w-full h-24 rounded-lg border border-[rgba(255,255,255,0.08)] bg-[#0a0a0a] overflow-hidden mb-2">
-              <div
-                className="absolute bottom-0 left-0 right-0 transition-all duration-300"
-                style={{
-                  height: `${fillRate * 100}%`,
-                  background: fillRate > 0.5
-                    ? "linear-gradient(to top, #22c55e22, #22c55e44)"
-                    : fillRate > 0.2
-                    ? "linear-gradient(to top, #f59e0b22, #f59e0b44)"
-                    : "linear-gradient(to top, #ef444422, #ef444444)",
-                  borderTop: `2px solid ${fillRate > 0.5 ? "#22c55e" : fillRate > 0.2 ? "#f59e0b" : "#ef4444"}`,
-                }}
-              />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-lg font-semibold font-mono" style={{
-                  color: fillRate > 0.5 ? "#22c55e" : fillRate > 0.2 ? "#f59e0b" : "#ef4444",
-                }}>
-                  {limitForKey - windowCount} / {limitForKey}
-                </span>
+            {compareMode ? (
+              <div className="grid grid-cols-2 gap-3">
+                {(["token-bucket", "sliding-window"] as const).map((algo) => {
+                  const algoFill = algo === "token-bucket" ? fillRate : Math.max(0, 1 - (windowCount / limitForKey) * 0.7);
+                  const algoColor = algoFill > 0.5 ? "#22c55e" : algoFill > 0.2 ? "#f59e0b" : "#ef4444";
+                  return (
+                    <div key={algo}>
+                      <p className="text-xs text-[#888888] font-mono mb-1.5 truncate">{algo}</p>
+                      <div className="relative w-full h-16 rounded-lg border border-[rgba(255,255,255,0.08)] bg-[#0a0a0a] overflow-hidden">
+                        <div
+                          className="absolute bottom-0 left-0 right-0 transition-all duration-300"
+                          style={{
+                            height: `${algoFill * 100}%`,
+                            background: `linear-gradient(to top, ${algoColor}22, ${algoColor}44)`,
+                            borderTop: `2px solid ${algoColor}`,
+                          }}
+                        />
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <span className="text-xs font-semibold font-mono" style={{ color: algoColor }}>
+                            {Math.round(algoFill * 100)}%
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <>
+                <div className="relative w-full h-24 rounded-lg border border-[rgba(255,255,255,0.08)] bg-[#0a0a0a] overflow-hidden mb-2">
+                  <div
+                    className="absolute bottom-0 left-0 right-0 transition-all duration-300"
+                    style={{
+                      height: `${fillRate * 100}%`,
+                      background: fillRate > 0.5
+                        ? "linear-gradient(to top, #22c55e22, #22c55e44)"
+                        : fillRate > 0.2
+                        ? "linear-gradient(to top, #f59e0b22, #f59e0b44)"
+                        : "linear-gradient(to top, #ef444422, #ef444444)",
+                      borderTop: `2px solid ${fillRate > 0.5 ? "#22c55e" : fillRate > 0.2 ? "#f59e0b" : "#ef4444"}`,
+                    }}
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="text-lg font-semibold font-mono" style={{
+                      color: fillRate > 0.5 ? "#22c55e" : fillRate > 0.2 ? "#f59e0b" : "#ef4444",
+                    }}>
+                      {limitForKey - windowCount} / {limitForKey}
+                    </span>
+                  </div>
+                </div>
+                <p className="text-xs text-[#888888]">tokens remaining · resets in {selectedPolicy.windowSec}s window</p>
+              </>
+            )}
+          </div>
+
+          {/* Sliding Window timeline */}
+          <div className="rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#111111] p-5">
+            <p className="text-xs text-[#888888] uppercase tracking-widest font-medium mb-3">Sliding Window (last 10s)</p>
+            <div className="relative h-10 bg-[#0a0a0a] rounded-lg border border-[rgba(255,255,255,0.06)] overflow-hidden px-2">
+              <div className="flex items-center h-full gap-px">
+                {Array.from({ length: 10 }, (_, i) => {
+                  const secAgo = 9 - i;
+                  const tsFrom = Date.now() - (secAgo + 1) * 1000;
+                  const tsTo = Date.now() - secAgo * 1000;
+                  const bucket = results.filter((r) => r.ts >= tsFrom && r.ts < tsTo);
+                  return (
+                    <div key={i} className="flex-1 flex flex-col-reverse items-center gap-px pb-1">
+                      {bucket.slice(0, 4).map((r, j) => (
+                        <div
+                          key={j}
+                          className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${r.allowed ? "bg-[#22c55e]" : "bg-[#ef4444]"}`}
+                        />
+                      ))}
+                    </div>
+                  );
+                })}
               </div>
             </div>
-            <p className="text-xs text-[#888888]">tokens remaining · resets in {selectedPolicy.windowSec}s window</p>
+            <div className="flex justify-between text-xs text-[#444444] mt-1 px-1">
+              <span>−10s</span>
+              <span>now</span>
+            </div>
           </div>
 
           {/* Actions */}

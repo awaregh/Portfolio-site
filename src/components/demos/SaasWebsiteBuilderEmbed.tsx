@@ -30,6 +30,24 @@ const TEMPLATES = [
     sub: "The developer-first infrastructure for modern teams",
     sections: ["Features", "Pricing Plans"],
   },
+  {
+    id: "blog",
+    name: "Blog",
+    accent: "#f59e0b",
+    nav: ["Articles", "Topics", "About", "RSS"],
+    hero: "Thoughts on Engineering",
+    sub: "Deep dives into distributed systems & AI infrastructure",
+    sections: ["Latest Posts", "Popular Topics"],
+  },
+  {
+    id: "ecommerce",
+    name: "E-Commerce",
+    accent: "#ef4444",
+    nav: ["Shop", "Collections", "Sale", "Cart"],
+    hero: "Premium Tech Accessories",
+    sub: "Curated hardware for engineers and makers",
+    sections: ["Featured Products", "New Arrivals"],
+  },
 ];
 
 type BuildStatus = "idle" | "building" | "done";
@@ -45,15 +63,19 @@ export default function SaasWebsiteBuilderEmbed() {
   const [buildSteps, setBuildSteps] = useState<BuildStep[]>([]);
   const [publishUrl, setPublishUrl] = useState("");
   const [siteName, setSiteName] = useState("my-site");
+  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [region, setRegion] = useState<"US-East" | "EU-West" | "Asia-Pacific">("US-East");
+  const [edgeCaching, setEdgeCaching] = useState(true);
 
   const steps = [
     "Resolving content model",
-    "Rendering 12 pages",
-    "Optimising images (WebP)",
+    `Rendering 12 pages (${template.name} template)`,
+    "Optimising images (WebP + AVIF)",
     "Fingerprinting assets",
-    "Uploading to S3 (v" + (Math.floor(Math.random() * 40) + 10) + ")",
-    "Invalidating CDN cache",
-    "Health check passed",
+    `Deploying to ${region}`,
+    edgeCaching ? "Warming edge cache (15 PoPs)" : "Uploading to origin",
+    "Running health checks",
+    "DNS propagation complete",
   ];
 
   async function buildAndPublish() {
@@ -116,6 +138,55 @@ export default function SaasWebsiteBuilderEmbed() {
               .builder-demo.app
             </span>
           </div>
+        </div>
+
+        {/* Advanced Options */}
+        <div className="rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#111111] overflow-hidden">
+          <button
+            onClick={() => setShowAdvanced((s) => !s)}
+            className="w-full flex items-center justify-between px-5 py-3 hover:bg-[rgba(255,255,255,0.02)] transition-colors"
+          >
+            <span className="text-xs text-[#888888] uppercase tracking-widest font-medium">Advanced Options</span>
+            <svg
+              width="12" height="12" viewBox="0 0 12 12" fill="none"
+              className={`transition-transform duration-200 ${showAdvanced ? "rotate-180" : ""}`}
+            >
+              <path d="M2 4l4 4 4-4" stroke="#888888" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+          {showAdvanced && (
+            <div className="px-5 pb-4 border-t border-[rgba(255,255,255,0.06)] pt-3 space-y-4">
+              <div>
+                <p className="text-xs text-[#888888] mb-2">Region</p>
+                <div className="flex flex-wrap gap-2">
+                  {(["US-East", "EU-West", "Asia-Pacific"] as const).map((r) => (
+                    <label key={r} className="flex items-center gap-1.5 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="region"
+                        value={r}
+                        checked={region === r}
+                        onChange={() => setRegion(r)}
+                        disabled={buildStatus === "building"}
+                        className="accent-[#3b82f6]"
+                      />
+                      <span className="text-xs text-[#888888]">{r}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+              <label className="flex items-center gap-2.5 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={edgeCaching}
+                  onChange={(e) => setEdgeCaching(e.target.checked)}
+                  disabled={buildStatus === "building"}
+                  className="accent-[#3b82f6]"
+                />
+                <span className="text-xs text-[#888888]">Enable edge caching</span>
+              </label>
+            </div>
+          )}
         </div>
 
         {/* Publish button */}

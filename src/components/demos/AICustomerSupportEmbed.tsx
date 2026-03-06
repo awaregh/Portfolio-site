@@ -16,6 +16,11 @@ const KNOWLEDGE_BASE = [
   "How do I cancel my subscription?",
   "Where can I find my invoice?",
   "How do I add team members?",
+  "How do I export my data?",
+  "What are the system requirements?",
+  "Is there an API available?",
+  "How do I upgrade my plan?",
+  "What's your uptime SLA?",
 ];
 
 const RESPONSES: Record<string, { text: string; sources: string[]; confidence: number }> = {
@@ -44,6 +49,31 @@ const RESPONSES: Record<string, { text: string; sources: string[]; confidence: n
     sources: ["docs/team/inviting-members.md", "docs/team/roles.md"],
     confidence: 0.98,
   },
+  "export": {
+    text: "To export your data, go to **Settings → Account → Export Data**. You can download your data in CSV or JSON format. Exports are generated within a few minutes and a download link is emailed to you.",
+    sources: ["docs/account/data-export.md"],
+    confidence: 0.93,
+  },
+  "requirements": {
+    text: "Our platform runs in any modern browser (Chrome, Firefox, Safari, Edge). We recommend at least 2 GB of RAM for the best experience. No installation is required — everything runs in the browser.",
+    sources: ["docs/getting-started/requirements.md"],
+    confidence: 0.91,
+  },
+  "api": {
+    text: "A REST API is available on all paid plans. Full documentation including authentication, endpoints, and code examples is available at **api.example.com/docs**. API keys can be generated under Settings → Developer.",
+    sources: ["docs/api/overview.md", "docs/api/authentication.md"],
+    confidence: 0.96,
+  },
+  "upgrade": {
+    text: "To upgrade your plan, go to **Settings → Billing → Upgrade Plan**. You'll see available tiers with a comparison table. Upgrades take effect immediately and are prorated for the current billing cycle.",
+    sources: ["docs/billing/plans.md"],
+    confidence: 0.95,
+  },
+  "sla": {
+    text: "We guarantee **99.9% uptime** for Business and Enterprise plans, measured monthly. Scheduled maintenance windows are announced 48 hours in advance. Credits are issued automatically for any downtime exceeding the SLA threshold.",
+    sources: ["docs/legal/sla.md"],
+    confidence: 0.92,
+  },
   "default": {
     text: "I don't have specific information about that in our knowledge base. I'd recommend checking our documentation at docs.example.com or reaching out to support@example.com for further assistance.",
     sources: [],
@@ -58,6 +88,11 @@ function getResponse(query: string) {
   if (q.includes("cancel") || q.includes("subscription")) return RESPONSES["cancel"];
   if (q.includes("invoice") || q.includes("receipt") || q.includes("billing")) return RESPONSES["invoice"];
   if (q.includes("team") || q.includes("member") || q.includes("invite") || q.includes("add user")) return RESPONSES["team"];
+  if (q.includes("export") || q.includes("data export")) return RESPONSES["export"];
+  if (q.includes("requirements") || q.includes("system") || q.includes("browser")) return RESPONSES["requirements"];
+  if (q.includes("api") || q.includes("rest")) return RESPONSES["api"];
+  if (q.includes("upgrade") || q.includes("plan upgrade")) return RESPONSES["upgrade"];
+  if (q.includes("sla") || q.includes("uptime")) return RESPONSES["sla"];
   return RESPONSES["default"];
 }
 
@@ -71,6 +106,8 @@ export default function AICustomerSupportEmbed() {
   ]);
   const [input, setInput] = useState("");
   const [thinking, setThinking] = useState(false);
+  const [traceOpen, setTraceOpen] = useState(false);
+  const [traceSteps, setTraceSteps] = useState<{ label: string; ms: number; done: boolean }[]>([]);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -86,7 +123,18 @@ export default function AICustomerSupportEmbed() {
     setMessages((prev) => [...prev, userMsg]);
     setThinking(true);
 
-    await new Promise((r) => setTimeout(r, 800 + Math.random() * 600));
+    const pipelineSteps = [
+      { label: "Query tokenized", ms: 12 + Math.floor(Math.random() * 8) },
+      { label: "Vector search: top-k retrieved", ms: 38 + Math.floor(Math.random() * 20) },
+      { label: "Context assembled", ms: 8 + Math.floor(Math.random() * 6) },
+      { label: "Response generated", ms: 620 + Math.floor(Math.random() * 300) },
+    ];
+    setTraceSteps(pipelineSteps.map((s) => ({ ...s, done: false })));
+
+    for (let i = 0; i < pipelineSteps.length; i++) {
+      await new Promise((r) => setTimeout(r, pipelineSteps[i].ms));
+      setTraceSteps((prev) => prev.map((s, idx) => idx === i ? { ...s, done: true } : s));
+    }
 
     const resp = getResponse(query);
     const botMsg: Message = {
@@ -217,6 +265,55 @@ export default function AICustomerSupportEmbed() {
             </button>
           </form>
         </div>
+      </div>
+
+      {/* Pipeline Trace */}
+      <div className="mt-4 rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#111111] overflow-hidden">
+        <button
+          onClick={() => setTraceOpen((o) => !o)}
+          className="w-full flex items-center justify-between px-5 py-3 text-left hover:bg-[rgba(255,255,255,0.02)] transition-colors"
+        >
+          <div className="flex items-center gap-2">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <circle cx="6" cy="6" r="5" stroke="#3b82f6" strokeWidth="1.5" />
+              <path d="M6 4v2.5l1.5 1" stroke="#3b82f6" strokeWidth="1.2" strokeLinecap="round" />
+            </svg>
+            <span className="text-xs font-medium text-[#888888] uppercase tracking-widest">Pipeline Trace</span>
+          </div>
+          <svg
+            width="12" height="12" viewBox="0 0 12 12" fill="none"
+            className={`transition-transform duration-200 ${traceOpen ? "rotate-180" : ""}`}
+          >
+            <path d="M2 4l4 4 4-4" stroke="#888888" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </button>
+        {traceOpen && (
+          <div className="px-5 pb-4 space-y-2 border-t border-[rgba(255,255,255,0.06)] pt-3">
+            {traceSteps.length === 0 ? (
+              <p className="text-xs text-[#444444]">Send a message to see the pipeline trace.</p>
+            ) : (
+              traceSteps.map((step, i) => (
+                <div key={i} className="flex items-center gap-2.5">
+                  <div className="w-4 h-4 flex items-center justify-center flex-shrink-0">
+                    {step.done ? (
+                      <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                        <path d="M3 8l3 3 7-7" stroke="#22c55e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    ) : (
+                      <div className="w-3 h-3 rounded-full border border-[rgba(255,255,255,0.15)]" />
+                    )}
+                  </div>
+                  <span className={`text-xs font-mono flex-1 ${step.done ? "text-[#888888]" : "text-[#444444]"}`}>
+                    {step.label}
+                  </span>
+                  {step.done && (
+                    <span className="text-xs text-[#3b82f6] font-mono">{step.ms}ms</span>
+                  )}
+                </div>
+              ))
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

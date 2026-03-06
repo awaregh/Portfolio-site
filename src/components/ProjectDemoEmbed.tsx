@@ -4,19 +4,39 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 
 const DEMO_COMPONENTS: Record<string, React.ComponentType> = {
+  "fraud-detection": dynamic(() => import("./demos/FraudDetectionEmbed")),
   "ai-workflow-platform": dynamic(() => import("./demos/AIWorkflowPlatformEmbed")),
   "saas-website-builder": dynamic(() => import("./demos/SaasWebsiteBuilderEmbed")),
   "ai-customer-support": dynamic(() => import("./demos/AICustomerSupportEmbed")),
   "real-time-data-pipeline": dynamic(() => import("./demos/RealTimePipelineEmbed")),
   "distributed-rate-limiter": dynamic(() => import("./demos/DistributedRateLimiterEmbed")),
+  "schema-evolution": dynamic(() => import("./demos/SchemaEvolutionEmbed")),
+  "change-data-pipeline": dynamic(() => import("./demos/ChangeDataPipelineEmbed")),
+  "retrieval-experiment-platform": dynamic(() => import("./demos/RetrievalExperimentEmbed")),
+  "designing-idempotent-apis": dynamic(() => import("./demos/IdempotentAPIsEmbed")),
+  "hallucination-mitigation": dynamic(() => import("./demos/HallucinationMitigationEmbed")),
+  "failure-recovery-patterns": dynamic(() => import("./demos/FailureRecoveryEmbed")),
+  "llm-gateway": dynamic(() => import("./demos/LLMGatewayEmbed")),
+  "config-service": dynamic(() => import("./demos/ConfigServiceEmbed")),
+  "iac-maintainability-study": dynamic(() => import("./demos/IaCMaintainabilityEmbed")),
 };
 
 const DEMO_DESCRIPTIONS: Record<string, string> = {
+  "fraud-detection": "Select a transaction scenario and press Score Transaction to see the LightGBM model evaluate fraud risk in real time.",
   "ai-workflow-platform": "Select a workflow template, then press Run to watch each step execute in real time.",
   "saas-website-builder": "Pick a template, name your site, and hit Publish to simulate the full build pipeline.",
   "ai-customer-support": "Chat with an AI agent backed by a simulated RAG pipeline. Try the suggested questions or ask your own.",
   "real-time-data-pipeline": "Start the pipeline to see events streaming in real time through Kafka consumer workers to downstream sinks.",
   "distributed-rate-limiter": "Select a rate-limit policy and fire requests to see real-time allow/reject decisions.",
+  "schema-evolution": "Choose a migration scenario and run it to see backward-compatible schema changes applied step by step.",
+  "change-data-pipeline": "Start the CDC pipeline to watch database mutations stream into the event log and sync across consumers.",
+  "retrieval-experiment-platform": "Submit a query and compare chunking strategies side-by-side using Precision@K and nDCG metrics.",
+  "designing-idempotent-apis": "Submit a payment twice with the same idempotency key to see deduplication in action.",
+  "hallucination-mitigation": "Ask questions and compare raw LLM output against guardrail-enforced answers with citation verification.",
+  "failure-recovery-patterns": "Inject failures to trip circuit breakers, then watch recovery through half-open probes.",
+  "llm-gateway": "Route requests across multiple LLM providers and compare cost, latency, and availability strategies.",
+  "config-service": "Edit feature flags and config values, publish to all environments, and inspect the audit trail.",
+  "iac-maintainability-study": "Run Terraform drift detection across modules to see which resources have drifted from desired state.",
 };
 
 interface ProjectDemoEmbedProps {
