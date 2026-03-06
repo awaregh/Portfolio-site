@@ -46,6 +46,30 @@ const WORKFLOWS = [
       { id: "s4", label: "Action: Publish to CMS", type: "action" as const, status: "pending" as StepStatus },
     ],
   },
+  {
+    id: "data-enrichment",
+    name: "Data Enrichment",
+    description: "Enrich customer records with AI-generated insights",
+    steps: [
+      { id: "s1", label: "Trigger: New CRM Record", type: "trigger" as const, status: "pending" as StepStatus },
+      { id: "s2", label: "GPT-4: Extract Company Intel", type: "ai" as const, status: "pending" as StepStatus },
+      { id: "s3", label: "Action: Fetch LinkedIn Data", type: "action" as const, status: "pending" as StepStatus },
+      { id: "s4", label: "GPT-4: Synthesise Profile", type: "ai" as const, status: "pending" as StepStatus },
+      { id: "s5", label: "Action: Update CRM Fields", type: "action" as const, status: "pending" as StepStatus },
+    ],
+  },
+  {
+    id: "incident-response",
+    name: "Incident Response",
+    description: "Auto-triage and route production alerts",
+    steps: [
+      { id: "s1", label: "Trigger: PagerDuty Alert", type: "trigger" as const, status: "pending" as StepStatus },
+      { id: "s2", label: "GPT-4: Classify Severity", type: "ai" as const, status: "pending" as StepStatus },
+      { id: "s3", label: "Condition: Sev-1?", type: "condition" as const, status: "pending" as StepStatus },
+      { id: "s4", label: "Action: Page On-Call Team", type: "action" as const, status: "pending" as StepStatus },
+      { id: "s5", label: "Action: Create Incident Doc", type: "action" as const, status: "pending" as StepStatus },
+    ],
+  },
 ];
 
 const STEP_OUTPUTS: Record<string, string[]> = {
@@ -58,6 +82,14 @@ const STEP_OUTPUTS: Record<string, string[]> = {
   "content-pipeline-s2": ["Draft complete · 1,240 words · reading time 5 min"],
   "content-pipeline-s3": ["SEO score 91/100 · 3 suggestions applied"],
   "content-pipeline-s4": ["Published to cms.example.com/blog/ai-trends-2025"],
+  "data-enrichment-s2": ['{"company": "Acme Corp", "size": "500-1000", "industry": "fintech"}'],
+  "data-enrichment-s3": ['{"followers": 1240, "connections": "500+", "open_to_work": false}'],
+  "data-enrichment-s4": ['Profile score: 92/100 · ICP match: enterprise · priority: high'],
+  "data-enrichment-s5": ["CRM fields updated: company_size, industry, icp_score, linkedin_url"],
+  "incident-response-s2": ['{"severity": 1, "type": "latency_spike", "affected_services": ["api", "db"]}'],
+  "incident-response-s3": ["Sev-1 → true branch · escalation triggered"],
+  "incident-response-s4": ["PagerDuty incident #IR-2847 created · oncall@example.com notified"],
+  "incident-response-s5": ["Confluence page created: /incidents/IR-2847 · Slack thread opened"],
 };
 
 const TYPE_COLORS: Record<WorkflowStep["type"], string> = {
@@ -119,6 +151,33 @@ export default function AIWorkflowPlatformEmbed() {
             ) : null}
           </button>
         ))}
+        <button
+          onClick={async () => {
+            if (running) return;
+            for (const wf of WORKFLOWS) {
+              setSelectedWorkflow(wf);
+              await new Promise((r) => setTimeout(r, 200));
+              setRunning(true);
+              setRunCount((prev) => ({ ...prev, [wf.id]: (prev[wf.id] || 0) + 1 }));
+              const fresh = wf.steps.map((s) => ({ ...s, status: "pending" as StepStatus, output: undefined }));
+              setSteps(fresh);
+              for (let i = 0; i < fresh.length; i++) {
+                await new Promise((r) => setTimeout(r, 200));
+                setSteps((prev) => prev.map((s, idx) => idx === i ? { ...s, status: "running" } : s));
+                await new Promise((r) => setTimeout(r, 500 + Math.random() * 400));
+                const key = `${wf.id}-${fresh[i].id}`;
+                const output = STEP_OUTPUTS[key];
+                setSteps((prev) => prev.map((s, idx) => idx === i ? { ...s, status: "done", output: output?.[0] } : s));
+              }
+              setRunning(false);
+              await new Promise((r) => setTimeout(r, 400));
+            }
+          }}
+          disabled={running}
+          className="w-full text-xs text-[#888888] border border-[rgba(255,255,255,0.08)] rounded-xl py-2.5 hover:text-[#ededed] hover:border-[rgba(255,255,255,0.14)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          Run All Workflows
+        </button>
       </div>
 
       {/* Workflow runner */}

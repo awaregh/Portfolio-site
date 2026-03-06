@@ -36,6 +36,7 @@ export const projects: Project[] = [
     githubUrl: `${REPO_BASE}/fraud-detection`,
     quickStart:
       "git clone https://github.com/awaregh/Portfolio-site.git && cd Portfolio-site/projects/fraud-detection && pip install -r requirements.txt && python -c \"from src.models.train import run_training_pipeline; run_training_pipeline()\"",
+    demoUrl: "/projects/fraud-detection/demo",
   },
   {
     slug: "ai-workflow-platform",
@@ -154,6 +155,7 @@ export const projects: Project[] = [
     githubUrl: `${GITHUB_BASE}/-Schema-Evolution-in-Long-Lived-Systems-Backward-compatibility-patterns.`,
     quickStart:
       "git clone https://github.com/awaregh/-Schema-Evolution-in-Long-Lived-Systems-Backward-compatibility-patterns..git && cd -Schema-Evolution-in-Long-Lived-Systems-Backward-compatibility-patterns. && docker compose up --build",
+    demoUrl: "/projects/schema-evolution/demo",
   },
   {
     slug: "change-data-pipeline",
@@ -172,6 +174,7 @@ export const projects: Project[] = [
     githubUrl: `${GITHUB_BASE}/change-data-pipeline`,
     quickStart:
       "git clone https://github.com/awaregh/change-data-pipeline.git && cd change-data-pipeline && docker compose up --build",
+    demoUrl: "/projects/change-data-pipeline/demo",
   },
   {
     slug: "retrieval-experiment-platform",
@@ -190,6 +193,7 @@ export const projects: Project[] = [
     githubUrl: `${GITHUB_BASE}/Retrieval-Experiment-Platform`,
     quickStart:
       "git clone https://github.com/awaregh/Retrieval-Experiment-Platform.git && cd Retrieval-Experiment-Platform && pip install -r requirements.txt",
+    demoUrl: "/projects/retrieval-experiment-platform/demo",
   },
   {
     slug: "designing-idempotent-apis",
@@ -208,6 +212,7 @@ export const projects: Project[] = [
     githubUrl: `${GITHUB_BASE}/Designing-Idempotent-APIs-at-Scale`,
     quickStart:
       "git clone https://github.com/awaregh/Designing-Idempotent-APIs-at-Scale.git && cd Designing-Idempotent-APIs-at-Scale/infra && docker compose up --build",
+    demoUrl: "/projects/designing-idempotent-apis/demo",
   },
   {
     slug: "hallucination-mitigation",
@@ -226,6 +231,7 @@ export const projects: Project[] = [
     githubUrl: `${GITHUB_BASE}/Hallucination-Mitigation-in-Enterprise-LLM-Apps`,
     quickStart:
       "git clone https://github.com/awaregh/Hallucination-Mitigation-in-Enterprise-LLM-Apps.git && cd Hallucination-Mitigation-in-Enterprise-LLM-Apps && pip install -r requirements.txt && python evaluation/scripts/run_evaluation.py --dataset evaluation/datasets/factual_queries.jsonl --strategy all --output results/factual_results.json --mock",
+    demoUrl: "/projects/hallucination-mitigation/demo",
   },
   {
     slug: "config-service",
@@ -240,6 +246,7 @@ export const projects: Project[] = [
     language: "TypeScript",
     languageColor: "#3178c6",
     githubUrl: `${GITHUB_BASE}/config-service`,
+    demoUrl: "/projects/config-service/demo",
   },
   {
     slug: "failure-recovery-patterns",
@@ -258,6 +265,7 @@ export const projects: Project[] = [
     githubUrl: `${GITHUB_BASE}/Failure-Recovery-Patterns-in-Microservices`,
     quickStart:
       "git clone https://github.com/awaregh/Failure-Recovery-Patterns-in-Microservices.git && cd Failure-Recovery-Patterns-in-Microservices && docker-compose up --build",
+    demoUrl: "/projects/failure-recovery-patterns/demo",
   },
   {
     slug: "iac-maintainability-study",
@@ -274,6 +282,7 @@ export const projects: Project[] = [
     language: "HCL",
     languageColor: "#844FBA",
     githubUrl: `${GITHUB_BASE}/IaC-Maintainability-Study`,
+    demoUrl: "/projects/iac-maintainability-study/demo",
   },
   {
     slug: "llm-gateway",
@@ -292,5 +301,6 @@ export const projects: Project[] = [
     githubUrl: `${GITHUB_BASE}/LLM-Gateway-AI-Infrastructure-`,
     quickStart:
       "git clone https://github.com/awaregh/LLM-Gateway-AI-Infrastructure-.git && cd LLM-Gateway-AI-Infrastructure- && cp .env.example .env && docker compose up",
+    demoUrl: "/projects/llm-gateway/demo",
   },
 ];

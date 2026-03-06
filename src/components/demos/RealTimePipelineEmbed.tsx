@@ -10,17 +10,19 @@ interface Event {
   payload: string;
   ts: number;
   latencyMs: number;
-  sink: "ClickHouse" | "Alerting" | "Billing";
+  sink: "ClickHouse" | "Alerting" | "Billing" | "DLQ";
+  schemaValid: boolean;
 }
 
 const TOPICS = ["user.pageview", "order.created", "payment.processed", "session.end", "error.captured"];
 const SCHEMAS = ["UserEvent/v3", "OrderEvent/v2", "PaymentEvent/v4", "SessionEvent/v1", "ErrorEvent/v2"];
 const TENANTS = ["acme-corp", "fintech-co", "retail-inc", "dev-tools-ltd", "media-group"];
-const SINKS: Event["sink"][] = ["ClickHouse", "Alerting", "Billing"];
+const SINKS: Array<"ClickHouse" | "Alerting" | "Billing"> = ["ClickHouse", "Alerting", "Billing"];
 
 let eventCounter = 0;
 function generateEvent(): Event {
   const idx = Math.floor(Math.random() * TOPICS.length);
+  const schemaValid = Math.random() > 0.05;
   return {
     id: `evt-${(++eventCounter).toString().padStart(6, "0")}`,
     topic: TOPICS[idx],
@@ -29,7 +31,8 @@ function generateEvent(): Event {
     payload: JSON.stringify({ event_id: `${Math.random().toString(36).slice(2, 10)}`, ts: Date.now() }),
     ts: Date.now(),
     latencyMs: 80 + Math.floor(Math.random() * 270),
-    sink: SINKS[Math.floor(Math.random() * SINKS.length)],
+    sink: schemaValid ? SINKS[Math.floor(Math.random() * SINKS.length)] : "DLQ",
+    schemaValid,
   };
 }
 
@@ -37,6 +40,7 @@ const SINK_COLORS: Record<Event["sink"], string> = {
   ClickHouse: "text-[#f59e0b] bg-[#f59e0b]/10 border-[#f59e0b]/20",
   Alerting: "text-[#ef4444] bg-[#ef4444]/10 border-[#ef4444]/20",
   Billing: "text-[#22c55e] bg-[#22c55e]/10 border-[#22c55e]/20",
+  DLQ: "text-[#f97316] bg-[#f97316]/10 border-[#f97316]/20",
 };
 
 export default function RealTimePipelineEmbed() {
@@ -89,16 +93,17 @@ export default function RealTimePipelineEmbed() {
   return (
     <div>
       {/* Metrics */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-2 sm:grid-cols-5 gap-4 mb-6">
         {[
           { label: "Events Processed", value: totalProcessed.toLocaleString() },
           { label: "Events / sec", value: running ? eventsPerSec.toString() : "—" },
           { label: "Avg Latency (p50)", value: avgLatency ? `${avgLatency}ms` : "—" },
           { label: "Consumer Lag", value: running ? `${Math.floor(Math.random() * 8) + 1}s` : "—" },
+          { label: "Schema Errors", value: events.filter((e) => !e.schemaValid).length.toString(), color: "#ef4444" },
         ].map((m) => (
           <div key={m.label} className="rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#111111] p-4">
             <div className="text-xs text-[#888888] mb-1">{m.label}</div>
-            <div className="text-xl font-semibold text-[#ededed] font-mono">{m.value}</div>
+            <div className="text-xl font-semibold font-mono" style={{ color: (m as { color?: string }).color || "#ededed" }}>{m.value}</div>
           </div>
         ))}
       </div>
@@ -200,7 +205,7 @@ export default function RealTimePipelineEmbed() {
 
           <div className="mt-6 pt-4 border-t border-[rgba(255,255,255,0.06)]">
             <p className="text-xs text-[#888888] uppercase tracking-widest font-medium mb-3">Sink Distribution</p>
-            {SINKS.map((sink) => {
+            {(["ClickHouse", "Alerting", "Billing", "DLQ"] as const).map((sink) => {
               const count = events.filter((e) => e.sink === sink).length;
               return (
                 <div key={sink} className="flex items-center justify-between text-xs mb-2">
