@@ -1,0 +1,31 @@
+---
+title: Retrieval Experiment Platform
+description: A tool for testing and evaluating RAG retrieval pipelines by comparing chunking strategies, embedding models, and reranking methods using metrics like Precision@K and nDCG.
+tags: ["Python", "RAG", "Embeddings", "NLP"]
+architecture: ["retrieval evaluation", "chunking strategies", "embedding comparison", "reranking"]
+---
+
+## Problem
+
+Building effective RAG (Retrieval-Augmented Generation) systems requires making critical decisions about chunking strategies, embedding models, and reranking methods. Each choice affects retrieval quality, latency, and cost — but without systematic evaluation, teams rely on intuition rather than data. This platform provides a controlled environment for comparing retrieval pipeline configurations head-to-head.
+
+## Architecture Overview
+
+The platform implements a modular retrieval pipeline where each stage (chunking, embedding, retrieval, reranking) can be independently swapped and evaluated. Experiments run across configurable parameter grids, measuring retrieval quality with standard IR metrics including Precision@K, Recall@K, Mean Reciprocal Rank (MRR), and normalized Discounted Cumulative Gain (nDCG).
+
+## Technical Decisions
+
+- **Modular pipeline stages** — chunking, embedding, and reranking are independent components that can be mixed and matched for controlled experiments
+- **Standard IR metrics** — using established information retrieval metrics (Precision@K, nDCG) rather than downstream task performance, isolating retrieval quality from generation quality
+- **Configurable experiment grids** — parameter grid search over chunk sizes, overlap, embedding models, and reranking strategies for systematic comparison
+
+## Tradeoffs
+
+- **Retrieval-only evaluation** — the platform measures retrieval quality in isolation, not end-to-end RAG performance including generation. This keeps experiments focused but requires separate evaluation of the full pipeline
+- **Benchmark datasets** — evaluation relies on curated query-document relevance pairs, which may not perfectly represent production query distributions
+
+## Tech Stack
+
+- **Backend:** Python
+- **ML/NLP:** Embedding models, rerankers
+- **Evaluation:** Precision@K, Recall@K, MRR, nDCG

@@ -1,0 +1,54 @@
+---
+title: Failure Recovery Patterns in Microservices
+description: Platform simulating microservice failures to evaluate retries, circuit breakers, bulkheads, and idempotency. Measures reliability, latency, and duplicate prevention to guide resilient system design.
+tags: ["Python", "FastAPI", "PostgreSQL", "Redis", "Docker", "Prometheus", "Grafana"]
+architecture: ["circuit breakers", "retry patterns", "bulkhead isolation", "outbox pattern"]
+---
+
+## Problem
+
+Microservice architectures introduce new failure modes — cascading failures, retry storms, and partial outages can bring down entire systems. Understanding which resilience patterns actually help (and which make things worse) requires empirical evidence under realistic failure conditions. This platform provides that evidence by implementing six incrementally complex resilience configurations and measuring their performance under chaos scenarios.
+
+## Architecture Overview
+
+Five FastAPI microservices form a realistic order processing system:
+
+- **Gateway** — entry point with load shedding
+- **Orders** — order management with outbox pattern
+- **Payments** — payment processing (chaos injection target)
+- **Inventory** — stock management with lock contention simulation
+- **Notifications** — async notification delivery via outbox
+
+Infrastructure includes PostgreSQL, Redis, Prometheus, Grafana, and Jaeger for full observability.
+
+## Resilience Patterns Implemented
+
+| Pattern | Implementation |
+|---------|---------------|
+| Exponential backoff + jitter | max_attempts=3, base_delay=100ms |
+| Circuit breaker (rolling window) | threshold=5, open=30s |
+| Bulkhead (async semaphore) | payments=20, inventory=20 |
+| Per-hop timeouts + deadline | read=10s, deadline=25s |
+| Idempotency keys (Redis-backed) | TTL=24h |
+| Backpressure / load shedding | max_inflight=200 |
+| Outbox pattern | Background worker + Postgres |
+
+## Key Results
+
+| Config | Success Rate | P95 Latency | Retry Amplification |
+|--------|-------------|-------------|---------------------|
+| Baseline (no resilience) | 80% | 340ms | 1.0x |
+| Retries only (naive) | **51%** | 890ms | **2.6x** |
+| + Circuit breakers | **92%** | 210ms | **1.1x** |
+| Full stack | **94%** | 185ms | 1.1x |
+
+Naive retries *lower* success rate below baseline by amplifying load. Circuit breakers restore success rate and reduce MTTR from 120s to 35s.
+
+## Tech Stack
+
+- **Backend:** Python, FastAPI
+- **Database:** PostgreSQL
+- **Cache:** Redis
+- **Observability:** Prometheus, Grafana, Jaeger, OpenTelemetry
+- **Load Testing:** k6
+- **Infrastructure:** Docker, Docker Compose

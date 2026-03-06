@@ -1,0 +1,23 @@
+---
+title: Config Service
+description: Centralized configuration service used across internal systems for managing application settings and feature flags.
+tags: ["TypeScript", "Node.js"]
+architecture: ["configuration management", "internal tooling"]
+---
+
+## Problem
+
+As the number of internal services grows, managing configuration across environments becomes increasingly complex. Hardcoded values, scattered environment variables, and inconsistent configuration formats lead to deployment errors and operational overhead. A centralized configuration service provides a single source of truth for application settings.
+
+## Architecture Overview
+
+The config service provides a unified API for storing and retrieving configuration values across all internal services. It supports environment-specific overrides, ensuring that development, staging, and production environments can share base configurations while maintaining environment-specific customizations.
+
+## Technical Decisions
+
+- **TypeScript** — type safety for configuration schemas prevents misconfiguration errors at compile time
+- **Centralized management** — single service owns all configuration, eliminating scattered environment variables and config files across services
+
+## Tech Stack
+
+- **Backend:** TypeScript, Node.js

@@ -15,6 +15,7 @@ export interface Project {
 }
 
 const REPO_BASE = "https://github.com/awaregh/Portfolio-site/tree/main/projects";
+const GITHUB_BASE = "https://github.com/awaregh";
 
 export const projects: Project[] = [
   {
@@ -135,5 +136,161 @@ export const projects: Project[] = [
     quickStart:
       "git clone https://github.com/awaregh/Portfolio-site.git && cd Portfolio-site/projects/distributed-rate-limiter && docker compose up -d",
     demoUrl: "/projects/distributed-rate-limiter/demo",
+  },
+  {
+    slug: "schema-evolution",
+    title: "Schema Evolution in Long-Lived Systems",
+    description:
+      "Research implementation of eight real-world schema evolution scenarios across a three-service microservices architecture, covering PostgreSQL migrations, REST API versioning, and event schema evolution with backward compatibility patterns.",
+    tags: ["Python", "PostgreSQL", "FastAPI", "Kafka", "Docker"],
+    architecture: [
+      "backward compatibility",
+      "API versioning",
+      "event schema evolution",
+      "database migrations",
+    ],
+    language: "Python",
+    languageColor: "#3572A5",
+    githubUrl: `${GITHUB_BASE}/-Schema-Evolution-in-Long-Lived-Systems-Backward-compatibility-patterns.`,
+    quickStart:
+      "git clone https://github.com/awaregh/-Schema-Evolution-in-Long-Lived-Systems-Backward-compatibility-patterns..git && cd -Schema-Evolution-in-Long-Lived-Systems-Backward-compatibility-patterns. && docker compose up --build",
+  },
+  {
+    slug: "change-data-pipeline",
+    title: "Change Data Capture Pipeline",
+    description:
+      "CDC pipeline that streams database changes into an event log, supports consumers, replay, and schema evolution with a demo consumer that builds projections.",
+    tags: ["Python", "PostgreSQL", "Kafka", "Docker"],
+    architecture: [
+      "CDC",
+      "event sourcing",
+      "stream processing",
+      "schema evolution",
+    ],
+    language: "Python",
+    languageColor: "#3572A5",
+    githubUrl: `${GITHUB_BASE}/change-data-pipeline`,
+    quickStart:
+      "git clone https://github.com/awaregh/change-data-pipeline.git && cd change-data-pipeline && docker compose up --build",
+  },
+  {
+    slug: "retrieval-experiment-platform",
+    title: "Retrieval Experiment Platform",
+    description:
+      "A tool for testing and evaluating RAG retrieval pipelines by comparing chunking strategies, embedding models, and reranking methods using metrics like Precision@K and nDCG.",
+    tags: ["Python", "RAG", "Embeddings", "NLP"],
+    architecture: [
+      "retrieval evaluation",
+      "chunking strategies",
+      "embedding comparison",
+      "reranking",
+    ],
+    language: "Python",
+    languageColor: "#3572A5",
+    githubUrl: `${GITHUB_BASE}/Retrieval-Experiment-Platform`,
+    quickStart:
+      "git clone https://github.com/awaregh/Retrieval-Experiment-Platform.git && cd Retrieval-Experiment-Platform && pip install -r requirements.txt",
+  },
+  {
+    slug: "designing-idempotent-apis",
+    title: "Designing Idempotent APIs at Scale",
+    description:
+      "Production-quality research system comparing six idempotency strategies for a payments API domain, built with FastAPI, PostgreSQL, Redis, and RabbitMQ.",
+    tags: ["Python", "FastAPI", "PostgreSQL", "Redis", "RabbitMQ", "Docker"],
+    architecture: [
+      "idempotency patterns",
+      "distributed systems",
+      "saga pattern",
+      "outbox pattern",
+    ],
+    language: "Python",
+    languageColor: "#3572A5",
+    githubUrl: `${GITHUB_BASE}/Designing-Idempotent-APIs-at-Scale`,
+    quickStart:
+      "git clone https://github.com/awaregh/Designing-Idempotent-APIs-at-Scale.git && cd Designing-Idempotent-APIs-at-Scale/infra && docker compose up --build",
+  },
+  {
+    slug: "hallucination-mitigation",
+    title: "Hallucination Mitigation in Enterprise LLM Apps",
+    description:
+      "Production-grade research system for evaluating, benchmarking, and mitigating hallucinations in enterprise LLM applications with multiple RAG variants and guardrail frameworks.",
+    tags: ["Python", "RAG", "LLM", "NLP", "pytest"],
+    architecture: [
+      "RAG pipeline",
+      "guardrails",
+      "citation enforcement",
+      "self-critique",
+    ],
+    language: "Python",
+    languageColor: "#3572A5",
+    githubUrl: `${GITHUB_BASE}/Hallucination-Mitigation-in-Enterprise-LLM-Apps`,
+    quickStart:
+      "git clone https://github.com/awaregh/Hallucination-Mitigation-in-Enterprise-LLM-Apps.git && cd Hallucination-Mitigation-in-Enterprise-LLM-Apps && pip install -r requirements.txt && python evaluation/scripts/run_evaluation.py --dataset evaluation/datasets/factual_queries.jsonl --strategy all --output results/factual_results.json --mock",
+  },
+  {
+    slug: "config-service",
+    title: "Config Service",
+    description:
+      "Centralized configuration service used across internal systems for managing application settings and feature flags.",
+    tags: ["TypeScript", "Node.js"],
+    architecture: [
+      "configuration management",
+      "internal tooling",
+    ],
+    language: "TypeScript",
+    languageColor: "#3178c6",
+    githubUrl: `${GITHUB_BASE}/config-service`,
+  },
+  {
+    slug: "failure-recovery-patterns",
+    title: "Failure Recovery Patterns in Microservices",
+    description:
+      "Platform simulating microservice failures to evaluate retries, circuit breakers, bulkheads, and idempotency. Measures reliability, latency, and duplicate prevention to guide resilient system design.",
+    tags: ["Python", "FastAPI", "PostgreSQL", "Redis", "Docker", "Prometheus", "Grafana"],
+    architecture: [
+      "circuit breakers",
+      "retry patterns",
+      "bulkhead isolation",
+      "outbox pattern",
+    ],
+    language: "Python",
+    languageColor: "#3572A5",
+    githubUrl: `${GITHUB_BASE}/Failure-Recovery-Patterns-in-Microservices`,
+    quickStart:
+      "git clone https://github.com/awaregh/Failure-Recovery-Patterns-in-Microservices.git && cd Failure-Recovery-Patterns-in-Microservices && docker-compose up --build",
+  },
+  {
+    slug: "iac-maintainability-study",
+    title: "IaC Maintainability Study",
+    description:
+      "Comprehensive empirical study examining how structural design decisions in Terraform infrastructure-as-code affect long-term maintainability, drift susceptibility, and change management complexity.",
+    tags: ["Terraform", "HCL", "AWS", "Python"],
+    architecture: [
+      "infrastructure as code",
+      "drift detection",
+      "maintainability metrics",
+      "reference architectures",
+    ],
+    language: "HCL",
+    languageColor: "#844FBA",
+    githubUrl: `${GITHUB_BASE}/IaC-Maintainability-Study`,
+  },
+  {
+    slug: "llm-gateway",
+    title: "LLM Gateway — AI Infrastructure",
+    description:
+      "Production-ready unified API gateway for routing requests across multiple LLM providers with built-in rate limiting, response caching, cost tracking, and OpenTelemetry observability.",
+    tags: ["Python", "FastAPI", "Redis", "PostgreSQL", "Docker", "OpenTelemetry"],
+    architecture: [
+      "API gateway",
+      "model routing",
+      "rate limiting",
+      "cost tracking",
+    ],
+    language: "Python",
+    languageColor: "#3572A5",
+    githubUrl: `${GITHUB_BASE}/LLM-Gateway-AI-Infrastructure-`,
+    quickStart:
+      "git clone https://github.com/awaregh/LLM-Gateway-AI-Infrastructure-.git && cd LLM-Gateway-AI-Infrastructure- && cp .env.example .env && docker compose up",
   },
 ];

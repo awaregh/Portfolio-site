@@ -1,0 +1,43 @@
+---
+title: Designing Idempotent APIs at Scale
+description: Production-quality research system comparing six idempotency strategies for a payments API domain, built with FastAPI, PostgreSQL, Redis, and RabbitMQ.
+tags: ["Python", "FastAPI", "PostgreSQL", "Redis", "RabbitMQ", "Docker"]
+architecture: ["idempotency patterns", "distributed systems", "saga pattern", "outbox pattern"]
+---
+
+## Problem
+
+In distributed systems, network failures and retries are inevitable. Without idempotency, a simple retry can cause a payment to be processed twice — real money moving where it shouldn't. This project implements and empirically compares six different idempotency strategies in a payments API domain, measuring correctness under failure, latency overhead, and implementation complexity.
+
+## Architecture Overview
+
+Seven API variants run simultaneously, each implementing the same payments API with a different idempotency strategy. A shared infrastructure layer provides PostgreSQL, Redis, and RabbitMQ. The evaluation framework includes load testing (Locust), failure scenario injection, and automated comparison across correctness, latency, storage, and race-safety dimensions.
+
+### Strategies Implemented
+
+1. **Baseline** — no idempotency (demonstrates the double-spend problem)
+2. **Idempotency Key** — Redis SET NX lock with dual-write to Redis and PostgreSQL
+3. **Natural Idempotency** — SHA-256 content-hash deterministic UUID with PUT upserts
+4. **DB Unique Constraint** — INSERT ON CONFLICT DO NOTHING with unique constraint
+5. **Dedup Queue** — RabbitMQ consumer-side deduplication table
+6. **Event-Driven / Outbox** — transactional outbox with background publisher
+7. **Saga / Workflow** — 4-step saga with JSONB state and compensating transactions
+
+## Technical Decisions
+
+- **Real infrastructure, not mocks** — all seven strategies run against actual PostgreSQL, Redis, and RabbitMQ instances for realistic performance measurement
+- **Failure injection** — seven failure scenarios (client retry, network timeout, duplicate webhooks, concurrent requests, partial failure, worker retry, message redelivery) test each strategy under realistic failure conditions
+- **Cost model** — beyond correctness, the system measures latency overhead, storage requirements, and implementation complexity to support production decision-making
+
+## Key Results
+
+Naive retries (no idempotency) lower success rate below the no-retry baseline by amplifying load. The idempotency key pattern provides the best general-purpose tradeoff of correctness, latency, and complexity. The saga pattern offers the strongest correctness guarantees but at the highest implementation and latency cost.
+
+## Tech Stack
+
+- **Backend:** Python, FastAPI
+- **Database:** PostgreSQL
+- **Cache/Lock:** Redis
+- **Queue:** RabbitMQ
+- **Load Testing:** Locust
+- **Infrastructure:** Docker, Docker Compose

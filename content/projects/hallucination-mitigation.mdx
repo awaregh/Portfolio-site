@@ -1,0 +1,43 @@
+---
+title: Hallucination Mitigation in Enterprise LLM Apps
+description: Production-grade research system for evaluating, benchmarking, and mitigating hallucinations in enterprise LLM applications with multiple RAG variants and guardrail frameworks.
+tags: ["Python", "RAG", "LLM", "NLP", "pytest"]
+architecture: ["RAG pipeline", "guardrails", "citation enforcement", "self-critique"]
+---
+
+## Problem
+
+Hallucinations — confident but factually incorrect outputs — represent one of the most critical risks in deploying LLMs for enterprise use cases. This system provides a comprehensive framework for evaluating, benchmarking, and mitigating hallucinations across multiple strategies, from simple prompt engineering to full retrieval-augmented generation pipelines with multi-stage validation.
+
+## Architecture Overview
+
+The system implements a layered architecture with four key stages:
+
+1. **Guardrails Layer** — prompt templates, instruction constraints, and system role enforcement to shape LLM behavior before generation
+2. **Retrieval Layer** — four RAG variants (naive, hybrid BM25+dense, reranking, multi-query) providing grounding context
+3. **LLM Orchestrator** — prompt building and context assembly for the language model
+4. **Validation Layer** — schema validation, citation enforcement, self-critique, and multi-step validation pipeline for output verification
+
+## Mitigation Strategies
+
+The system evaluates nine strategies from no mitigation (baseline) through full pipeline deployment:
+
+- **Grounded Prompting** (~20-35% hallucination reduction)
+- **Naive RAG** (~40-55% reduction)
+- **Hybrid RAG** (BM25 + dense retrieval, ~50-65% reduction)
+- **Reranking RAG** (~55-68% reduction)
+- **Citation Enforcement** (~65-78% reduction)
+- **Full Pipeline** (all strategies combined, ~70-85% reduction)
+
+## Technical Decisions
+
+- **Modular evaluation harness** — strategies can be individually toggled and combined, enabling controlled A/B comparison
+- **Five benchmark datasets** — factual, ambiguous, missing-knowledge, adversarial, and long-context queries test different failure modes
+- **Mock mode** — full evaluation pipeline runs without API keys for development and CI, using deterministic mock responses
+
+## Tech Stack
+
+- **Backend:** Python
+- **ML/NLP:** RAG pipelines, embedding models, rerankers
+- **Testing:** pytest
+- **Evaluation:** Custom harness with hallucination rate, citation accuracy, latency, and refusal rate metrics

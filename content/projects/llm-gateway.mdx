@@ -1,0 +1,45 @@
+---
+title: LLM Gateway — AI Infrastructure
+description: Production-ready unified API gateway for routing requests across multiple LLM providers with built-in rate limiting, response caching, cost tracking, and OpenTelemetry observability.
+tags: ["Python", "FastAPI", "Redis", "PostgreSQL", "Docker", "OpenTelemetry"]
+architecture: ["API gateway", "model routing", "rate limiting", "cost tracking"]
+---
+
+## Problem
+
+Organizations using multiple LLM providers (OpenAI, Anthropic, etc.) face fragmented integration, inconsistent rate limiting, duplicated cost tracking, and no unified observability. Each provider has different APIs, pricing models, and rate limits, creating operational complexity that grows with each new model adoption. A unified gateway abstracts these differences behind a single API.
+
+## Architecture Overview
+
+The gateway provides a unified REST API (`POST /v1/chat`, `POST /v1/embeddings`) that routes requests to the optimal provider based on configurable strategies. Key infrastructure components include:
+
+- **Model Routing Engine** — supports cost-optimized, latency-optimized, capability-based, and round-robin strategies
+- **Rate Limiter** — sliding-window algorithm with per-user and per-tenant limits (Redis-backed for multi-instance deployment)
+- **Response Cache** — SHA-256 keyed cache with configurable TTL, reducing redundant API calls
+- **Cost Tracker** — per-request token usage and USD cost stored in database with analytics API
+- **Observability** — structured logging with OpenTelemetry metrics and traces
+
+## Routing Strategies
+
+| Strategy | Description |
+|----------|-------------|
+| Cost (default) | Lowest combined input+output cost |
+| Latency | Lowest typical response latency |
+| Capability | Highest context window |
+| Round Robin | Rotate through available providers |
+
+Automatic fallback chain ensures availability: small requests go to gpt-4o-mini, large context goes to claude-3-5-sonnet, and a local echo provider is always available when no API keys are configured.
+
+## Technical Decisions
+
+- **Provider abstraction** — each LLM provider is an adapter implementing a common interface, making new provider integration a single-file addition
+- **Redis-optional** — rate limiting and caching work with in-memory fallbacks when Redis is unavailable, enabling single-process development
+- **SQLite for development, PostgreSQL for production** — cost tracking database is configurable via connection string
+
+## Tech Stack
+
+- **Backend:** Python, FastAPI
+- **Cache/Rate Limiting:** Redis (with in-memory fallback)
+- **Database:** SQLite / PostgreSQL
+- **Observability:** OpenTelemetry, structured logging
+- **Infrastructure:** Docker, Docker Compose
