@@ -11,31 +11,30 @@ export default function RecruiterSummary() {
       className="px-6 pb-16"
     >
       <div className="max-w-5xl mx-auto">
-        <div className="rounded-2xl border border-[rgba(147,197,253,0.3)] bg-white/70 backdrop-blur-sm p-6 sm:p-8 grid grid-cols-1 sm:grid-cols-3 gap-6 shadow-soft">
-          <div className="border-r-0 sm:border-r border-[rgba(147,197,253,0.2)] pr-0 sm:pr-6">
-            <p className="text-xs text-[#6b7ea3] uppercase tracking-widest mb-2 font-medium">
+        <div className="rounded border border-[rgba(232,230,227,0.1)] bg-[#161920] p-6 sm:p-8 grid grid-cols-1 sm:grid-cols-3 gap-6">
+          <div className="border-r-0 sm:border-r border-[rgba(232,230,227,0.1)] pr-0 sm:pr-6">
+            <p className="text-xs font-mono text-[#b6b1a8] uppercase tracking-widest mb-2">
               Experience
             </p>
-            <p className="text-[#1a2e4a] text-sm font-medium leading-relaxed">
-              5+ years building production backend systems
+            <p className="text-[#e8e6e3] text-sm leading-relaxed">
+              10+ years building production web systems
             </p>
           </div>
-          <div className="border-r-0 sm:border-r border-[rgba(147,197,253,0.2)] pr-0 sm:pr-6">
-            <p className="text-xs text-[#6b7ea3] uppercase tracking-widest mb-2 font-medium">
+          <div className="border-r-0 sm:border-r border-[rgba(232,230,227,0.1)] pr-0 sm:pr-6">
+            <p className="text-xs font-mono text-[#b6b1a8] uppercase tracking-widest mb-2">
               Specializes in
             </p>
-            <p className="text-[#1a2e4a] text-sm leading-relaxed">
-              Event-driven architecture · Distributed systems · Multi-tenant
-              SaaS · AI infrastructure
+            <p className="text-[#b6b1a8] text-sm leading-relaxed">
+              Frontend systems &bull; Design systems &bull; Distributed
+              architecture &bull; AI product UX
             </p>
           </div>
           <div>
-            <p className="text-xs text-[#6b7ea3] uppercase tracking-widest mb-2 font-medium">
+            <p className="text-xs font-mono text-[#b6b1a8] uppercase tracking-widest mb-2">
               Open to
             </p>
-            <p className="text-[#1a2e4a] text-sm leading-relaxed">
-              Senior Backend · Staff Engineer · Platform Engineer · AI Systems
-              roles
+            <p className="text-[#b6b1a8] text-sm leading-relaxed">
+              Senior Frontend &bull; Staff Engineer &bull; Platform Engineer roles
             </p>
           </div>
         </div>
@@ -43,3 +42,4 @@ export default function RecruiterSummary() {
     </motion.section>
   );
 }
+

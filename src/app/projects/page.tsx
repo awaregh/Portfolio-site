@@ -16,14 +16,14 @@ export default function ProjectsPage() {
         {/* Back link */}
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-[#6b7ea3] hover:text-[#1a2e4a] text-sm transition-colors mb-10 group"
+          className="link-underline inline-flex items-center gap-2 text-[#b6b1a8] hover:text-[#e8e6e3] text-sm transition-colors mb-10"
         >
           <svg
-            width="16"
-            height="16"
+            width="14"
+            height="14"
             viewBox="0 0 16 16"
             fill="none"
-            className="transition-transform group-hover:-translate-x-0.5"
+            aria-hidden="true"
           >
             <path
               d="M10 12L6 8L10 4"
@@ -38,17 +38,17 @@ export default function ProjectsPage() {
 
         {/* Header */}
         <div className="mb-12">
-          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#1a2e4a] mb-4 leading-tight">
-            Selected Projects
+          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#e8e6e3] mb-4 leading-tight">
+            Projects
           </h1>
-          <p className="text-[#6b7ea3] text-base leading-relaxed max-w-2xl">
+          <p className="text-[#b6b1a8] text-base leading-relaxed max-w-2xl">
             Production systems I&apos;ve designed and built end-to-end —
             backend platforms, AI infrastructure, and distributed systems.
           </p>
         </div>
 
         {/* Project list */}
-        <div className="grid grid-cols-1 gap-5">
+        <div className="grid grid-cols-1 gap-4">
           {projects.map((project) => (
             <ProjectCard key={project.slug} {...project} />
           ))}
@@ -57,3 +57,4 @@ export default function ProjectsPage() {
     </div>
   );
 }
+
