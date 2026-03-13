@@ -20,14 +20,14 @@ export default function Nav() {
       transition={{ duration: 0.4, ease: "easeOut" }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-[#0a0a0a]/90 backdrop-blur-md border-b border-[rgba(255,255,255,0.06)]"
+          ? "bg-white/80 backdrop-blur-md border-b border-[rgba(147,197,253,0.25)] shadow-[0_1px_12px_rgba(147,197,253,0.15)]"
           : "bg-transparent"
       }`}
     >
       <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
         <Link
           href="/"
-          className="text-[#ededed] font-semibold text-sm tracking-tight hover:text-white transition-colors"
+          className="text-[#1a2e4a] font-semibold text-sm tracking-tight hover:text-[#5b9bd5] transition-colors"
         >
           Ahmed Waregh
         </Link>
@@ -41,7 +41,7 @@ export default function Nav() {
             <Link
               key={label}
               href={href}
-              className="text-[#888888] hover:text-[#ededed] text-sm transition-colors"
+              className="text-[#6b7ea3] hover:text-[#1a2e4a] text-sm transition-colors"
             >
               {label}
             </Link>

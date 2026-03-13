@@ -50,7 +50,7 @@ export default async function ProjectPage({ params }: Props) {
         {/* Back link */}
         <Link
           href="/projects"
-          className="inline-flex items-center gap-2 text-[#888888] hover:text-[#ededed] text-sm transition-colors mb-10 group"
+          className="inline-flex items-center gap-2 text-[#6b7ea3] hover:text-[#1a2e4a] text-sm transition-colors mb-10 group"
         >
           <svg
             width="16"
@@ -72,10 +72,10 @@ export default async function ProjectPage({ params }: Props) {
 
         {/* Header */}
         <div className="mb-10">
-          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#ededed] mb-4 leading-tight">
+          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#1a2e4a] mb-4 leading-tight">
             {fm.title}
           </h1>
-          <p className="text-[#888888] text-base mb-6 leading-relaxed">
+          <p className="text-[#6b7ea3] text-base mb-6 leading-relaxed">
             {fm.description}
           </p>
 
@@ -85,7 +85,7 @@ export default async function ProjectPage({ params }: Props) {
               {currentProject?.demoUrl && (
                 <Link
                   href={currentProject.demoUrl}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#3b82f6] text-white text-sm font-medium hover:bg-[#2563eb] transition-colors"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#5b9bd5] text-white text-sm font-medium hover:bg-[#4a8cc4] transition-colors"
                 >
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                     <path d="M2 8h12M8 3l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -98,7 +98,7 @@ export default async function ProjectPage({ params }: Props) {
                   href={currentProject.githubUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#ffffff08] text-[#ededed] text-sm font-medium hover:bg-[#ffffff12] transition-colors border border-[rgba(255,255,255,0.08)]"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white/70 text-[#1a2e4a] text-sm font-medium hover:bg-white/90 transition-colors border border-[rgba(147,197,253,0.25)]"
                 >
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
                     <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
@@ -115,7 +115,7 @@ export default async function ProjectPage({ params }: Props) {
               {fm.architecture.map((tag: string) => (
                 <span
                   key={tag}
-                  className="px-2.5 py-1 text-xs rounded-md bg-[#3b82f6]/10 text-[#3b82f6] border border-[#3b82f6]/20 font-medium"
+                  className="px-2.5 py-1 text-xs rounded-md bg-[#5b9bd5]/10 text-[#5b9bd5] border border-[rgba(147,197,253,0.35)] font-medium"
                 >
                   {tag}
                 </span>
@@ -129,7 +129,7 @@ export default async function ProjectPage({ params }: Props) {
               {fm.tags.map((tag: string) => (
                 <span
                   key={tag}
-                  className="px-2.5 py-1 text-xs rounded-md bg-[#ffffff08] text-[#888888] border border-[rgba(255,255,255,0.08)] font-mono"
+                  className="px-2.5 py-1 text-xs rounded-md bg-white/70 text-[#6b7ea3] border border-[rgba(147,197,253,0.25)] font-mono"
                 >
                   {tag}
                 </span>
@@ -138,7 +138,7 @@ export default async function ProjectPage({ params }: Props) {
           )}
         </div>
 
-        <hr className="border-[rgba(255,255,255,0.08)] mb-10" />
+        <hr className="border-[rgba(147,197,253,0.25)] mb-10" />
 
         {/* MDX Content */}
         <div className="prose">
@@ -150,18 +150,18 @@ export default async function ProjectPage({ params }: Props) {
 
         {/* Quick Start */}
         {currentProject?.quickStart && (
-          <div className="mt-12 rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#111111] p-6">
-            <h3 className="text-[#ededed] font-semibold text-base mb-3 flex items-center gap-2">
+          <div className="mt-12 rounded-2xl border border-[rgba(147,197,253,0.25)] bg-white/70 p-6">
+            <h3 className="text-[#1a2e4a] font-semibold text-base mb-3 flex items-center gap-2">
               <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
                 <path d="M6 2l4 6H6l4 6" stroke="#3b82f6" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
               Quick Start
             </h3>
-            <p className="text-[#888888] text-sm mb-4">
+            <p className="text-[#6b7ea3] text-sm mb-4">
               Clone the repo and run locally with Docker:
             </p>
-            <div className="bg-[#0a0a0a] rounded-lg p-4 border border-[rgba(255,255,255,0.06)] overflow-x-auto">
-              <code className="text-sm text-[#93c5fd] font-mono whitespace-pre-wrap break-all">
+            <div className="bg-[#f8fbff] rounded-lg p-4 border border-[rgba(147,197,253,0.2)] overflow-x-auto">
+              <code className="text-sm text-[#2563eb] font-mono whitespace-pre-wrap break-all">
                 {currentProject.quickStart}
               </code>
             </div>
@@ -169,7 +169,7 @@ export default async function ProjectPage({ params }: Props) {
               href={currentProject.githubUrl ? `${currentProject.githubUrl}#readme` : '#'}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-sm text-[#3b82f6] hover:text-[#60a5fa] transition-colors mt-4"
+              className="inline-flex items-center gap-1.5 text-sm text-[#5b9bd5] hover:text-[#4a8cc4] transition-colors mt-4"
             >
               Full setup instructions in README
               <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
@@ -182,17 +182,17 @@ export default async function ProjectPage({ params }: Props) {
         {/* Prev / Next navigation */}
         {(prevProject || nextProject) && (
           <>
-            <hr className="border-[rgba(255,255,255,0.08)] mt-16 mb-8" />
+            <hr className="border-[rgba(147,197,253,0.25)] mt-16 mb-8" />
             <div className="flex items-stretch justify-between gap-4">
               {prevProject ? (
                 <Link
                   href={`/projects/${prevProject.slug}`}
-                  className="group flex-1 rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#111111] p-5 hover:border-[rgba(255,255,255,0.14)] hover:bg-[#141414] transition-all duration-200"
+                  className="group flex-1 rounded-2xl border border-[rgba(147,197,253,0.25)] bg-white/70 p-5 hover:border-[rgba(147,197,253,0.45)] hover:bg-white/90 transition-all duration-200"
                 >
-                  <span className="text-xs text-[#888888] mb-1 block">
+                  <span className="text-xs text-[#6b7ea3] mb-1 block">
                     ← Previous
                   </span>
-                  <span className="text-sm text-[#ededed] font-medium group-hover:text-white transition-colors">
+                  <span className="text-sm text-[#1a2e4a] font-medium group-hover:text-[#5b9bd5] transition-colors">
                     {prevProject.title}
                   </span>
                 </Link>
@@ -202,12 +202,12 @@ export default async function ProjectPage({ params }: Props) {
               {nextProject ? (
                 <Link
                   href={`/projects/${nextProject.slug}`}
-                  className="group flex-1 rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#111111] p-5 hover:border-[rgba(255,255,255,0.14)] hover:bg-[#141414] transition-all duration-200 text-right"
+                  className="group flex-1 rounded-2xl border border-[rgba(147,197,253,0.25)] bg-white/70 p-5 hover:border-[rgba(147,197,253,0.45)] hover:bg-white/90 transition-all duration-200 text-right"
                 >
-                  <span className="text-xs text-[#888888] mb-1 block">
+                  <span className="text-xs text-[#6b7ea3] mb-1 block">
                     Next →
                   </span>
-                  <span className="text-sm text-[#ededed] font-medium group-hover:text-white transition-colors">
+                  <span className="text-sm text-[#1a2e4a] font-medium group-hover:text-[#5b9bd5] transition-colors">
                     {nextProject.title}
                   </span>
                 </Link>

@@ -28,7 +28,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-[#0a0a0a] text-[#ededed] min-h-screen font-sans">
+      <body className="text-[#1a2e4a] min-h-screen font-sans">
         <Nav />
         <main>{children}</main>
         <Footer />

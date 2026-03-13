@@ -16,11 +16,11 @@ export default function Home() {
       <Hero />
       <RecruiterSummary />
       <PinnedRepos />
-      <section id="projects" className="py-24 px-6 max-w-5xl mx-auto">
-        <h2 className="text-2xl font-semibold tracking-tight text-[#ededed] mb-2">
+      <section id="projects" className="py-24 px-6 max-w-5xl mx-auto border-t border-[rgba(147,197,253,0.2)]">
+        <h2 className="text-2xl font-semibold tracking-tight text-[#1a2e4a] mb-2">
           Selected Projects
         </h2>
-        <p className="text-[#888888] mb-12 text-sm">
+        <p className="text-[#6b7ea3] mb-12 text-sm">
           Production systems I&apos;ve designed and built end-to-end.
         </p>
         <div className="grid grid-cols-1 gap-5">
@@ -31,7 +31,7 @@ export default function Home() {
         <div className="mt-10 text-center">
           <Link
             href="/projects"
-            className="inline-flex items-center gap-2 text-[#888888] hover:text-[#ededed] text-sm transition-colors group"
+            className="inline-flex items-center gap-2 text-[#6b7ea3] hover:text-[#1a2e4a] text-sm transition-colors group"
           >
             View all projects
             <svg

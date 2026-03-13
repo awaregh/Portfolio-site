@@ -31,12 +31,12 @@ const stack = [
 
 export default function TechStackSection() {
   return (
-    <section className="py-24 px-6 border-t border-[rgba(255,255,255,0.06)]">
+    <section className="py-24 px-6 border-t border-[rgba(147,197,253,0.2)]">
       <div className="max-w-5xl mx-auto">
-        <h2 className="text-2xl font-semibold tracking-tight text-[#ededed] mb-2">
+        <h2 className="text-2xl font-semibold tracking-tight text-[#1a2e4a] mb-2">
           Tech Stack
         </h2>
-        <p className="text-[#888888] text-sm mb-12">
+        <p className="text-[#6b7ea3] text-sm mb-12">
           Tools and technologies I work with regularly.
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -48,14 +48,14 @@ export default function TechStackSection() {
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: index * 0.05, ease: "easeOut" }}
             >
-              <p className="text-xs text-[#888888] uppercase tracking-widest mb-3 font-medium">
+              <p className="text-xs text-[#6b7ea3] uppercase tracking-widest mb-3 font-medium">
                 {group.category}
               </p>
               <div className="flex flex-wrap gap-2">
                 {group.items.map((item) => (
                   <span
                     key={item}
-                    className="px-2.5 py-1 text-xs rounded-md bg-[#ffffff06] text-[#a1a1aa] border border-[rgba(255,255,255,0.06)] font-mono"
+                    className="px-2.5 py-1 text-xs rounded-lg bg-white/70 text-[#4b5e7a] border border-[rgba(147,197,253,0.25)] font-mono shadow-[0_1px_4px_rgba(147,197,253,0.1)]"
                   >
                     {item}
                   </span>
