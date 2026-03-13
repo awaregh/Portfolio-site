@@ -15,7 +15,7 @@ export default function ResearchPage() {
         {/* Back link */}
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-[#888888] hover:text-[#ededed] text-sm transition-colors mb-10 group"
+          className="inline-flex items-center gap-2 text-[#6b7ea3] hover:text-[#1a2e4a] text-sm transition-colors mb-10 group"
         >
           <svg
             width="16"
@@ -37,10 +37,10 @@ export default function ResearchPage() {
 
         {/* Header */}
         <div className="mb-12">
-          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#ededed] mb-4 leading-tight">
+          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#1a2e4a] mb-4 leading-tight">
             Research &amp; Writing
           </h1>
-          <p className="text-[#888888] text-base leading-relaxed max-w-2xl">
+          <p className="text-[#6b7ea3] text-base leading-relaxed max-w-2xl">
             Technical papers and deep-dives on systems I&apos;ve built and
             problems I&apos;ve solved in production — covering distributed
             systems, AI infrastructure, and backend platform engineering.
@@ -52,24 +52,24 @@ export default function ResearchPage() {
           {researchPapers.map((paper) => (
             <div
               key={paper.title}
-              className="rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#111111] p-6 sm:p-7 hover:border-[rgba(255,255,255,0.14)] hover:bg-[#141414] transition-all duration-200"
+              className="rounded-2xl border border-[rgba(147,197,253,0.25)] bg-white/70 backdrop-blur-sm p-6 sm:p-7 hover:border-[rgba(147,197,253,0.45)] transition-all duration-200 shadow-soft"
             >
               <div className="flex items-start justify-between gap-4 mb-3">
-                <h2 className="text-[#ededed] font-semibold text-lg leading-snug">
+                <h2 className="text-[#1a2e4a] font-semibold text-lg leading-snug">
                   {paper.title}
                 </h2>
-                <span className="text-xs text-[#888888] flex-shrink-0 mt-1 font-mono">
+                <span className="text-xs text-[#6b7ea3] flex-shrink-0 mt-1 font-mono">
                   {paper.year}
                 </span>
               </div>
 
               {paper.venue && (
-                <p className="text-xs text-[#3b82f6] mb-4 font-medium">
+                <p className="text-xs text-[#5b9bd5] mb-4 font-medium">
                   {paper.venue}
                 </p>
               )}
 
-              <p className="text-[#888888] text-sm leading-relaxed mb-5">
+              <p className="text-[#6b7ea3] text-sm leading-relaxed mb-5">
                 {paper.abstract}
               </p>
 
@@ -77,7 +77,7 @@ export default function ResearchPage() {
                 {paper.topics.map((topic) => (
                   <span
                     key={topic}
-                    className="px-2.5 py-1 text-xs rounded-md bg-[#ffffff06] text-[#888888] border border-[rgba(255,255,255,0.06)] font-mono"
+                    className="px-2.5 py-1 text-xs rounded-lg bg-[#f8fbff] text-[#6b7ea3] border border-[rgba(147,197,253,0.2)] font-mono"
                   >
                     {topic}
                   </span>
@@ -85,13 +85,13 @@ export default function ResearchPage() {
               </div>
 
               {(paper.url || paper.pdfUrl) && (
-                <div className="flex gap-4 pt-4 border-t border-[rgba(255,255,255,0.06)]">
+                <div className="flex gap-4 pt-4 border-t border-[rgba(147,197,253,0.2)]">
                   {paper.pdfUrl && (
                     <a
                       href={paper.pdfUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 text-xs text-[#888888] hover:text-[#ededed] transition-colors"
+                      className="inline-flex items-center gap-1.5 text-xs text-[#6b7ea3] hover:text-[#1a2e4a] transition-colors"
                     >
                       <svg
                         width="14"
@@ -115,7 +115,7 @@ export default function ResearchPage() {
                       href={paper.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 text-xs text-[#888888] hover:text-[#ededed] transition-colors"
+                      className="inline-flex items-center gap-1.5 text-xs text-[#6b7ea3] hover:text-[#1a2e4a] transition-colors"
                     >
                       <svg
                         width="14"

@@ -16,7 +16,7 @@ export default function ProjectsPage() {
         {/* Back link */}
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-[#888888] hover:text-[#ededed] text-sm transition-colors mb-10 group"
+          className="inline-flex items-center gap-2 text-[#6b7ea3] hover:text-[#1a2e4a] text-sm transition-colors mb-10 group"
         >
           <svg
             width="16"
@@ -38,10 +38,10 @@ export default function ProjectsPage() {
 
         {/* Header */}
         <div className="mb-12">
-          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#ededed] mb-4 leading-tight">
+          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#1a2e4a] mb-4 leading-tight">
             Selected Projects
           </h1>
-          <p className="text-[#888888] text-base leading-relaxed max-w-2xl">
+          <p className="text-[#6b7ea3] text-base leading-relaxed max-w-2xl">
             Production systems I&apos;ve designed and built end-to-end —
             backend platforms, AI infrastructure, and distributed systems.
           </p>
