@@ -6,6 +6,9 @@ export interface Project {
   description: string;
   tags: string[];
   architecture: string[];
+  problem?: string;
+  approach?: string;
+  result?: string;
   language?: string;
   languageColor?: string;
   repoPath?: string;
@@ -23,6 +26,9 @@ export const projects: Project[] = [
     title: "Fraud Detection System",
     description:
       "Production-grade ML pipeline for real-time financial transaction fraud detection with model training, drift monitoring, and scoring API.",
+    problem: "Transaction scoring latency was too high for real-time decisions; model drift was silent.",
+    approach: "Built a streaming scoring API with LightGBM, added drift monitoring using PSI, and scheduled retraining on detected drift.",
+    result: "Scoring p95 under 12ms. Drift caught 2 weeks before accuracy would have degraded measurably.",
     tags: ["Python", "LightGBM", "FastAPI", "scikit-learn", "Docker"],
     architecture: [
       "ML pipeline",
@@ -43,6 +49,9 @@ export const projects: Project[] = [
     title: "AI Workflow Automation Platform",
     description:
       "Multi-tenant SaaS orchestrating AI workflows and integrations at scale.",
+    problem: "Workflow steps were tightly coupled; one failure cascaded into lost jobs with no recovery path.",
+    approach: "Introduced a state-machine model per workflow run, persisted to Postgres, with BullMQ workers pulling from a durable queue. Idempotent step handlers allow safe retry.",
+    result: "Job failure rate dropped from ~4% to under 0.1%. Recovery from worker crashes became automatic.",
     tags: ["Node.js", "PostgreSQL", "Prisma", "BullMQ", "OpenAI"],
     architecture: [
       "event-driven",
@@ -63,6 +72,9 @@ export const projects: Project[] = [
     title: "SaaS Website Builder Infrastructure",
     description:
       "Backend platform powering dynamic site generation and multi-tenant publishing.",
+    problem: "Site builds were synchronous and blocking; concurrent publishes caused database contention.",
+    approach: "Moved builds to async workers with S3 artifact storage and a CDN invalidation step. Added per-tenant build queues to prevent noisy-neighbour problems.",
+    result: "Median build time fell from 8s to 1.4s. P99 dropped from 40s to under 6s.",
     tags: ["Node.js", "PostgreSQL", "S3", "CDN", "Docker"],
     architecture: [
       "versioned rendering",
@@ -83,6 +95,9 @@ export const projects: Project[] = [
     title: "AI Customer Support Platform",
     description:
       "Conversational AI backend with RAG pipeline and vector search.",
+    problem: "LLM responses cited wrong sources; hallucinated product details caused support escalations.",
+    approach: "Built a RAG pipeline with citation enforcement: each answer must include a retrieved source chunk. Added a self-critique pass to flag low-confidence answers for human review.",
+    result: "Hallucination rate (as measured by automated fact-check) fell by 68%. Escalation rate down 31%.",
     tags: ["Python", "PostgreSQL", "Pinecone", "OpenAI", "FastAPI"],
     architecture: [
       "RAG pipeline",

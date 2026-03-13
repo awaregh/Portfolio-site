@@ -9,28 +9,24 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "#eef6fd",
-        foreground: "#1a2e4a",
-        card: "#ffffff",
-        "card-alt": "#f4f9ff",
-        border: "rgba(147,197,253,0.3)",
-        muted: "#6b7ea3",
-        accent: "#5b9bd5",
-        "accent-pink": "#f9a8d4",
-        "sky-soft": "#e8f4fd",
-        "cloud-white": "#f8fbff",
+        bg: "#0f1115",
+        surface: "#f7f5f2",
+        "surface-dim": "#1a1d22",
+        "surface-card": "#161920",
+        text: "#e8e6e3",
+        subtext: "#b6b1a8",
+        accent: "#c4572f",
+        "accent-hover": "#a8461f",
+        border: "rgba(232,230,227,0.1)",
+        "border-strong": "rgba(232,230,227,0.18)",
       },
       fontFamily: {
-        sans: ["-apple-system", "BlinkMacSystemFont", "Segoe UI", "Helvetica Neue", "Arial", "sans-serif"],
-      },
-      backgroundImage: {
-        "sky-gradient": "linear-gradient(160deg, #dbeafe 0%, #ede9fe 45%, #fce7f3 100%)",
-        "card-glow": "linear-gradient(135deg, #ffffff 0%, #f0f7ff 100%)",
+        sans: ["Inter", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Helvetica Neue", "Arial", "sans-serif"],
+        mono: ["IBM Plex Mono", "Fira Code", "Cascadia Code", "monospace"],
       },
       boxShadow: {
-        "soft": "0 2px 16px rgba(147,197,253,0.18), 0 1px 4px rgba(147,197,253,0.12)",
-        "soft-lg": "0 8px 32px rgba(147,197,253,0.22), 0 2px 8px rgba(147,197,253,0.15)",
-        "pink-glow": "0 4px 20px rgba(249,168,212,0.25)",
+        card: "0 1px 3px rgba(0,0,0,0.4), 0 0 0 1px rgba(232,230,227,0.08)",
+        "card-hover": "0 4px 16px rgba(0,0,0,0.5), 0 0 0 1px rgba(232,230,227,0.14)",
       },
       borderRadius: {
         "2xl": "1rem",

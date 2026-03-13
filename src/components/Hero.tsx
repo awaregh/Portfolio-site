@@ -1,121 +1,95 @@
 "use client";
 
-import { motion } from "framer-motion";
 import Link from "next/link";
-
-function CloudShape({
-  className,
-  delay = 0,
-  duration = 8,
-}: {
-  className?: string;
-  delay?: number;
-  duration?: number;
-}) {
-  return (
-    <motion.div
-      className={`absolute pointer-events-none select-none ${className}`}
-      animate={{ y: [0, -14, 0] }}
-      transition={{ duration, delay, repeat: Infinity, ease: "easeInOut" }}
-    >
-      <svg viewBox="0 0 120 60" fill="white" xmlns="http://www.w3.org/2000/svg">
-        <ellipse cx="60" cy="42" rx="48" ry="18" opacity="0.9" />
-        <ellipse cx="42" cy="32" rx="26" ry="20" opacity="0.9" />
-        <ellipse cx="74" cy="28" rx="28" ry="22" opacity="0.9" />
-        <ellipse cx="55" cy="22" rx="18" ry="14" opacity="0.9" />
-      </svg>
-    </motion.div>
-  );
-}
+import { motion } from "framer-motion";
 
 export default function Hero() {
   return (
-    <section className="relative min-h-[90vh] flex items-center px-6 pt-20 pb-12 overflow-hidden">
-      {/* Floating cloud decorations */}
-      <CloudShape
-        className="w-48 opacity-60 -top-4 right-[8%]"
-        delay={0}
-        duration={9}
-      />
-      <CloudShape
-        className="w-32 opacity-40 top-24 right-[28%]"
-        delay={2}
-        duration={11}
-      />
-      <CloudShape
-        className="w-56 opacity-50 top-12 left-[5%]"
-        delay={1}
-        duration={10}
-      />
-      <CloudShape
-        className="w-24 opacity-30 bottom-24 left-[20%]"
-        delay={3}
-        duration={8}
-      />
-      <CloudShape
-        className="w-36 opacity-35 bottom-16 right-[12%]"
-        delay={1.5}
-        duration={12}
-      />
+    <section className="relative pt-28 pb-20 px-6 overflow-hidden">
+      <div className="max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-12 lg:gap-16 items-start">
+          {/* Left: text column */}
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <p className="text-sm font-mono text-[#b6b1a8] mb-6 tracking-wide">
+              Hi, I&apos;m Aware
+            </p>
 
-      <div className="max-w-5xl mx-auto w-full relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        >
-          {/* Availability badge */}
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/70 border border-[rgba(147,197,253,0.4)] text-xs text-[#5b9bd5] mb-8 shadow-soft backdrop-blur-sm">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#5b9bd5] motion-safe:animate-pulse" />
-            Available for senior & staff roles
-          </div>
+            <h1 className="text-[38px] sm:text-5xl font-semibold tracking-tight text-[#e8e6e3] leading-[1.1] mb-6">
+              I design and ship<br />
+              <span className="text-[#c4572f]">frontends</span> for<br />
+              complex systems.
+            </h1>
 
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-semibold tracking-tight text-[#1a2e4a] leading-[1.1] mb-4">
-            Software Engineer
-          </h1>
-          <h2 className="text-5xl sm:text-6xl lg:text-7xl font-semibold tracking-tight leading-[1.1] mb-8">
-            <span className="text-[#6b7ea3]">Backend</span>
-            <span className="text-[rgba(91,155,213,0.4)]"> · </span>
-            <span className="text-[#6b7ea3]">Platform</span>
-            <span className="text-[rgba(91,155,213,0.4)]"> · </span>
-            <span className="text-[#5b9bd5]">AI Systems</span>
-          </h2>
+            <p className="text-base text-[#b6b1a8] max-w-lg mb-3 leading-relaxed">
+              10+ years leading web UX for data-heavy products.
+            </p>
+            <p className="text-base text-[#b6b1a8] max-w-lg mb-10 leading-relaxed">
+              I prototype in code; I care about latency budgets and readability.
+            </p>
 
-          <p className="text-base sm:text-lg text-[#6b7ea3] max-w-2xl mb-10 leading-relaxed">
-            I build multi-tenant SaaS platforms, workflow engines, and
-            production AI systems. Focused on reliability, scalability, and
-            developer-friendly architecture.
-          </p>
-
-          <div className="flex flex-wrap gap-4">
-            <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+            <div className="flex flex-wrap gap-3">
               <Link
                 href="/projects"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#5b9bd5] text-white text-sm font-medium hover:bg-[#4a8cc4] transition-all shadow-soft hover:shadow-soft-lg"
+                className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium bg-[#c4572f] text-[#e8e6e3] hover:bg-[#a8461f] transition-colors rounded"
               >
-                View Work
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                  <path
-                    d="M3 7H11M7 3L11 7L7 11"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
+                View recent work
+                <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                  <path d="M3 7H11M7 3L11 7L7 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </Link>
-            </motion.div>
-            <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-              <Link
-                href="#contact"
-                className="inline-flex items-center px-5 py-2.5 rounded-xl bg-white/70 text-[#1a2e4a] text-sm font-medium hover:bg-white/90 transition-all border border-[rgba(147,197,253,0.4)] backdrop-blur-sm shadow-soft hover:shadow-soft-lg"
+              <a
+                href="mailto:ahmedwaregh@gmail.com"
+                className="link-underline inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#b6b1a8] hover:text-[#e8e6e3] transition-colors border border-[rgba(232,230,227,0.18)] rounded"
               >
-                Get in Touch
-              </Link>
-            </motion.div>
-          </div>
-        </motion.div>
+                Email
+              </a>
+            </div>
+          </motion.div>
+
+          {/* Right: code artifact — vertically offset */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.65, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+            className="lg:mt-16 hidden lg:block"
+          >
+            <div className="rounded border border-[rgba(232,230,227,0.1)] bg-[#161920] overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,0.4)]">
+              {/* Terminal chrome */}
+              <div className="flex items-center gap-1.5 px-4 py-2.5 border-b border-[rgba(232,230,227,0.08)] bg-[#1a1d22]">
+                <span className="w-2.5 h-2.5 rounded-full bg-[rgba(232,230,227,0.12)]" />
+                <span className="w-2.5 h-2.5 rounded-full bg-[rgba(232,230,227,0.12)]" />
+                <span className="w-2.5 h-2.5 rounded-full bg-[rgba(232,230,227,0.12)]" />
+                <span className="ml-3 text-xs font-mono text-[#b6b1a8]">reconcile.ts</span>
+              </div>
+              <pre className="p-5 text-xs font-mono leading-relaxed overflow-x-auto">
+                <code>
+                  <span className="text-[rgba(182,177,168,0.5)]">{"// reconciliation view — event-sourced cache\n"}</span>
+                  <span className="text-[#c4572f]">{"async function"}</span>
+                  <span className="text-[#e8e6e3]">{" reconcile("}</span>
+                  <span className="text-[#b6b1a8]">{"accountId: string"}</span>
+                  <span className="text-[#e8e6e3]">{")"}</span>
+                  <span className="text-[#e8e6e3]">{" {\n"}</span>
+                  <span className="text-[#b6b1a8]">{"  const events = "}</span>
+                  <span className="text-[#c4572f]">{"await"}</span>
+                  <span className="text-[#b6b1a8]">{" eventLog.since(\n"}</span>
+                  <span className="text-[#b6b1a8]">{"    lastCheckpoint(accountId)\n"}</span>
+                  <span className="text-[#b6b1a8]">{"  );\n"}</span>
+                  <span className="text-[#c4572f]">{"  return"}</span>
+                  <span className="text-[#b6b1a8]">{" events.reduce(applyEvent, currentState);\n"}</span>
+                  <span className="text-[#e8e6e3]">{"}\n\n"}</span>
+                  <span className="text-[rgba(182,177,168,0.5)]">{"// result: p95 render -180ms, support tickets -42%"}</span>
+                </code>
+              </pre>
+            </div>
+          </motion.div>
+        </div>
       </div>
     </section>
   );
 }
+
+

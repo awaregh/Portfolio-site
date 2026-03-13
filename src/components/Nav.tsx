@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
 
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false);
@@ -14,20 +13,17 @@ export default function Nav() {
   }, []);
 
   return (
-    <motion.header
-      initial={{ opacity: 0, y: -8 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
+    <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-white/80 backdrop-blur-md border-b border-[rgba(147,197,253,0.25)] shadow-[0_1px_12px_rgba(147,197,253,0.15)]"
+          ? "bg-[rgba(15,17,21,0.92)] backdrop-blur-md border-b border-[rgba(232,230,227,0.1)]"
           : "bg-transparent"
       }`}
     >
       <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
         <Link
           href="/"
-          className="text-[#1a2e4a] font-semibold text-sm tracking-tight hover:text-[#5b9bd5] transition-colors"
+          className="text-[#e8e6e3] font-semibold text-sm tracking-tight link-underline hover:text-white transition-colors"
         >
           Ahmed Waregh
         </Link>
@@ -41,13 +37,14 @@ export default function Nav() {
             <Link
               key={label}
               href={href}
-              className="text-[#6b7ea3] hover:text-[#1a2e4a] text-sm transition-colors"
+              className="link-underline text-[#b6b1a8] hover:text-[#e8e6e3] text-sm transition-colors"
             >
               {label}
             </Link>
           ))}
         </nav>
       </div>
-    </motion.header>
+    </header>
   );
 }
+

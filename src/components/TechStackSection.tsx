@@ -4,42 +4,41 @@ import { motion } from "framer-motion";
 
 const stack = [
   {
-    category: "Backend",
-    items: ["Node.js", "TypeScript", "Python", "Go (learning)"],
+    category: "Languages & Runtimes",
+    prose: "Node.js + TypeScript (primary), Python for ML pipelines, Go for high-throughput services.",
+  },
+  {
+    category: "Frontend",
+    prose: "React + TypeScript (SSR, hydration budgets), Next.js, design systems governance.",
   },
   {
     category: "Databases",
-    items: ["PostgreSQL", "Redis", "MongoDB", "Vector DBs"],
+    prose: "PostgreSQL as default, Redis for ephemeral state and rate-limiting, vector DBs (Pinecone, Weaviate) for similarity search.",
   },
   {
     category: "Infrastructure",
-    items: ["Docker", "Kubernetes", "AWS", "GCP"],
+    prose: "Docker-first local dev, Kubernetes for orchestration, AWS / GCP for managed services.",
   },
   {
     category: "AI / ML",
-    items: ["OpenAI API", "LangChain", "Pinecone", "Weaviate"],
+    prose: "OpenAI API integration, LangChain for RAG orchestration, embedding pipelines, hallucination mitigation patterns.",
   },
   {
-    category: "Queues & Streaming",
-    items: ["BullMQ", "RabbitMQ", "Kafka"],
-  },
-  {
-    category: "Frameworks",
-    items: ["Next.js", "Express", "FastAPI", "Prisma"],
+    category: "Queues & Observability",
+    prose: "BullMQ + RabbitMQ for async work, Kafka for streaming. Prometheus + Grafana for metrics; OpenTelemetry traces.",
   },
 ];
 
 export default function TechStackSection() {
   return (
-    <section className="py-24 px-6 border-t border-[rgba(147,197,253,0.2)]">
-      <div className="max-w-5xl mx-auto">
-        <h2 className="text-2xl font-semibold tracking-tight text-[#1a2e4a] mb-2">
-          Tech Stack
-        </h2>
-        <p className="text-[#6b7ea3] text-sm mb-12">
-          Tools and technologies I work with regularly.
-        </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <section className="py-24 px-6 border-t border-[rgba(232,230,227,0.1)]">
+      <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-[160px_1fr] gap-12">
+        <div>
+          <h2 className="text-sm font-mono text-[#b6b1a8] uppercase tracking-widest">
+            Stack
+          </h2>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-8">
           {stack.map((group, index) => (
             <motion.div
               key={group.category}
@@ -48,19 +47,12 @@ export default function TechStackSection() {
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: index * 0.05, ease: "easeOut" }}
             >
-              <p className="text-xs text-[#6b7ea3] uppercase tracking-widest mb-3 font-medium">
+              <p className="text-xs font-mono text-[#b6b1a8] uppercase tracking-widest mb-2">
                 {group.category}
               </p>
-              <div className="flex flex-wrap gap-2">
-                {group.items.map((item) => (
-                  <span
-                    key={item}
-                    className="px-2.5 py-1 text-xs rounded-lg bg-white/70 text-[#4b5e7a] border border-[rgba(147,197,253,0.25)] font-mono shadow-[0_1px_4px_rgba(147,197,253,0.1)]"
-                  >
-                    {item}
-                  </span>
-                ))}
-              </div>
+              <p className="text-sm text-[#b6b1a8] leading-relaxed">
+                {group.prose}
+              </p>
             </motion.div>
           ))}
         </div>
@@ -68,3 +60,4 @@ export default function TechStackSection() {
     </section>
   );
 }
+

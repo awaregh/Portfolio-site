@@ -4,20 +4,20 @@ import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "Ahmed Waregh — Backend & Platform Engineer",
+  title: "Ahmed Waregh — Frontend / Platform Engineer",
   description:
-    "Software Engineer focused on backend systems, platform infrastructure, and AI-driven products.",
+    "10+ years designing and shipping frontends for complex, data-heavy systems. Latency budgets, design systems, end-to-end.",
   openGraph: {
-    title: "Ahmed Waregh — Backend & Platform Engineer",
+    title: "Ahmed Waregh — Frontend / Platform Engineer",
     description:
-      "Software Engineer focused on backend systems, platform infrastructure, and AI-driven products.",
+      "10+ years designing and shipping frontends for complex, data-heavy systems. Latency budgets, design systems, end-to-end.",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Ahmed Waregh — Backend & Platform Engineer",
+    title: "Ahmed Waregh — Frontend / Platform Engineer",
     description:
-      "Software Engineer focused on backend systems, platform infrastructure, and AI-driven products.",
+      "10+ years designing and shipping frontends for complex, data-heavy systems. Latency budgets, design systems, end-to-end.",
   },
 };
 
@@ -28,7 +28,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="text-[#1a2e4a] min-h-screen font-sans">
+      <body className="bg-[#0f1115] text-[#e8e6e3] min-h-screen font-sans">
         <Nav />
         <main>{children}</main>
         <Footer />
@@ -36,3 +36,4 @@ export default function RootLayout({
     </html>
   );
 }
+
