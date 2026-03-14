@@ -31,10 +31,10 @@ const stack = [
 
 export default function TechStackSection() {
   return (
-    <section className="py-24 px-6 border-t border-[rgba(232,230,227,0.1)]">
+    <section className="py-24 px-6 border-t border-[rgba(61,155,212,0.14)]">
       <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-[160px_1fr] gap-12">
         <div>
-          <h2 className="text-sm font-mono text-[#b6b1a8] uppercase tracking-widest">
+          <h2 className="text-sm font-mono text-[#57789a] uppercase tracking-widest">
             Stack
           </h2>
         </div>
@@ -47,10 +47,10 @@ export default function TechStackSection() {
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: index * 0.05, ease: "easeOut" }}
             >
-              <p className="text-xs font-mono text-[#b6b1a8] uppercase tracking-widest mb-2">
+              <p className="text-xs font-mono text-[#57789a] uppercase tracking-widest mb-2">
                 {group.category}
               </p>
-              <p className="text-sm text-[#b6b1a8] leading-relaxed">
+              <p className="text-sm text-[#57789a] leading-relaxed">
                 {group.prose}
               </p>
             </motion.div>

@@ -95,7 +95,7 @@ const STEP_OUTPUTS: Record<string, string[]> = {
 const TYPE_COLORS: Record<WorkflowStep["type"], string> = {
   trigger: "bg-[#22c55e]/10 text-[#22c55e] border-[#22c55e]/20",
   ai: "bg-[#a855f7]/10 text-[#a855f7] border-[#a855f7]/20",
-  action: "bg-[#3b82f6]/10 text-[#3b82f6] border-[#3b82f6]/20",
+  action: "bg-[#3d9bd4]/10 text-[#3d9bd4] border-[#3d9bd4]/20",
   condition: "bg-[#f59e0b]/10 text-[#f59e0b] border-[#f59e0b]/20",
 };
 
@@ -133,21 +133,21 @@ export default function AIWorkflowPlatformEmbed() {
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       {/* Workflow selector */}
       <div className="lg:col-span-1 space-y-3">
-        <p className="text-xs text-[#888888] uppercase tracking-widest font-medium mb-4">Workflow Templates</p>
+        <p className="text-xs text-[#57789a] uppercase tracking-widest font-medium mb-4">Workflow Templates</p>
         {WORKFLOWS.map((wf) => (
           <button
             key={wf.id}
             onClick={() => { if (!running) setSelectedWorkflow(wf); }}
             className={`w-full text-left rounded-xl border p-4 transition-all duration-200 ${
               selectedWorkflow.id === wf.id
-                ? "border-[#3b82f6]/50 bg-[#3b82f6]/05"
-                : "border-[rgba(255,255,255,0.08)] bg-[#111111] hover:border-[rgba(255,255,255,0.14)]"
+                ? "border-[#3d9bd4]/50 bg-[#3d9bd4]/05"
+                : "border-[rgba(61,155,212,0.14)] bg-[#ffffff] hover:border-[rgba(61,155,212,0.28)]"
             } ${running ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
           >
-            <div className="text-sm font-medium text-[#ededed] mb-1">{wf.name}</div>
-            <div className="text-xs text-[#888888]">{wf.description}</div>
+            <div className="text-sm font-medium text-[#1a2f45] mb-1">{wf.name}</div>
+            <div className="text-xs text-[#57789a]">{wf.description}</div>
             {runCount[wf.id] ? (
-              <div className="text-xs text-[#3b82f6] mt-2">{runCount[wf.id]}× executed</div>
+              <div className="text-xs text-[#3d9bd4] mt-2">{runCount[wf.id]}× executed</div>
             ) : null}
           </button>
         ))}
@@ -174,7 +174,7 @@ export default function AIWorkflowPlatformEmbed() {
             }
           }}
           disabled={running}
-          className="w-full text-xs text-[#888888] border border-[rgba(255,255,255,0.08)] rounded-xl py-2.5 hover:text-[#ededed] hover:border-[rgba(255,255,255,0.14)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full text-xs text-[#57789a] border border-[rgba(61,155,212,0.14)] rounded-xl py-2.5 hover:text-[#1a2f45] hover:border-[rgba(61,155,212,0.28)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Run All Workflows
         </button>
@@ -182,16 +182,16 @@ export default function AIWorkflowPlatformEmbed() {
 
       {/* Workflow runner */}
       <div className="lg:col-span-2">
-        <div className="rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#111111] overflow-hidden">
-          <div className="flex items-center justify-between px-5 py-4 border-b border-[rgba(255,255,255,0.06)]">
+        <div className="rounded-xl border border-[rgba(61,155,212,0.14)] bg-[#ffffff] overflow-hidden">
+          <div className="flex items-center justify-between px-5 py-4 border-b border-[rgba(61,155,212,0.10)]">
             <div>
-              <div className="text-sm font-semibold text-[#ededed]">{selectedWorkflow.name}</div>
-              <div className="text-xs text-[#888888]">{selectedWorkflow.steps.length} steps</div>
+              <div className="text-sm font-semibold text-[#1a2f45]">{selectedWorkflow.name}</div>
+              <div className="text-xs text-[#57789a]">{selectedWorkflow.steps.length} steps</div>
             </div>
             <button
               onClick={runWorkflow}
               disabled={running}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#3b82f6] text-white text-sm font-medium hover:bg-[#2563eb] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#3d9bd4] text-white text-sm font-medium hover:bg-[#2880b5] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {running ? (
                 <>
@@ -217,20 +217,20 @@ export default function AIWorkflowPlatformEmbed() {
               <div key={step.id}>
                 {idx > 0 && (
                   <div className="flex justify-center py-1">
-                    <div className={`w-px h-4 ${step.status !== "pending" ? "bg-[#3b82f6]/40" : "bg-[rgba(255,255,255,0.08)]"} transition-colors duration-300`} />
+                    <div className={`w-px h-4 ${step.status !== "pending" ? "bg-[#3d9bd4]/40" : "bg-[rgba(61,155,212,0.14)]"} transition-colors duration-300`} />
                   </div>
                 )}
                 <div className={`rounded-lg border p-3.5 transition-all duration-300 ${
                   step.status === "running"
-                    ? "border-[#3b82f6]/40 bg-[#3b82f6]/05"
+                    ? "border-[#3d9bd4]/40 bg-[#3d9bd4]/05"
                     : step.status === "done"
-                    ? "border-[rgba(255,255,255,0.10)] bg-[#0f0f0f]"
-                    : "border-[rgba(255,255,255,0.06)] bg-[#0a0a0a]"
+                    ? "border-[rgba(61,155,212,0.14)] bg-[#e4f2fc]"
+                    : "border-[rgba(61,155,212,0.10)] bg-[#f0f7ff]"
                 }`}>
                   <div className="flex items-center gap-3">
                     <div className="flex-shrink-0 w-5 h-5 flex items-center justify-center">
                       {step.status === "running" && (
-                        <svg className="animate-spin w-4 h-4 text-[#3b82f6]" viewBox="0 0 24 24" fill="none">
+                        <svg className="animate-spin w-4 h-4 text-[#3d9bd4]" viewBox="0 0 24 24" fill="none">
                           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                         </svg>
@@ -242,18 +242,18 @@ export default function AIWorkflowPlatformEmbed() {
                         </svg>
                       )}
                       {step.status === "pending" && (
-                        <div className="w-4 h-4 rounded-full border border-[rgba(255,255,255,0.15)]" />
+                        <div className="w-4 h-4 rounded-full border border-[rgba(61,155,212,0.20)]" />
                       )}
                     </div>
                     <span className={`text-xs font-medium px-2 py-0.5 rounded border ${TYPE_COLORS[step.type]}`}>
                       {step.type}
                     </span>
-                    <span className={`text-sm flex-1 ${step.status === "pending" ? "text-[#888888]" : "text-[#ededed]"}`}>
+                    <span className={`text-sm flex-1 ${step.status === "pending" ? "text-[#57789a]" : "text-[#1a2f45]"}`}>
                       {step.label}
                     </span>
                   </div>
                   {step.output && (
-                    <div className="mt-2.5 ml-8 px-3 py-2 rounded bg-[#0a0a0a] border border-[rgba(255,255,255,0.06)]">
+                    <div className="mt-2.5 ml-8 px-3 py-2 rounded bg-[#f0f7ff] border border-[rgba(61,155,212,0.10)]">
                       <code className="text-xs text-[#93c5fd] font-mono">{step.output}</code>
                     </div>
                   )}

@@ -15,7 +15,7 @@ export default function ResearchPage() {
         {/* Back link */}
         <Link
           href="/"
-          className="link-underline inline-flex items-center gap-2 text-[#b6b1a8] hover:text-[#e8e6e3] text-sm transition-colors mb-10"
+          className="link-underline inline-flex items-center gap-2 text-[#57789a] hover:text-[#1a2f45] text-sm transition-colors mb-10"
         >
           <svg
             width="14"
@@ -37,10 +37,10 @@ export default function ResearchPage() {
 
         {/* Header */}
         <div className="mb-12">
-          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#e8e6e3] mb-4 leading-tight">
+          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#1a2f45] mb-4 leading-tight">
             Writing
           </h1>
-          <p className="text-[#b6b1a8] text-base leading-relaxed max-w-2xl">
+          <p className="text-[#57789a] text-base leading-relaxed max-w-2xl">
             Technical papers and deep-dives on systems I&apos;ve built and
             problems I&apos;ve solved in production — distributed systems, AI
             infrastructure, and platform engineering.
@@ -52,24 +52,24 @@ export default function ResearchPage() {
           {researchPapers.map((paper) => (
             <div
               key={paper.title}
-              className="rounded border border-[rgba(232,230,227,0.1)] bg-[#161920] p-6 sm:p-7 hover:border-[rgba(232,230,227,0.18)] transition-colors duration-200"
+              className="rounded-2xl border border-[rgba(61,155,212,0.16)] bg-white p-6 sm:p-7 hover:border-[rgba(61,155,212,0.22)] transition-colors duration-200"
             >
               <div className="flex items-start justify-between gap-4 mb-2">
-                <h2 className="text-[#e8e6e3] font-medium text-base leading-snug">
+                <h2 className="text-[#1a2f45] font-medium text-base leading-snug">
                   {paper.title}
                 </h2>
-                <span className="text-xs font-mono text-[#b6b1a8] flex-shrink-0 mt-1">
+                <span className="text-xs font-mono text-[#57789a] flex-shrink-0 mt-1">
                   {paper.year}
                 </span>
               </div>
 
               {paper.venue && (
-                <p className="text-xs font-mono text-[#c4572f] mb-3">
+                <p className="text-xs font-mono text-[#3d9bd4] mb-3">
                   {paper.venue}
                 </p>
               )}
 
-              <p className="text-[#b6b1a8] text-sm leading-relaxed mb-4">
+              <p className="text-[#57789a] text-sm leading-relaxed mb-4">
                 {paper.abstract}
               </p>
 
@@ -77,7 +77,7 @@ export default function ResearchPage() {
                 {paper.topics.map((topic) => (
                   <span
                     key={topic}
-                    className="px-2 py-0.5 text-xs rounded font-mono bg-[rgba(232,230,227,0.06)] text-[#b6b1a8] border border-[rgba(232,230,227,0.1)]"
+                    className="px-2 py-0.5 text-xs rounded font-mono bg-[rgba(61,155,212,0.08)] text-[#57789a] border border-[rgba(61,155,212,0.14)]"
                   >
                     {topic}
                   </span>
@@ -85,13 +85,13 @@ export default function ResearchPage() {
               </div>
 
               {(paper.url || paper.pdfUrl) && (
-                <div className="flex gap-4 pt-3 border-t border-[rgba(232,230,227,0.08)]">
+                <div className="flex gap-4 pt-3 border-t border-[rgba(61,155,212,0.10)]">
                   {paper.pdfUrl && (
                     <a
                       href={paper.pdfUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="link-underline text-xs text-[#b6b1a8] hover:text-[#e8e6e3] transition-colors"
+                      className="link-underline text-xs text-[#57789a] hover:text-[#1a2f45] transition-colors"
                     >
                       Read PDF
                     </a>
@@ -101,7 +101,7 @@ export default function ResearchPage() {
                       href={paper.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="link-underline text-xs text-[#b6b1a8] hover:text-[#e8e6e3] transition-colors"
+                      className="link-underline text-xs text-[#57789a] hover:text-[#1a2f45] transition-colors"
                     >
                       Read Online
                     </a>
