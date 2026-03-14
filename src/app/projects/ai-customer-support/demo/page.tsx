@@ -102,8 +102,13 @@ export default function AICustomerSupportDemo() {
     inputRef.current?.focus();
   }
 
+  function escapeHtml(str: string) {
+    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+  }
+
   function renderText(text: string) {
-    return text.replace(/\*\*(.+?)\*\*/g, (_, m) => `<strong class="text-[#1a2f45]">${m}</strong>`);
+    const safe = escapeHtml(text);
+    return safe.replace(/\*\*(.+?)\*\*/g, (_, m) => `<strong class="text-[#1a2f45]">${m}</strong>`);
   }
 
   return (
