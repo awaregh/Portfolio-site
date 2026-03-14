@@ -17,7 +17,7 @@ export default function RecruiterSummary() {
               Experience
             </p>
             <p className="text-[#1a2f45] text-sm leading-relaxed">
-              10+ years building production web systems
+              5+ years building production web systems
             </p>
           </div>
           <div className="border-r-0 sm:border-r border-[rgba(61,155,212,0.14)] pr-0 sm:pr-6">
