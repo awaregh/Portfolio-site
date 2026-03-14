@@ -33,7 +33,7 @@ const SCENARIOS: Scenario[] = [
       {
         phase: "Validate backward compat",
         badge: "validate",
-        badgeColor: "text-[#3b82f6] bg-[#3b82f6]/10 border-[#3b82f6]/20",
+        badgeColor: "text-[#3d9bd4] bg-[#3d9bd4]/10 border-[#3d9bd4]/20",
         output: "✓ Column is nullable — no default required\n✓ Existing consumers unaffected\n✓ 3 services checked: orders-svc, billing-svc, reporting-svc",
       },
       {
@@ -64,7 +64,7 @@ const SCENARIOS: Scenario[] = [
       {
         phase: "Validate backward compat",
         badge: "validate",
-        badgeColor: "text-[#3b82f6] bg-[#3b82f6]/10 border-[#3b82f6]/20",
+        badgeColor: "text-[#3d9bd4] bg-[#3d9bd4]/10 border-[#3d9bd4]/20",
         output: "✓ View users_v1 exposes legacy column name\n✓ 2 consumers still query user_name via view\n✓ No breaking change detected",
       },
       {
@@ -95,7 +95,7 @@ const SCENARIOS: Scenario[] = [
       {
         phase: "Validate backward compat",
         badge: "validate",
-        badgeColor: "text-[#3b82f6] bg-[#3b82f6]/10 border-[#3b82f6]/20",
+        badgeColor: "text-[#3d9bd4] bg-[#3d9bd4]/10 border-[#3d9bd4]/20",
         output: "✓ Field is union with null default — backward-compatible\n✓ Schema Registry compatibility check: BACKWARD_TRANSITIVE\n✓ 4 consumer groups validated",
       },
       {
@@ -126,7 +126,7 @@ const SCENARIOS: Scenario[] = [
       {
         phase: "Validate backward compat",
         badge: "validate",
-        badgeColor: "text-[#3b82f6] bg-[#3b82f6]/10 border-[#3b82f6]/20",
+        badgeColor: "text-[#3d9bd4] bg-[#3d9bd4]/10 border-[#3d9bd4]/20",
         output: "✓ v1 route still mounted and returns same shape\n✓ Contract tests pass for /api/v1/users\n✓ 3rd-party clients on v1 unaffected",
       },
       {
@@ -201,12 +201,12 @@ export default function SchemaEvolutionEmbed() {
         {[
           { label: "Total Migrations", value: totalMigrations.toString() },
           { label: "Passed Validation", value: passedValidation.toString(), color: "#22c55e" },
-          { label: "Applied", value: applied.toString(), color: "#3b82f6" },
+          { label: "Applied", value: applied.toString(), color: "#3d9bd4" },
           { label: "Last Duration", value: lastDuration ? `${(lastDuration / 1000).toFixed(1)}s` : "—" },
         ].map((m) => (
-          <div key={m.label} className="rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#111111] p-4">
-            <div className="text-xs text-[#888888] mb-1">{m.label}</div>
-            <div className="text-xl font-semibold font-mono" style={{ color: m.color || "#ededed" }}>{m.value}</div>
+          <div key={m.label} className="rounded-xl border border-[rgba(61,155,212,0.14)] bg-[#ffffff] p-4">
+            <div className="text-xs text-[#57789a] mb-1">{m.label}</div>
+            <div className="text-xl font-semibold font-mono" style={{ color: m.color || "#1a2f45" }}>{m.value}</div>
           </div>
         ))}
       </div>
@@ -214,26 +214,26 @@ export default function SchemaEvolutionEmbed() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Scenario selector */}
         <div className="space-y-3">
-          <p className="text-xs text-[#888888] uppercase tracking-widest font-medium mb-4">Migration Scenarios</p>
+          <p className="text-xs text-[#57789a] uppercase tracking-widest font-medium mb-4">Migration Scenarios</p>
           {SCENARIOS.map((sc) => (
             <button
               key={sc.id}
               onClick={() => { if (!running) { setSelected(sc); setActiveSteps([]); } }}
               className={`w-full text-left rounded-xl border p-4 transition-all duration-200 ${
                 selected.id === sc.id
-                  ? "border-[#3b82f6]/50 bg-[#3b82f6]/05"
-                  : "border-[rgba(255,255,255,0.08)] bg-[#111111] hover:border-[rgba(255,255,255,0.14)]"
+                  ? "border-[#3d9bd4]/50 bg-[#3d9bd4]/05"
+                  : "border-[rgba(61,155,212,0.14)] bg-[#ffffff] hover:border-[rgba(61,155,212,0.28)]"
               } ${running ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
             >
-              <div className="text-sm font-medium text-[#ededed] mb-1">{sc.label}</div>
-              <div className="text-xs text-[#888888]">{sc.description}</div>
+              <div className="text-sm font-medium text-[#1a2f45] mb-1">{sc.label}</div>
+              <div className="text-xs text-[#57789a]">{sc.description}</div>
             </button>
           ))}
 
           <button
             onClick={runMigration}
             disabled={running}
-            className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#3b82f6] text-white text-sm font-medium hover:bg-[#2563eb] transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-2"
+            className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#3d9bd4] text-white text-sm font-medium hover:bg-[#2880b5] transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-2"
           >
             {running ? (
               <>
@@ -252,10 +252,10 @@ export default function SchemaEvolutionEmbed() {
         {/* Steps + log */}
         <div className="lg:col-span-2 space-y-4">
           {/* Migration steps */}
-          <div className="rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#111111] overflow-hidden">
-            <div className="px-5 py-4 border-b border-[rgba(255,255,255,0.06)]">
-              <div className="text-sm font-semibold text-[#ededed]">{selected.label}</div>
-              <div className="text-xs text-[#888888]">{selected.description}</div>
+          <div className="rounded-xl border border-[rgba(61,155,212,0.14)] bg-[#ffffff] overflow-hidden">
+            <div className="px-5 py-4 border-b border-[rgba(61,155,212,0.10)]">
+              <div className="text-sm font-semibold text-[#1a2f45]">{selected.label}</div>
+              <div className="text-xs text-[#57789a]">{selected.description}</div>
             </div>
             <div className="p-5 space-y-3">
               {selected.steps.map((step, idx) => {
@@ -265,20 +265,20 @@ export default function SchemaEvolutionEmbed() {
                   <div key={idx}>
                     {idx > 0 && (
                       <div className="flex justify-center py-1">
-                        <div className={`w-px h-4 transition-colors duration-300 ${status !== "pending" ? "bg-[#3b82f6]/40" : "bg-[rgba(255,255,255,0.08)]"}`} />
+                        <div className={`w-px h-4 transition-colors duration-300 ${status !== "pending" ? "bg-[#3d9bd4]/40" : "bg-[rgba(61,155,212,0.14)]"}`} />
                       </div>
                     )}
                     <div className={`rounded-lg border p-3.5 transition-all duration-300 ${
                       status === "running"
-                        ? "border-[#3b82f6]/40 bg-[#3b82f6]/05"
+                        ? "border-[#3d9bd4]/40 bg-[#3d9bd4]/05"
                         : status === "done"
-                        ? "border-[rgba(255,255,255,0.10)] bg-[#0f0f0f]"
-                        : "border-[rgba(255,255,255,0.06)] bg-[#0a0a0a]"
+                        ? "border-[rgba(61,155,212,0.14)] bg-[#e4f2fc]"
+                        : "border-[rgba(61,155,212,0.10)] bg-[#f0f7ff]"
                     }`}>
                       <div className="flex items-center gap-3">
                         <div className="flex-shrink-0 w-5 h-5 flex items-center justify-center">
                           {status === "running" && (
-                            <svg className="animate-spin w-4 h-4 text-[#3b82f6]" viewBox="0 0 24 24" fill="none">
+                            <svg className="animate-spin w-4 h-4 text-[#3d9bd4]" viewBox="0 0 24 24" fill="none">
                               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                             </svg>
@@ -290,18 +290,18 @@ export default function SchemaEvolutionEmbed() {
                             </svg>
                           )}
                           {status === "pending" && (
-                            <div className="w-4 h-4 rounded-full border border-[rgba(255,255,255,0.15)]" />
+                            <div className="w-4 h-4 rounded-full border border-[rgba(61,155,212,0.20)]" />
                           )}
                         </div>
                         <span className={`text-xs font-medium px-2 py-0.5 rounded border ${step.badgeColor}`}>
                           {step.badge}
                         </span>
-                        <span className={`text-sm flex-1 ${status === "pending" ? "text-[#888888]" : "text-[#ededed]"}`}>
+                        <span className={`text-sm flex-1 ${status === "pending" ? "text-[#57789a]" : "text-[#1a2f45]"}`}>
                           {step.phase}
                         </span>
                       </div>
                       {status === "done" && (
-                        <div className="mt-2.5 ml-8 px-3 py-2 rounded bg-[#0a0a0a] border border-[rgba(255,255,255,0.06)]">
+                        <div className="mt-2.5 ml-8 px-3 py-2 rounded bg-[#f0f7ff] border border-[rgba(61,155,212,0.10)]">
                           <pre className="text-xs text-[#93c5fd] font-mono whitespace-pre-wrap">{step.output}</pre>
                         </div>
                       )}
@@ -313,22 +313,22 @@ export default function SchemaEvolutionEmbed() {
           </div>
 
           {/* Migration log */}
-          <div className="rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#111111] overflow-hidden">
-            <div className="px-5 py-4 border-b border-[rgba(255,255,255,0.06)]">
-              <div className="text-sm font-medium text-[#ededed]">Migration Log</div>
+          <div className="rounded-xl border border-[rgba(61,155,212,0.14)] bg-[#ffffff] overflow-hidden">
+            <div className="px-5 py-4 border-b border-[rgba(61,155,212,0.10)]">
+              <div className="text-sm font-medium text-[#1a2f45]">Migration Log</div>
             </div>
-            <div className="divide-y divide-[rgba(255,255,255,0.04)] max-h-[180px] overflow-y-auto">
+            <div className="divide-y divide-[rgba(61,155,212,0.06)] max-h-[180px] overflow-y-auto">
               {runLog.length === 0 ? (
-                <div className="px-5 py-6 text-center text-sm text-[#888888]">
+                <div className="px-5 py-6 text-center text-sm text-[#57789a]">
                   No migrations run yet
                 </div>
               ) : (
                 runLog.map((r) => (
-                  <div key={r.id} className="px-5 py-3 flex items-center gap-3 hover:bg-[rgba(255,255,255,0.02)] transition-colors">
-                    <span className="text-xs font-mono text-[#888888]">{r.id}</span>
-                    <span className="text-xs font-medium text-[#ededed] flex-1">{r.scenarioLabel}</span>
+                  <div key={r.id} className="px-5 py-3 flex items-center gap-3 hover:bg-[rgba(61,155,212,0.04)] transition-colors">
+                    <span className="text-xs font-mono text-[#57789a]">{r.id}</span>
+                    <span className="text-xs font-medium text-[#1a2f45] flex-1">{r.scenarioLabel}</span>
                     <span className="text-xs text-[#22c55e]">{(r.durationMs / 1000).toFixed(1)}s</span>
-                    <span className="text-xs text-[#888888]">{new Date(r.ts).toLocaleTimeString()}</span>
+                    <span className="text-xs text-[#57789a]">{new Date(r.ts).toLocaleTimeString()}</span>
                   </div>
                 ))
               )}

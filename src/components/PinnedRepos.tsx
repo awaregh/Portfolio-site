@@ -10,12 +10,12 @@ export default function PinnedRepos() {
     <section className="pb-6 px-6">
       <div className="max-w-5xl mx-auto">
         <div className="flex items-center justify-between mb-4">
-          <span className="text-xs font-mono text-[#b6b1a8] uppercase tracking-widest">Pinned</span>
+          <span className="text-xs font-mono text-[#57789a] uppercase tracking-widest">Pinned</span>
           <a
             href={`https://github.com/${GITHUB_USER}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="link-underline flex items-center gap-1.5 text-xs text-[#b6b1a8] hover:text-[#e8e6e3] transition-colors"
+            className="link-underline flex items-center gap-1.5 text-xs text-[#57789a] hover:text-[#1a2f45] transition-colors"
           >
             <svg
               width="13"
@@ -40,25 +40,25 @@ export default function PinnedRepos() {
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.35, delay: 0.3 + index * 0.04, ease: "easeOut" }}
-              className="flex flex-col rounded border border-[rgba(232,230,227,0.1)] bg-[#161920] p-4 hover:border-[rgba(232,230,227,0.18)] transition-colors duration-200"
+              className="flex flex-col rounded-xl border border-[rgba(61,155,212,0.16)] bg-white p-4 hover:border-[rgba(61,155,212,0.22)] transition-colors duration-200"
             >
               <div className="flex items-center gap-2 mb-2">
                 <svg
                   width="13"
                   height="13"
                   viewBox="0 0 16 16"
-                  fill="#b6b1a8"
+                  fill="#57789a"
                   className="flex-shrink-0"
                   aria-hidden="true"
                 >
                   <path d="M2 2.5A2.5 2.5 0 014.5 0h8.75a.75.75 0 01.75.75v12.5a.75.75 0 01-.75.75h-2.5a.75.75 0 110-1.5h1.75v-2h-8a1 1 0 00-.714 1.7.75.75 0 01-1.072 1.05A2.495 2.495 0 012 11.5v-9zm10.5-1V9h-8c-.356 0-.694.074-1 .208V2.5a1 1 0 011-1h8zM5 12.25v3.25a.25.25 0 00.4.2l1.45-1.087a.25.25 0 01.3 0L8.6 15.7a.25.25 0 00.4-.2v-3.25a.25.25 0 00-.25-.25h-3.5a.25.25 0 00-.25.25z" />
                 </svg>
-                <span className="text-xs font-mono text-[#e8e6e3] truncate">
+                <span className="text-xs font-mono text-[#1a2f45] truncate">
                   {repo.slug}
                 </span>
               </div>
 
-              <p className="text-xs text-[#b6b1a8] leading-relaxed mb-3 flex-1 line-clamp-2">
+              <p className="text-xs text-[#57789a] leading-relaxed mb-3 flex-1 line-clamp-2">
                 {repo.description}
               </p>
 
@@ -67,7 +67,7 @@ export default function PinnedRepos() {
                   className="w-2 h-2 rounded-full flex-shrink-0"
                   style={{ backgroundColor: repo.languageColor }}
                 />
-                <span className="text-xs font-mono text-[#b6b1a8]">{repo.language}</span>
+                <span className="text-xs font-mono text-[#57789a]">{repo.language}</span>
               </div>
             </motion.a>
           ))}

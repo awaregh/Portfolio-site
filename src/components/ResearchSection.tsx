@@ -8,16 +8,16 @@ export default function ResearchSection() {
   return (
     <section
       id="research"
-      className="py-24 px-6 border-t border-[rgba(232,230,227,0.1)]"
+      className="py-24 px-6 border-t border-[rgba(61,155,212,0.14)]"
     >
       <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-[160px_1fr] gap-12">
         <div>
-          <h2 className="text-sm font-mono text-[#b6b1a8] uppercase tracking-widest">
+          <h2 className="text-sm font-mono text-[#57789a] uppercase tracking-widest">
             Writing
           </h2>
         </div>
         <div>
-          <p className="text-[#b6b1a8] mb-10 text-sm">
+          <p className="text-[#57789a] mb-10 text-sm">
             Technical papers and deep-dives on systems I&apos;ve built and
             problems I&apos;ve solved in production.
           </p>
@@ -34,24 +34,24 @@ export default function ResearchSection() {
                   delay: index * 0.07,
                   ease: "easeOut",
                 }}
-                className="rounded border border-[rgba(232,230,227,0.1)] bg-[#161920] p-5 hover:border-[rgba(232,230,227,0.18)] transition-colors duration-200"
+                className="rounded-2xl border border-[rgba(61,155,212,0.16)] bg-white p-5 hover:border-[rgba(61,155,212,0.22)] transition-colors duration-200"
               >
                 <div className="flex items-start justify-between gap-4 mb-2">
-                  <h3 className="text-[#e8e6e3] font-medium text-sm leading-snug">
+                  <h3 className="text-[#1a2f45] font-medium text-sm leading-snug">
                     {paper.title}
                   </h3>
-                  <span className="text-xs font-mono text-[#b6b1a8] flex-shrink-0 mt-0.5">
+                  <span className="text-xs font-mono text-[#57789a] flex-shrink-0 mt-0.5">
                     {paper.year}
                   </span>
                 </div>
 
                 {paper.venue && (
-                  <p className="text-xs font-mono text-[#c4572f] mb-2">
+                  <p className="text-xs font-mono text-[#3d9bd4] mb-2">
                     {paper.venue}
                   </p>
                 )}
 
-                <p className="text-[#b6b1a8] text-sm leading-relaxed mb-3">
+                <p className="text-[#57789a] text-sm leading-relaxed mb-3">
                   {paper.abstract}
                 </p>
 
@@ -59,7 +59,7 @@ export default function ResearchSection() {
                   {paper.topics.map((topic) => (
                     <span
                       key={topic}
-                      className="px-2 py-0.5 text-xs rounded font-mono bg-[rgba(232,230,227,0.06)] text-[#b6b1a8] border border-[rgba(232,230,227,0.1)]"
+                      className="px-2 py-0.5 text-xs rounded font-mono bg-[rgba(61,155,212,0.08)] text-[#57789a] border border-[rgba(61,155,212,0.14)]"
                     >
                       {topic}
                     </span>
@@ -67,13 +67,13 @@ export default function ResearchSection() {
                 </div>
 
                 {(paper.url || paper.pdfUrl) && (
-                  <div className="flex gap-4 mt-3 pt-3 border-t border-[rgba(232,230,227,0.08)]">
+                  <div className="flex gap-4 mt-3 pt-3 border-t border-[rgba(61,155,212,0.10)]">
                     {paper.pdfUrl && (
                       <a
                         href={paper.pdfUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="link-underline text-xs text-[#b6b1a8] hover:text-[#e8e6e3] transition-colors"
+                        className="link-underline text-xs text-[#57789a] hover:text-[#1a2f45] transition-colors"
                       >
                         Read PDF
                       </a>
@@ -83,7 +83,7 @@ export default function ResearchSection() {
                         href={paper.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="link-underline text-xs text-[#b6b1a8] hover:text-[#e8e6e3] transition-colors"
+                        className="link-underline text-xs text-[#57789a] hover:text-[#1a2f45] transition-colors"
                       >
                         Read Online
                       </a>
@@ -97,7 +97,7 @@ export default function ResearchSection() {
           <div className="mt-8">
             <Link
               href="/research"
-              className="link-underline inline-flex items-center gap-2 text-[#b6b1a8] hover:text-[#e8e6e3] text-sm transition-colors"
+              className="link-underline inline-flex items-center gap-2 text-[#57789a] hover:text-[#1a2f45] text-sm transition-colors"
             >
               View all papers
               <svg

@@ -101,9 +101,9 @@ export default function RealTimePipelineEmbed() {
           { label: "Consumer Lag", value: running ? `${Math.floor(Math.random() * 8) + 1}s` : "—" },
           { label: "Schema Errors", value: events.filter((e) => !e.schemaValid).length.toString(), color: "#ef4444" },
         ].map((m) => (
-          <div key={m.label} className="rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#111111] p-4">
-            <div className="text-xs text-[#888888] mb-1">{m.label}</div>
-            <div className="text-xl font-semibold font-mono" style={{ color: (m as { color?: string }).color || "#ededed" }}>{m.value}</div>
+          <div key={m.label} className="rounded-xl border border-[rgba(61,155,212,0.14)] bg-[#ffffff] p-4">
+            <div className="text-xs text-[#57789a] mb-1">{m.label}</div>
+            <div className="text-xl font-semibold font-mono" style={{ color: (m as { color?: string }).color || "#1a2f45" }}>{m.value}</div>
           </div>
         ))}
       </div>
@@ -115,7 +115,7 @@ export default function RealTimePipelineEmbed() {
           className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
             running
               ? "bg-[#ef4444]/10 text-[#ef4444] border border-[#ef4444]/20 hover:bg-[#ef4444]/20"
-              : "bg-[#3b82f6] text-white hover:bg-[#2563eb]"
+              : "bg-[#3d9bd4] text-white hover:bg-[#2880b5]"
           }`}
         >
           {running ? (
@@ -137,7 +137,7 @@ export default function RealTimePipelineEmbed() {
         </button>
         <button
           onClick={() => { setEvents([]); setTotalProcessed(0); setAvgLatency(0); setEventsPerSec(0); }}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-[#888888] border border-[rgba(255,255,255,0.08)] hover:text-[#ededed] transition-colors"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-[#57789a] border border-[rgba(61,155,212,0.14)] hover:text-[#1a2f45] transition-colors"
         >
           Clear
         </button>
@@ -145,34 +145,34 @@ export default function RealTimePipelineEmbed() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Event stream */}
-        <div className="lg:col-span-2 rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#111111] overflow-hidden">
-          <div className="px-5 py-4 border-b border-[rgba(255,255,255,0.06)] flex items-center justify-between">
-            <div className="text-sm font-medium text-[#ededed]">Event Stream</div>
+        <div className="lg:col-span-2 rounded-xl border border-[rgba(61,155,212,0.14)] bg-[#ffffff] overflow-hidden">
+          <div className="px-5 py-4 border-b border-[rgba(61,155,212,0.10)] flex items-center justify-between">
+            <div className="text-sm font-medium text-[#1a2f45]">Event Stream</div>
             {running && <span className="w-2 h-2 rounded-full bg-[#22c55e] animate-pulse" />}
           </div>
-          <div className="divide-y divide-[rgba(255,255,255,0.04)] max-h-[360px] overflow-y-auto">
+          <div className="divide-y divide-[rgba(61,155,212,0.06)] max-h-[360px] overflow-y-auto">
             {events.length === 0 ? (
-              <div className="px-5 py-8 text-center text-sm text-[#888888]">
+              <div className="px-5 py-8 text-center text-sm text-[#57789a]">
                 Start the pipeline to see events
               </div>
             ) : (
               events.map((evt) => (
-                <div key={evt.id} className="px-5 py-3 flex items-start gap-3 hover:bg-[rgba(255,255,255,0.02)] transition-colors">
+                <div key={evt.id} className="px-5 py-3 flex items-start gap-3 hover:bg-[rgba(61,155,212,0.04)] transition-colors">
                   <div className="flex-shrink-0 mt-0.5">
                     <span className="text-xs font-mono text-[#444444]">{evt.id}</span>
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="text-xs font-medium text-[#ededed]">{evt.topic}</span>
-                      <span className="text-xs text-[#888888]">·</span>
-                      <span className="text-xs text-[#888888] font-mono">{evt.schema}</span>
+                      <span className="text-xs font-medium text-[#1a2f45]">{evt.topic}</span>
+                      <span className="text-xs text-[#57789a]">·</span>
+                      <span className="text-xs text-[#57789a] font-mono">{evt.schema}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="text-xs text-[#888888]">{evt.tenantId}</span>
+                      <span className="text-xs text-[#57789a]">{evt.tenantId}</span>
                       <span className={`text-xs px-1.5 py-0.5 rounded border font-mono ${SINK_COLORS[evt.sink]}`}>
                         → {evt.sink}
                       </span>
-                      <span className="text-xs text-[#888888] ml-auto">{evt.latencyMs}ms</span>
+                      <span className="text-xs text-[#57789a] ml-auto">{evt.latencyMs}ms</span>
                     </div>
                   </div>
                 </div>
@@ -182,20 +182,20 @@ export default function RealTimePipelineEmbed() {
         </div>
 
         {/* Topic breakdown */}
-        <div className="rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#111111] p-5">
-          <p className="text-xs text-[#888888] uppercase tracking-widest font-medium mb-4">Topic Breakdown</p>
+        <div className="rounded-xl border border-[rgba(61,155,212,0.14)] bg-[#ffffff] p-5">
+          <p className="text-xs text-[#57789a] uppercase tracking-widest font-medium mb-4">Topic Breakdown</p>
           {TOPICS.map((topic) => {
             const count = topicCounts[topic] || 0;
             const total = events.length || 1;
             return (
               <div key={topic} className="mb-3">
                 <div className="flex justify-between text-xs mb-1">
-                  <span className="text-[#888888] font-mono truncate max-w-[140px]">{topic}</span>
-                  <span className="text-[#ededed] ml-2 flex-shrink-0">{count}</span>
+                  <span className="text-[#57789a] font-mono truncate max-w-[140px]">{topic}</span>
+                  <span className="text-[#1a2f45] ml-2 flex-shrink-0">{count}</span>
                 </div>
-                <div className="h-1.5 rounded-full bg-[rgba(255,255,255,0.06)] overflow-hidden">
+                <div className="h-1.5 rounded-full bg-[rgba(61,155,212,0.10)] overflow-hidden">
                   <div
-                    className="h-full rounded-full bg-[#3b82f6] transition-all duration-300"
+                    className="h-full rounded-full bg-[#3d9bd4] transition-all duration-300"
                     style={{ width: `${(count / total) * 100}%` }}
                   />
                 </div>
@@ -203,14 +203,14 @@ export default function RealTimePipelineEmbed() {
             );
           })}
 
-          <div className="mt-6 pt-4 border-t border-[rgba(255,255,255,0.06)]">
-            <p className="text-xs text-[#888888] uppercase tracking-widest font-medium mb-3">Sink Distribution</p>
+          <div className="mt-6 pt-4 border-t border-[rgba(61,155,212,0.10)]">
+            <p className="text-xs text-[#57789a] uppercase tracking-widest font-medium mb-3">Sink Distribution</p>
             {(["ClickHouse", "Alerting", "Billing", "DLQ"] as const).map((sink) => {
               const count = events.filter((e) => e.sink === sink).length;
               return (
                 <div key={sink} className="flex items-center justify-between text-xs mb-2">
                   <span className={`px-2 py-0.5 rounded border font-mono ${SINK_COLORS[sink]}`}>{sink}</span>
-                  <span className="text-[#888888]">{count} events</span>
+                  <span className="text-[#57789a]">{count} events</span>
                 </div>
               );
             })}

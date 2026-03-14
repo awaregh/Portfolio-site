@@ -51,19 +51,19 @@ export default function ProjectDemoEmbed({ slug }: ProjectDemoEmbedProps) {
     <div className="mt-12">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#3b82f6]/10 text-[#3b82f6] text-xs font-medium border border-[#3b82f6]/20 mb-3">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#3b82f6] animate-pulse" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#3d9bd4]/10 text-[#3d9bd4] text-xs font-medium border border-[#3d9bd4]/20 mb-3">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#3d9bd4] animate-pulse" />
             Interactive Demo
           </div>
           {DEMO_DESCRIPTIONS[slug] && (
-            <p className="text-[#888888] text-sm leading-relaxed max-w-xl">
+            <p className="text-[#57789a] text-sm leading-relaxed max-w-xl">
               {DEMO_DESCRIPTIONS[slug]}
             </p>
           )}
         </div>
         <Link
           href={`/projects/${slug}/demo`}
-          className="flex-shrink-0 ml-4 inline-flex items-center gap-1.5 text-xs text-[#888888] hover:text-[#ededed] transition-colors"
+          className="flex-shrink-0 ml-4 inline-flex items-center gap-1.5 text-xs text-[#57789a] hover:text-[#1a2f45] transition-colors"
         >
           Open full screen
           <svg width="12" height="12" viewBox="0 0 16 16" fill="none">

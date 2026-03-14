@@ -36,12 +36,12 @@ export default function ProjectCard({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.4, ease: "easeOut" }}
-      className="rounded border border-[rgba(232,230,227,0.1)] bg-[#161920] p-6 sm:p-7 hover:border-[rgba(232,230,227,0.2)] transition-colors duration-200 group"
+      className="rounded-2xl border border-[rgba(61,155,212,0.16)] bg-white p-6 sm:p-7 hover:border-[rgba(61,155,212,0.28)] hover:shadow-[0_4px_20px_rgba(61,155,212,0.12)] transition-all duration-200 group"
     >
       <div className="flex items-start justify-between gap-4 mb-4">
         <Link
           href={`/projects/${slug}`}
-          className="link-underline text-[#e8e6e3] font-semibold text-base tracking-tight"
+          className="link-underline text-[#1a2f45] font-semibold text-base tracking-tight"
         >
           {title}
         </Link>
@@ -51,7 +51,7 @@ export default function ProjectCard({
               href={githubUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[#b6b1a8] hover:text-[#e8e6e3] transition-colors"
+              className="text-[#57789a] hover:text-[#3d9bd4] transition-colors"
               title="View source on GitHub"
             >
               <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
@@ -61,7 +61,7 @@ export default function ProjectCard({
           )}
           <Link
             href={`/projects/${slug}`}
-            className="text-[#b6b1a8] hover:text-[#e8e6e3] transition-colors"
+            className="text-[#57789a] hover:text-[#3d9bd4] transition-colors"
             title="View project details"
           >
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -71,28 +71,28 @@ export default function ProjectCard({
         </div>
       </div>
 
-      {/* Case-study framing when available */}
+      {/* Case-study framing */}
       {problem ? (
         <div className="space-y-2 mb-5">
-          <div className="grid grid-cols-[64px_1fr] gap-x-3 text-sm">
-            <span className="text-xs font-mono text-[#b6b1a8] pt-0.5 uppercase tracking-wider">Problem</span>
-            <span className="text-[#b6b1a8] leading-relaxed">{problem}</span>
+          <div className="grid grid-cols-[68px_1fr] gap-x-3 text-sm">
+            <span className="text-xs font-mono text-[#57789a] pt-0.5 uppercase tracking-wider">Problem</span>
+            <span className="text-[#57789a] leading-relaxed">{problem}</span>
           </div>
           {approach && (
-            <div className="grid grid-cols-[64px_1fr] gap-x-3 text-sm">
-              <span className="text-xs font-mono text-[#b6b1a8] pt-0.5 uppercase tracking-wider">Approach</span>
-              <span className="text-[#b6b1a8] leading-relaxed">{approach}</span>
+            <div className="grid grid-cols-[68px_1fr] gap-x-3 text-sm">
+              <span className="text-xs font-mono text-[#57789a] pt-0.5 uppercase tracking-wider">Approach</span>
+              <span className="text-[#57789a] leading-relaxed">{approach}</span>
             </div>
           )}
           {result && (
-            <div className="grid grid-cols-[64px_1fr] gap-x-3 text-sm">
-              <span className="text-xs font-mono text-[#c4572f] pt-0.5 uppercase tracking-wider">Result</span>
-              <span className="text-[#e8e6e3] leading-relaxed font-medium">{result}</span>
+            <div className="grid grid-cols-[68px_1fr] gap-x-3 text-sm">
+              <span className="text-xs font-mono text-[#e8a3be] pt-0.5 uppercase tracking-wider">Result</span>
+              <span className="text-[#1a2f45] leading-relaxed font-medium">{result}</span>
             </div>
           )}
         </div>
       ) : (
-        <p className="text-[#b6b1a8] text-sm leading-relaxed mb-5">
+        <p className="text-[#57789a] text-sm leading-relaxed mb-5">
           {description}
         </p>
       )}
@@ -100,10 +100,7 @@ export default function ProjectCard({
       {/* Architecture signals */}
       <div className="flex flex-wrap gap-x-3 gap-y-1 mb-3">
         {architecture.map((tag) => (
-          <span
-            key={tag}
-            className="text-xs font-mono text-[#b6b1a8]"
-          >
+          <span key={tag} className="text-xs font-mono text-[#57789a]">
             {tag}
           </span>
         ))}
@@ -114,7 +111,7 @@ export default function ProjectCard({
         {tags.map((tag) => (
           <span
             key={tag}
-            className="px-2 py-0.5 text-xs rounded font-mono bg-[rgba(232,230,227,0.06)] text-[#b6b1a8] border border-[rgba(232,230,227,0.1)]"
+            className="px-2 py-0.5 text-xs rounded-full font-mono bg-[#e4f2fc] text-[#3d9bd4] border border-[rgba(61,155,212,0.18)]"
           >
             {tag}
           </span>
@@ -122,17 +119,17 @@ export default function ProjectCard({
       </div>
 
       {/* Actions */}
-      <div className="flex items-center gap-4 pt-3 border-t border-[rgba(232,230,227,0.08)]">
+      <div className="flex items-center gap-4 pt-3 border-t border-[rgba(61,155,212,0.10)]">
         <Link
           href={`/projects/${slug}`}
-          className="link-underline text-xs text-[#b6b1a8] hover:text-[#e8e6e3] transition-colors"
+          className="link-underline text-xs text-[#57789a] hover:text-[#1a2f45] transition-colors"
         >
           Case study
         </Link>
         {demoUrl && (
           <Link
             href={demoUrl}
-            className="link-underline text-xs text-[#c4572f] hover:text-[#e07a5f] transition-colors"
+            className="link-underline text-xs text-[#3d9bd4] hover:text-[#2880b5] transition-colors"
           >
             Live demo
           </Link>
@@ -142,7 +139,7 @@ export default function ProjectCard({
             href={githubUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="link-underline text-xs text-[#b6b1a8] hover:text-[#e8e6e3] transition-colors"
+            className="link-underline text-xs text-[#57789a] hover:text-[#1a2f45] transition-colors"
           >
             Source
           </a>
@@ -151,4 +148,3 @@ export default function ProjectCard({
     </motion.div>
   );
 }
-

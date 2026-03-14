@@ -37,10 +37,10 @@ const areas = [
 
 export default function FocusAreas() {
   return (
-    <section className="py-24 px-6 border-t border-[rgba(232,230,227,0.1)]">
+    <section className="py-24 px-6 border-t border-[rgba(61,155,212,0.14)]">
       <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-[160px_1fr] gap-12">
         <div>
-          <h2 className="text-sm font-mono text-[#b6b1a8] uppercase tracking-widest">
+          <h2 className="text-sm font-mono text-[#57789a] uppercase tracking-widest">
             Focus
           </h2>
         </div>
@@ -57,10 +57,10 @@ export default function FocusAreas() {
                 ease: "easeOut",
               }}
             >
-              <h3 className="text-[#e8e6e3] font-medium text-sm mb-2">
+              <h3 className="text-[#1a2f45] font-medium text-sm mb-2">
                 {area.title}
               </h3>
-              <p className="text-[#b6b1a8] text-sm leading-relaxed">
+              <p className="text-[#57789a] text-sm leading-relaxed">
                 {area.description}
               </p>
             </motion.div>

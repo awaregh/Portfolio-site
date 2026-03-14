@@ -127,18 +127,18 @@ export default function HallucinationMitigationEmbed() {
           { label: "Queries Run", value: queriesRun.toString() },
           { label: "Hallucinations Caught", value: hallucinationsCaught.toString(), color: "#ef4444" },
           { label: "Citations Added", value: citationsAdded.toString(), color: "#22c55e" },
-          { label: "Avg Confidence", value: avgConfidence !== "—" ? avgConfidence : "—", color: "#3b82f6" },
+          { label: "Avg Confidence", value: avgConfidence !== "—" ? avgConfidence : "—", color: "#3d9bd4" },
         ].map((m) => (
-          <div key={m.label} className="rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#111111] p-4">
-            <div className="text-xs text-[#888888] mb-1">{m.label}</div>
-            <div className="text-xl font-semibold font-mono" style={{ color: m.color || "#ededed" }}>{m.value}</div>
+          <div key={m.label} className="rounded-xl border border-[rgba(61,155,212,0.14)] bg-[#ffffff] p-4">
+            <div className="text-xs text-[#57789a] mb-1">{m.label}</div>
+            <div className="text-xl font-semibold font-mono" style={{ color: m.color || "#1a2f45" }}>{m.value}</div>
           </div>
         ))}
       </div>
 
       {/* Query panel */}
-      <div className="rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#111111] p-5 mb-6">
-        <p className="text-xs text-[#888888] uppercase tracking-widest font-medium mb-3">Query</p>
+      <div className="rounded-xl border border-[rgba(61,155,212,0.14)] bg-[#ffffff] p-5 mb-6">
+        <p className="text-xs text-[#57789a] uppercase tracking-widest font-medium mb-3">Query</p>
         <div className="flex flex-wrap gap-2 mb-3">
           {PRESET_QUERIES.map((q) => (
             <button
@@ -146,8 +146,8 @@ export default function HallucinationMitigationEmbed() {
               onClick={() => { setQuery(q); setCustomQuery(""); }}
               className={`text-xs px-2.5 py-1 rounded-lg border transition-all ${
                 query === q && !customQuery
-                  ? "border-[#3b82f6]/50 bg-[#3b82f6]/10 text-[#3b82f6]"
-                  : "border-[rgba(255,255,255,0.08)] text-[#888888] hover:text-[#ededed]"
+                  ? "border-[#3d9bd4]/50 bg-[#3d9bd4]/10 text-[#3d9bd4]"
+                  : "border-[rgba(61,155,212,0.14)] text-[#57789a] hover:text-[#1a2f45]"
               }`}
             >
               {q}
@@ -161,12 +161,12 @@ export default function HallucinationMitigationEmbed() {
             value={customQuery}
             onChange={(e) => setCustomQuery(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && askQuery()}
-            className="flex-1 bg-[#0a0a0a] border border-[rgba(255,255,255,0.08)] rounded-lg px-3 py-2 text-sm text-[#ededed] placeholder-[#444444] focus:outline-none focus:border-[#3b82f6]/50"
+            className="flex-1 bg-[#f0f7ff] border border-[rgba(61,155,212,0.14)] rounded-lg px-3 py-2 text-sm text-[#1a2f45] placeholder-[#57789a] focus:outline-none focus:border-[#3d9bd4]/50"
           />
           <button
             onClick={askQuery}
             disabled={running}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#3b82f6] text-white text-sm font-medium hover:bg-[#2563eb] transition-colors disabled:opacity-50"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#3d9bd4] text-white text-sm font-medium hover:bg-[#2880b5] transition-colors disabled:opacity-50"
           >
             {running ? (
               <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none">
@@ -180,13 +180,13 @@ export default function HallucinationMitigationEmbed() {
 
       {/* Comparison */}
       {!result && !running && (
-        <div className="rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#111111] py-12 text-center text-sm text-[#888888]">
+        <div className="rounded-xl border border-[rgba(61,155,212,0.14)] bg-[#ffffff] py-12 text-center text-sm text-[#57789a]">
           Ask a question to compare responses with and without guardrails
         </div>
       )}
       {running && (
-        <div className="rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#111111] py-12 text-center text-sm text-[#888888]">
-          <svg className="animate-spin w-5 h-5 text-[#3b82f6] mx-auto mb-2" viewBox="0 0 24 24" fill="none">
+        <div className="rounded-xl border border-[rgba(61,155,212,0.14)] bg-[#ffffff] py-12 text-center text-sm text-[#57789a]">
+          <svg className="animate-spin w-5 h-5 text-[#3d9bd4] mx-auto mb-2" viewBox="0 0 24 24" fill="none">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
           </svg>
@@ -196,13 +196,13 @@ export default function HallucinationMitigationEmbed() {
       {result && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Without guardrails */}
-          <div className="rounded-xl border border-[#ef4444]/25 bg-[#111111] overflow-hidden">
+          <div className="rounded-xl border border-[#ef4444]/25 bg-[#ffffff] overflow-hidden">
             <div className="px-5 py-3 border-b border-[#ef4444]/15 flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-[#ef4444]" />
-              <span className="text-sm font-semibold text-[#ededed]">Without Guardrails</span>
+              <span className="text-sm font-semibold text-[#1a2f45]">Without Guardrails</span>
             </div>
             <div className="p-5 space-y-4">
-              <p className="text-sm text-[#ededed] leading-relaxed">{result.data.withoutGuardrails.text}</p>
+              <p className="text-sm text-[#1a2f45] leading-relaxed">{result.data.withoutGuardrails.text}</p>
               <div className="flex flex-wrap gap-2">
                 {result.data.withoutGuardrails.riskBadges.map((b) => (
                   <span key={b} className="text-xs px-2 py-0.5 rounded border border-[#ef4444]/30 bg-[#ef4444]/10 text-[#ef4444]">
@@ -210,18 +210,18 @@ export default function HallucinationMitigationEmbed() {
                   </span>
                 ))}
               </div>
-              <div className="text-xs text-[#888888] italic">No sources cited · Confidence: unscored</div>
+              <div className="text-xs text-[#57789a] italic">No sources cited · Confidence: unscored</div>
             </div>
           </div>
 
           {/* With guardrails */}
-          <div className="rounded-xl border border-[#22c55e]/25 bg-[#111111] overflow-hidden">
+          <div className="rounded-xl border border-[#22c55e]/25 bg-[#ffffff] overflow-hidden">
             <div className="px-5 py-3 border-b border-[#22c55e]/15 flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-[#22c55e]" />
-              <span className="text-sm font-semibold text-[#ededed]">With Guardrails</span>
+              <span className="text-sm font-semibold text-[#1a2f45]">With Guardrails</span>
             </div>
             <div className="p-5 space-y-4">
-              <p className="text-sm text-[#ededed] leading-relaxed">{result.data.withGuardrails.text}</p>
+              <p className="text-sm text-[#1a2f45] leading-relaxed">{result.data.withGuardrails.text}</p>
               <div className="flex flex-wrap gap-2">
                 {result.data.withGuardrails.groundedBadges.map((b) => (
                   <span key={b} className="text-xs px-2 py-0.5 rounded border border-[#22c55e]/30 bg-[#22c55e]/10 text-[#22c55e]">
@@ -230,16 +230,16 @@ export default function HallucinationMitigationEmbed() {
                 ))}
               </div>
               <div className="space-y-1.5">
-                <div className="text-xs text-[#888888] uppercase tracking-widest">Sources</div>
+                <div className="text-xs text-[#57789a] uppercase tracking-widest">Sources</div>
                 {result.data.withGuardrails.sources.map((s, i) => (
-                  <div key={i} className="text-xs font-mono text-[#93c5fd] px-2 py-1 rounded bg-[#0a0a0a] border border-[rgba(255,255,255,0.06)]">
+                  <div key={i} className="text-xs font-mono text-[#93c5fd] px-2 py-1 rounded bg-[#f0f7ff] border border-[rgba(61,155,212,0.10)]">
                     {s}
                   </div>
                 ))}
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-xs text-[#888888]">Confidence:</span>
-                <div className="flex-1 h-1.5 rounded-full bg-[rgba(255,255,255,0.06)] overflow-hidden">
+                <span className="text-xs text-[#57789a]">Confidence:</span>
+                <div className="flex-1 h-1.5 rounded-full bg-[rgba(61,155,212,0.10)] overflow-hidden">
                   <div
                     className="h-full rounded-full transition-all duration-500"
                     style={{
@@ -248,7 +248,7 @@ export default function HallucinationMitigationEmbed() {
                     }}
                   />
                 </div>
-                <span className="text-xs font-mono text-[#ededed]">{result.data.withGuardrails.confidence.toFixed(2)}</span>
+                <span className="text-xs font-mono text-[#1a2f45]">{result.data.withGuardrails.confidence.toFixed(2)}</span>
               </div>
             </div>
           </div>

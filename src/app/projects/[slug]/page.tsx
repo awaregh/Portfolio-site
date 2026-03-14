@@ -50,7 +50,7 @@ export default async function ProjectPage({ params }: Props) {
         {/* Back link */}
         <Link
           href="/projects"
-          className="link-underline inline-flex items-center gap-2 text-[#b6b1a8] hover:text-[#e8e6e3] text-sm transition-colors mb-10"
+          className="link-underline inline-flex items-center gap-2 text-[#57789a] hover:text-[#1a2f45] text-sm transition-colors mb-10"
         >
           <svg
             width="14"
@@ -72,10 +72,10 @@ export default async function ProjectPage({ params }: Props) {
 
         {/* Header */}
         <div className="mb-10">
-          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#e8e6e3] mb-4 leading-tight">
+          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#1a2f45] mb-4 leading-tight">
             {fm.title}
           </h1>
-          <p className="text-[#b6b1a8] text-base mb-6 leading-relaxed">
+          <p className="text-[#57789a] text-base mb-6 leading-relaxed">
             {fm.description}
           </p>
 
@@ -85,7 +85,7 @@ export default async function ProjectPage({ params }: Props) {
               {currentProject?.demoUrl && (
                 <Link
                   href={currentProject.demoUrl}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded bg-[#c4572f] text-[#e8e6e3] text-sm font-medium hover:bg-[#a8461f] transition-colors"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#3d9bd4] text-white text-sm font-medium hover:bg-[#2880b5] transition-colors"
                 >
                   <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                     <path d="M2 8h12M8 3l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -98,7 +98,7 @@ export default async function ProjectPage({ params }: Props) {
                   href={currentProject.githubUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded border border-[rgba(232,230,227,0.18)] text-[#b6b1a8] text-sm font-medium hover:text-[#e8e6e3] transition-colors"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded border border-[rgba(61,155,212,0.22)] text-[#57789a] text-sm font-medium hover:text-[#1a2f45] transition-colors"
                 >
                   <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
                     <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
@@ -115,7 +115,7 @@ export default async function ProjectPage({ params }: Props) {
               {fm.architecture.map((tag: string) => (
                 <span
                   key={tag}
-                  className="px-2 py-0.5 text-xs rounded font-mono bg-[rgba(232,230,227,0.06)] text-[#b6b1a8] border border-[rgba(232,230,227,0.1)]"
+                  className="px-2 py-0.5 text-xs rounded font-mono bg-[rgba(61,155,212,0.08)] text-[#57789a] border border-[rgba(61,155,212,0.14)]"
                 >
                   {tag}
                 </span>
@@ -129,7 +129,7 @@ export default async function ProjectPage({ params }: Props) {
               {fm.tags.map((tag: string) => (
                 <span
                   key={tag}
-                  className="px-2 py-0.5 text-xs rounded font-mono bg-[rgba(232,230,227,0.06)] text-[#b6b1a8] border border-[rgba(232,230,227,0.1)]"
+                  className="px-2 py-0.5 text-xs rounded font-mono bg-[rgba(61,155,212,0.08)] text-[#57789a] border border-[rgba(61,155,212,0.14)]"
                 >
                   {tag}
                 </span>
@@ -138,7 +138,7 @@ export default async function ProjectPage({ params }: Props) {
           )}
         </div>
 
-        <hr className="border-[rgba(232,230,227,0.1)] mb-10" />
+        <hr className="border-[rgba(61,155,212,0.14)] mb-10" />
 
         {/* MDX Content */}
         <div className="prose">
@@ -150,15 +150,15 @@ export default async function ProjectPage({ params }: Props) {
 
         {/* Quick Start */}
         {currentProject?.quickStart && (
-          <div className="mt-12 rounded border border-[rgba(232,230,227,0.1)] bg-[#161920] p-6">
-            <h3 className="text-[#e8e6e3] font-semibold text-sm mb-3">
+          <div className="mt-12 rounded border border-[rgba(61,155,212,0.14)] bg-[#ffffff] p-6">
+            <h3 className="text-[#1a2f45] font-semibold text-sm mb-3">
               Quick Start
             </h3>
-            <p className="text-[#b6b1a8] text-sm mb-4">
+            <p className="text-[#57789a] text-sm mb-4">
               Clone and run locally with Docker:
             </p>
-            <div className="bg-[#0f1115] rounded p-4 border border-[rgba(232,230,227,0.08)] overflow-x-auto">
-              <code className="text-xs text-[#e07a5f] font-mono whitespace-pre-wrap break-all">
+            <div className="bg-[#f8fbff] rounded-xl p-4 border border-[rgba(61,155,212,0.14)] overflow-x-auto">
+              <code className="text-xs text-[#5aaedc] font-mono whitespace-pre-wrap break-all">
                 {currentProject.quickStart}
               </code>
             </div>
@@ -166,7 +166,7 @@ export default async function ProjectPage({ params }: Props) {
               href={currentProject.githubUrl ? `${currentProject.githubUrl}#readme` : '#'}
               target="_blank"
               rel="noopener noreferrer"
-              className="link-underline inline-flex items-center gap-1.5 text-sm text-[#b6b1a8] hover:text-[#e8e6e3] transition-colors mt-4"
+              className="link-underline inline-flex items-center gap-1.5 text-sm text-[#57789a] hover:text-[#1a2f45] transition-colors mt-4"
             >
               Full setup in README
               <svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -179,17 +179,17 @@ export default async function ProjectPage({ params }: Props) {
         {/* Prev / Next navigation */}
         {(prevProject || nextProject) && (
           <>
-            <hr className="border-[rgba(232,230,227,0.1)] mt-16 mb-8" />
+            <hr className="border-[rgba(61,155,212,0.14)] mt-16 mb-8" />
             <div className="flex items-stretch justify-between gap-4">
               {prevProject ? (
                 <Link
                   href={`/projects/${prevProject.slug}`}
-                  className="group flex-1 rounded border border-[rgba(232,230,227,0.1)] bg-[#161920] p-5 hover:border-[rgba(232,230,227,0.2)] transition-colors duration-200"
+                  className="group flex-1 rounded-xl border border-[rgba(61,155,212,0.16)] bg-white p-5 hover:border-[rgba(61,155,212,0.28)] transition-colors duration-200"
                 >
-                  <span className="text-xs font-mono text-[#b6b1a8] mb-1 block">
+                  <span className="text-xs font-mono text-[#57789a] mb-1 block">
                     ← Previous
                   </span>
-                  <span className="text-sm text-[#e8e6e3] font-medium">
+                  <span className="text-sm text-[#1a2f45] font-medium">
                     {prevProject.title}
                   </span>
                 </Link>
@@ -199,12 +199,12 @@ export default async function ProjectPage({ params }: Props) {
               {nextProject ? (
                 <Link
                   href={`/projects/${nextProject.slug}`}
-                  className="group flex-1 rounded border border-[rgba(232,230,227,0.1)] bg-[#161920] p-5 hover:border-[rgba(232,230,227,0.2)] transition-colors duration-200 text-right"
+                  className="group flex-1 rounded-xl border border-[rgba(61,155,212,0.16)] bg-white p-5 hover:border-[rgba(61,155,212,0.28)] transition-colors duration-200 text-right"
                 >
-                  <span className="text-xs font-mono text-[#b6b1a8] mb-1 block">
+                  <span className="text-xs font-mono text-[#57789a] mb-1 block">
                     Next →
                   </span>
-                  <span className="text-sm text-[#e8e6e3] font-medium">
+                  <span className="text-sm text-[#1a2f45] font-medium">
                     {nextProject.title}
                   </span>
                 </Link>

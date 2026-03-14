@@ -112,12 +112,12 @@ export default function ConfigServiceEmbed() {
         {[
           { label: "Active Keys", value: activeKeys.toString() },
           { label: "Feature Flags On", value: featureFlagsOn.toString(), color: "#22c55e" },
-          { label: "Overrides", value: overrides.toString(), color: overrides > 0 ? "#f59e0b" : "#888888" },
+          { label: "Overrides", value: overrides.toString(), color: overrides > 0 ? "#f59e0b" : "#57789a" },
           { label: "Last Published", value: lastPublished },
         ].map((m) => (
-          <div key={m.label} className="rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#111111] p-4">
-            <div className="text-xs text-[#888888] mb-1">{m.label}</div>
-            <div className="text-lg font-semibold font-mono truncate" style={{ color: m.color || "#ededed" }}>{m.value}</div>
+          <div key={m.label} className="rounded-xl border border-[rgba(61,155,212,0.14)] bg-[#ffffff] p-4">
+            <div className="text-xs text-[#57789a] mb-1">{m.label}</div>
+            <div className="text-lg font-semibold font-mono truncate" style={{ color: m.color || "#1a2f45" }}>{m.value}</div>
           </div>
         ))}
       </div>
@@ -126,14 +126,14 @@ export default function ConfigServiceEmbed() {
         {/* Left: Config keys */}
         <div className="lg:col-span-2 space-y-3">
           <div className="flex items-center justify-between mb-1">
-            <p className="text-xs text-[#888888] uppercase tracking-widest font-medium">Config Keys</p>
+            <p className="text-xs text-[#57789a] uppercase tracking-widest font-medium">Config Keys</p>
             <button
               onClick={publish}
               disabled={publishing || pendingChanges.size === 0}
               className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                 pendingChanges.size > 0
-                  ? "bg-[#3b82f6] text-white hover:bg-[#2563eb]"
-                  : "border border-[rgba(255,255,255,0.08)] text-[#888888] cursor-not-allowed"
+                  ? "bg-[#3d9bd4] text-white hover:bg-[#2880b5]"
+                  : "border border-[rgba(61,155,212,0.14)] text-[#57789a] cursor-not-allowed"
               } disabled:opacity-50`}
             >
               {publishing ? (
@@ -148,17 +148,17 @@ export default function ConfigServiceEmbed() {
             </button>
           </div>
 
-          <div className="rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#111111] overflow-hidden">
-            <div className="divide-y divide-[rgba(255,255,255,0.04)]">
+          <div className="rounded-xl border border-[rgba(61,155,212,0.14)] bg-[#ffffff] overflow-hidden">
+            <div className="divide-y divide-[rgba(61,155,212,0.06)]">
               {configs.map((cfg) => {
                 const isEditing = editingKey === cfg.key;
                 const isPending = pendingChanges.has(cfg.key);
                 return (
-                  <div key={cfg.key} className="px-5 py-4 hover:bg-[rgba(255,255,255,0.02)] transition-colors">
+                  <div key={cfg.key} className="px-5 py-4 hover:bg-[rgba(61,155,212,0.04)] transition-colors">
                     <div className="flex items-start gap-3">
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-0.5">
-                          <span className="text-xs font-mono font-semibold text-[#ededed]">{cfg.key}</span>
+                          <span className="text-xs font-mono font-semibold text-[#1a2f45]">{cfg.key}</span>
                           <span className={`text-xs px-1.5 py-0.5 rounded border ${
                             cfg.type === "boolean"
                               ? "text-[#a855f7] bg-[#a855f7]/10 border-[#a855f7]/20"
@@ -166,7 +166,7 @@ export default function ConfigServiceEmbed() {
                           }`}>{cfg.type}</span>
                           {isPending && <span className="text-xs text-[#f59e0b]">● unsaved</span>}
                         </div>
-                        <div className="text-xs text-[#888888]">{cfg.description}</div>
+                        <div className="text-xs text-[#57789a]">{cfg.description}</div>
                       </div>
 
                       <div className="flex items-center gap-2 flex-shrink-0">
@@ -179,8 +179,8 @@ export default function ConfigServiceEmbed() {
                                   onClick={() => { setEditValue(v); applyEdit({ ...cfg, value: v === "true" }); }}
                                   className={`text-xs px-2.5 py-1 rounded border transition-all ${
                                     editValue === v
-                                      ? "border-[#3b82f6]/50 bg-[#3b82f6]/10 text-[#3b82f6]"
-                                      : "border-[rgba(255,255,255,0.08)] text-[#888888] hover:text-[#ededed]"
+                                      ? "border-[#3d9bd4]/50 bg-[#3d9bd4]/10 text-[#3d9bd4]"
+                                      : "border-[rgba(61,155,212,0.14)] text-[#57789a] hover:text-[#1a2f45]"
                                   }`}
                                 >
                                   {v}
@@ -195,16 +195,16 @@ export default function ConfigServiceEmbed() {
                                 onChange={(e) => setEditValue(e.target.value)}
                                 onKeyDown={(e) => { if (e.key === "Enter") applyEdit(cfg); if (e.key === "Escape") setEditingKey(null); }}
                                 autoFocus
-                                className="w-20 bg-[#0a0a0a] border border-[#3b82f6]/50 rounded px-2 py-1 text-xs font-mono text-[#ededed] focus:outline-none"
+                                className="w-20 bg-[#f0f7ff] border border-[#3d9bd4]/50 rounded px-2 py-1 text-xs font-mono text-[#1a2f45] focus:outline-none"
                               />
-                              <button onClick={() => applyEdit(cfg)} className="text-xs px-2 py-1 rounded bg-[#3b82f6] text-white">✓</button>
-                              <button onClick={() => setEditingKey(null)} className="text-xs px-2 py-1 rounded border border-[rgba(255,255,255,0.08)] text-[#888888]">✕</button>
+                              <button onClick={() => applyEdit(cfg)} className="text-xs px-2 py-1 rounded bg-[#3d9bd4] text-white">✓</button>
+                              <button onClick={() => setEditingKey(null)} className="text-xs px-2 py-1 rounded border border-[rgba(61,155,212,0.14)] text-[#57789a]">✕</button>
                             </div>
                           )
                         ) : (
                           <button
                             onClick={() => startEdit(cfg)}
-                            className="font-mono text-sm font-semibold px-2 py-0.5 rounded hover:bg-[rgba(255,255,255,0.06)] transition-colors"
+                            className="font-mono text-sm font-semibold px-2 py-0.5 rounded hover:bg-[rgba(61,155,212,0.10)] transition-colors"
                             style={{ color: valueColor(cfg) }}
                           >
                             {formatValue(cfg)}
@@ -226,9 +226,9 @@ export default function ConfigServiceEmbed() {
                 {deployLog.slice(0, 3).map((d, i) => (
                   <div key={i} className="flex items-center gap-2 text-xs font-mono">
                     <span className="text-[#22c55e]">✓</span>
-                    <span className="text-[#888888]">{d.env}</span>
-                    <span className="text-[#888888]">→</span>
-                    <span className="text-[#ededed]">pushed</span>
+                    <span className="text-[#57789a]">{d.env}</span>
+                    <span className="text-[#57789a]">→</span>
+                    <span className="text-[#1a2f45]">pushed</span>
                   </div>
                 ))}
               </div>
@@ -237,25 +237,25 @@ export default function ConfigServiceEmbed() {
         </div>
 
         {/* Right: Audit log */}
-        <div className="rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#111111] overflow-hidden">
-          <div className="px-5 py-4 border-b border-[rgba(255,255,255,0.06)]">
-            <div className="text-sm font-medium text-[#ededed]">Audit Log</div>
+        <div className="rounded-xl border border-[rgba(61,155,212,0.14)] bg-[#ffffff] overflow-hidden">
+          <div className="px-5 py-4 border-b border-[rgba(61,155,212,0.10)]">
+            <div className="text-sm font-medium text-[#1a2f45]">Audit Log</div>
           </div>
-          <div className="divide-y divide-[rgba(255,255,255,0.04)] max-h-[480px] overflow-y-auto">
+          <div className="divide-y divide-[rgba(61,155,212,0.06)] max-h-[480px] overflow-y-auto">
             {auditLog.length === 0 ? (
-              <div className="px-5 py-8 text-center text-sm text-[#888888]">
+              <div className="px-5 py-8 text-center text-sm text-[#57789a]">
                 Edit a config key to see audit entries
               </div>
             ) : (
               auditLog.map((entry) => (
-                <div key={entry.id} className="px-4 py-3 hover:bg-[rgba(255,255,255,0.02)] transition-colors">
-                  <div className="text-xs font-mono text-[#ededed] mb-1 truncate">{entry.key}</div>
+                <div key={entry.id} className="px-4 py-3 hover:bg-[rgba(61,155,212,0.04)] transition-colors">
+                  <div className="text-xs font-mono text-[#1a2f45] mb-1 truncate">{entry.key}</div>
                   <div className="flex items-center gap-1.5 text-xs font-mono">
                     <span className="text-[#ef4444]">{String(entry.oldValue)}</span>
-                    <span className="text-[#888888]">→</span>
+                    <span className="text-[#57789a]">→</span>
                     <span className="text-[#22c55e]">{String(entry.newValue)}</span>
                   </div>
-                  <div className="text-xs text-[#888888] mt-0.5">{new Date(entry.ts).toLocaleTimeString()}</div>
+                  <div className="text-xs text-[#57789a] mt-0.5">{new Date(entry.ts).toLocaleTimeString()}</div>
                 </div>
               ))
             )}

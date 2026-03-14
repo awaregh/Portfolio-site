@@ -5,14 +5,20 @@
 @tailwind utilities;
 
 :root {
-  --bg: #0f1115;
-  --surface: #f7f5f2;
-  --text: #e8e6e3;
-  --subtext: #b6b1a8;
-  --accent: #c4572f;
-  --accent-hover: #a8461f;
-  --border: rgba(232, 230, 227, 0.1);
-  --border-strong: rgba(232, 230, 227, 0.18);
+  /* Cinnamoroll sky / cloud palette */
+  --bg: #f0f7ff;
+  --surface: #ffffff;
+  --surface-dim: #e4f2fc;
+  --sky: #cce8f9;
+  --cloud: #f8fbff;
+  --text: #1a2f45;
+  --subtext: #57789a;
+  --accent: #3d9bd4;
+  --accent-hover: #2880b5;
+  --pink: #e8a3be;
+  --pink-light: #fce8f2;
+  --border: rgba(61, 155, 212, 0.16);
+  --border-strong: rgba(61, 155, 212, 0.26);
 }
 
 * {
@@ -36,7 +42,7 @@ body {
   min-height: 100vh;
 }
 
-/* Link underline-slide motion */
+/* Link underline-slide */
 .link-underline {
   position: relative;
   text-decoration: none;
@@ -54,6 +60,14 @@ body {
 .link-underline:hover::after {
   width: 100%;
 }
+
+/* Cloud float animation */
+@keyframes cloud-float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-8px); }
+}
+.animate-cloud-float      { animation: cloud-float 6s ease-in-out infinite; }
+.animate-cloud-float-slow { animation: cloud-float 9s ease-in-out infinite; }
 
 /* Prose styles for MDX content */
 .prose {
@@ -102,11 +116,11 @@ body {
 }
 
 .prose code {
-  background: rgba(196, 87, 47, 0.12);
-  border: 1px solid rgba(196, 87, 47, 0.25);
-  border-radius: 3px;
+  background: rgba(61, 155, 212, 0.10);
+  border: 1px solid rgba(61, 155, 212, 0.22);
+  border-radius: 4px;
   padding: 0.1rem 0.35rem;
   font-size: 0.875em;
-  color: #e07a5f;
+  color: #2880b5;
   font-family: 'IBM Plex Mono', monospace;
 }

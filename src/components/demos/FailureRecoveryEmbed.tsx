@@ -147,12 +147,12 @@ export default function FailureRecoveryEmbed() {
         {[
           { label: "Total Requests", value: totalRequests.toString() },
           { label: "Success Rate", value: `${successRate}%`, color: Number(successRate) >= 80 ? "#22c55e" : "#ef4444" },
-          { label: "Circuit Trips", value: circuitTrips.toString(), color: circuitTrips > 0 ? "#ef4444" : "#888888" },
+          { label: "Circuit Trips", value: circuitTrips.toString(), color: circuitTrips > 0 ? "#ef4444" : "#57789a" },
           { label: "Avg Latency", value: avgLatency !== "—" ? `${avgLatency}ms` : "—" },
         ].map((m) => (
-          <div key={m.label} className="rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#111111] p-4">
-            <div className="text-xs text-[#888888] mb-1">{m.label}</div>
-            <div className="text-xl font-semibold font-mono" style={{ color: m.color || "#ededed" }}>{m.value}</div>
+          <div key={m.label} className="rounded-xl border border-[rgba(61,155,212,0.14)] bg-[#ffffff] p-4">
+            <div className="text-xs text-[#57789a] mb-1">{m.label}</div>
+            <div className="text-xl font-semibold font-mono" style={{ color: m.color || "#1a2f45" }}>{m.value}</div>
           </div>
         ))}
       </div>
@@ -161,30 +161,30 @@ export default function FailureRecoveryEmbed() {
         {/* Left: circuit diagram + controls */}
         <div className="space-y-4">
           {/* State diagram */}
-          <div className="rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#111111] p-5">
-            <p className="text-xs text-[#888888] uppercase tracking-widest font-medium mb-4">Circuit State Machine</p>
+          <div className="rounded-xl border border-[rgba(61,155,212,0.14)] bg-[#ffffff] p-5">
+            <p className="text-xs text-[#57789a] uppercase tracking-widest font-medium mb-4">Circuit State Machine</p>
             <div className="flex flex-col items-center gap-2">
               {(["CLOSED", "HALF-OPEN", "OPEN"] as CircuitState[]).map((state) => {
                 const isCurrent = selectedService.state === state;
                 const s = STATE_STYLES[state];
                 return (
                   <div key={state} className="flex flex-col items-center w-full">
-                    <div className={`w-full rounded-lg border px-4 py-3 text-center transition-all duration-300 ${isCurrent ? `${s.border} ${s.bg}` : "border-[rgba(255,255,255,0.06)] bg-[#0a0a0a]"}`}>
+                    <div className={`w-full rounded-lg border px-4 py-3 text-center transition-all duration-300 ${isCurrent ? `${s.border} ${s.bg}` : "border-[rgba(61,155,212,0.10)] bg-[#f0f7ff]"}`}>
                       <div className="flex items-center justify-center gap-2">
-                        <div className={`w-2.5 h-2.5 rounded-full ${isCurrent ? s.dot : "bg-[rgba(255,255,255,0.15)]"} ${isCurrent ? "animate-pulse" : ""}`} />
-                        <span className={`text-sm font-semibold ${isCurrent ? s.text : "text-[#888888]"}`}>{state}</span>
+                        <div className={`w-2.5 h-2.5 rounded-full ${isCurrent ? s.dot : "bg-[rgba(61,155,212,0.18)]"} ${isCurrent ? "animate-pulse" : ""}`} />
+                        <span className={`text-sm font-semibold ${isCurrent ? s.text : "text-[#57789a]"}`}>{state}</span>
                       </div>
                     </div>
                     {state !== "OPEN" && (
                       <div className="flex items-center gap-1 my-0.5">
-                        <div className="w-px h-3 bg-[rgba(255,255,255,0.1)]" />
+                        <div className="w-px h-3 bg-[rgba(61,155,212,0.12)]" />
                       </div>
                     )}
                   </div>
                 );
               })}
             </div>
-            <div className="mt-3 text-xs text-[#888888] text-center">
+            <div className="mt-3 text-xs text-[#57789a] text-center">
               {selectedService.state === "CLOSED" && "Requests flowing normally"}
               {selectedService.state === "OPEN" && `Tripped · auto half-open in 5s`}
               {selectedService.state === "HALF-OPEN" && "Probing — one test request allowed"}
@@ -192,8 +192,8 @@ export default function FailureRecoveryEmbed() {
           </div>
 
           {/* Service selector */}
-          <div className="rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#111111] p-5">
-            <p className="text-xs text-[#888888] uppercase tracking-widest font-medium mb-3">Services</p>
+          <div className="rounded-xl border border-[rgba(61,155,212,0.14)] bg-[#ffffff] p-5">
+            <p className="text-xs text-[#57789a] uppercase tracking-widest font-medium mb-3">Services</p>
             <div className="space-y-2">
               {services.map((svc) => {
                 const s = STATE_STYLES[svc.state];
@@ -203,15 +203,15 @@ export default function FailureRecoveryEmbed() {
                     onClick={() => setSelectedServiceId(svc.id)}
                     className={`w-full text-left rounded-lg border px-3 py-2.5 transition-all ${
                       selectedServiceId === svc.id
-                        ? "border-[#3b82f6]/50 bg-[#3b82f6]/05"
-                        : "border-[rgba(255,255,255,0.06)] hover:border-[rgba(255,255,255,0.12)]"
+                        ? "border-[#3d9bd4]/50 bg-[#3d9bd4]/05"
+                        : "border-[rgba(61,155,212,0.10)] hover:border-[rgba(61,155,212,0.16)]"
                     }`}
                   >
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-mono text-[#ededed]">{svc.name}</span>
+                      <span className="text-xs font-mono text-[#1a2f45]">{svc.name}</span>
                       <span className={`text-xs font-semibold ${s.text}`}>{svc.state}</span>
                     </div>
-                    <div className="text-xs text-[#888888] mt-0.5">
+                    <div className="text-xs text-[#57789a] mt-0.5">
                       err rate: {Math.round(svc.errorRate * 100)}% · failures: {svc.failures}
                     </div>
                   </button>
@@ -222,49 +222,49 @@ export default function FailureRecoveryEmbed() {
 
           {/* Actions */}
           <div className="space-y-2">
-            <button onClick={sendRequest} disabled={sending} className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#3b82f6] text-white text-sm font-medium hover:bg-[#2563eb] transition-colors disabled:opacity-50">
+            <button onClick={sendRequest} disabled={sending} className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#3d9bd4] text-white text-sm font-medium hover:bg-[#2880b5] transition-colors disabled:opacity-50">
               {sending ? "Sending…" : "Send Request"}
             </button>
             <button onClick={injectFailure} className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-[#ef4444]/30 text-[#ef4444] text-sm font-medium hover:bg-[#ef4444]/05 transition-colors">
               Inject Failure
             </button>
-            <button onClick={resetBreaker} className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-[rgba(255,255,255,0.08)] text-[#888888] text-sm font-medium hover:text-[#ededed] transition-colors">
+            <button onClick={resetBreaker} className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-[rgba(61,155,212,0.14)] text-[#57789a] text-sm font-medium hover:text-[#1a2f45] transition-colors">
               Reset Breaker
             </button>
           </div>
         </div>
 
         {/* Right: request log */}
-        <div className="lg:col-span-2 rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#111111] overflow-hidden">
-          <div className="px-5 py-4 border-b border-[rgba(255,255,255,0.06)]">
-            <div className="text-sm font-medium text-[#ededed]">Request Log</div>
+        <div className="lg:col-span-2 rounded-xl border border-[rgba(61,155,212,0.14)] bg-[#ffffff] overflow-hidden">
+          <div className="px-5 py-4 border-b border-[rgba(61,155,212,0.10)]">
+            <div className="text-sm font-medium text-[#1a2f45]">Request Log</div>
           </div>
-          <div className="divide-y divide-[rgba(255,255,255,0.04)] max-h-[520px] overflow-y-auto">
+          <div className="divide-y divide-[rgba(61,155,212,0.06)] max-h-[520px] overflow-y-auto">
             {logs.length === 0 ? (
-              <div className="px-5 py-8 text-center text-sm text-[#888888]">
+              <div className="px-5 py-8 text-center text-sm text-[#57789a]">
                 Send a request to see the circuit breaker in action
               </div>
             ) : (
               logs.map((log) => {
                 const s = STATE_STYLES[log.circuitState];
                 return (
-                  <div key={log.id} className="px-5 py-3 flex items-start gap-3 hover:bg-[rgba(255,255,255,0.02)] transition-colors">
+                  <div key={log.id} className="px-5 py-3 flex items-start gap-3 hover:bg-[rgba(61,155,212,0.04)] transition-colors">
                     <div className={`mt-1.5 w-2 h-2 rounded-full flex-shrink-0 ${
                       log.status === "SUCCESS" ? "bg-[#22c55e]" : log.status === "CIRCUIT_OPEN" ? "bg-[#ef4444]" : "bg-[#f59e0b]"
                     }`} />
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-0.5 flex-wrap">
-                        <span className="text-xs font-mono text-[#888888]">{log.id}</span>
+                        <span className="text-xs font-mono text-[#57789a]">{log.id}</span>
                         <span className={`text-xs font-semibold ${STATUS_COLORS[log.status]}`}>{log.status}</span>
                         <span className={`text-xs px-1.5 py-0.5 rounded border ${s.border} ${s.text}`}>{log.circuitState}</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="text-xs text-[#888888] font-mono">{log.service}</span>
-                        <span className="text-xs text-[#888888]">·</span>
-                        <span className="text-xs text-[#3b82f6]">{log.status === "CIRCUIT_OPEN" ? "0ms (short-circuited)" : `${log.latencyMs}ms`}</span>
+                        <span className="text-xs text-[#57789a] font-mono">{log.service}</span>
+                        <span className="text-xs text-[#57789a]">·</span>
+                        <span className="text-xs text-[#3d9bd4]">{log.status === "CIRCUIT_OPEN" ? "0ms (short-circuited)" : `${log.latencyMs}ms`}</span>
                       </div>
                     </div>
-                    <span className="text-xs text-[#888888] flex-shrink-0">{new Date(log.ts).toLocaleTimeString()}</span>
+                    <span className="text-xs text-[#57789a] flex-shrink-0">{new Date(log.ts).toLocaleTimeString()}</span>
                   </div>
                 );
               })

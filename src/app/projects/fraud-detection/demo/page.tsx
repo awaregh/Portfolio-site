@@ -134,11 +134,11 @@ export default function FraudDetectionDemo() {
     : null;
 
   return (
-    <div className="min-h-screen pt-24 pb-24 px-6 bg-[#0a0a0a]">
+    <div className="min-h-screen pt-24 pb-24 px-6 bg-[#f0f7ff]">
       <div className="max-w-5xl mx-auto">
         <Link
           href="/projects/fraud-detection"
-          className="inline-flex items-center gap-2 text-[#888888] hover:text-[#ededed] text-sm transition-colors mb-8 group"
+          className="inline-flex items-center gap-2 text-[#57789a] hover:text-[#1a2f45] text-sm transition-colors mb-8 group"
         >
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="transition-transform group-hover:-translate-x-0.5">
             <path d="M10 12L6 8L10 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -147,16 +147,16 @@ export default function FraudDetectionDemo() {
         </Link>
 
         <div className="mb-8">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#3b82f6]/10 text-[#3b82f6] text-xs font-medium border border-[#3b82f6]/20 mb-4">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#3b82f6] animate-pulse" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#3d9bd4]/10 text-[#3d9bd4] text-xs font-medium border border-[#3d9bd4]/20 mb-4">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#3d9bd4] animate-pulse" />
             Interactive Demo
           </div>
-          <h1 className="text-3xl font-semibold tracking-tight text-[#ededed] mb-3">
+          <h1 className="text-3xl font-semibold tracking-tight text-[#1a2f45] mb-3">
             Fraud Detection System
           </h1>
-          <p className="text-[#888888] text-sm leading-relaxed max-w-xl">
+          <p className="text-[#57789a] text-sm leading-relaxed max-w-xl">
             Select a transaction scenario and press{" "}
-            <strong className="text-[#ededed]">Score Transaction</strong> to see the LightGBM
+            <strong className="text-[#1a2f45]">Score Transaction</strong> to see the LightGBM
             model evaluate it in real time — including fraud score, risk factors, and the
             approve / review / decline decision.
           </p>
@@ -170,9 +170,9 @@ export default function FraudDetectionDemo() {
             { label: "Flagged",      value: reviewed.toString(),  color: "#f59e0b" },
             { label: "Declined",     value: declined.toString(),  color: "#ef4444" },
           ].map((m) => (
-            <div key={m.label} className="rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#111111] p-4">
-              <div className="text-xs text-[#888888] mb-1">{m.label}</div>
-              <div className="text-xl font-semibold font-mono" style={{ color: m.color ?? "#ededed" }}>{m.value}</div>
+            <div key={m.label} className="rounded-xl border border-[rgba(61,155,212,0.14)] bg-[#ffffff] p-4">
+              <div className="text-xs text-[#57789a] mb-1">{m.label}</div>
+              <div className="text-xl font-semibold font-mono" style={{ color: m.color ?? "#1a2f45" }}>{m.value}</div>
             </div>
           ))}
         </div>
@@ -180,8 +180,8 @@ export default function FraudDetectionDemo() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Scenario selector + controls */}
           <div className="space-y-4">
-            <div className="rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#111111] p-5">
-              <p className="text-xs text-[#888888] uppercase tracking-widest font-medium mb-3">Transaction Scenario</p>
+            <div className="rounded-xl border border-[rgba(61,155,212,0.14)] bg-[#ffffff] p-5">
+              <p className="text-xs text-[#57789a] uppercase tracking-widest font-medium mb-3">Transaction Scenario</p>
               <div className="space-y-2">
                 {SCENARIOS.map((s, i) => (
                   <button
@@ -189,14 +189,14 @@ export default function FraudDetectionDemo() {
                     onClick={() => { if (!scoring) setSelectedScenario(i); }}
                     className={`w-full text-left rounded-lg border p-3 transition-all ${
                       selectedScenario === i
-                        ? "border-[#3b82f6]/50 bg-[#3b82f6]/05"
-                        : "border-[rgba(255,255,255,0.06)] hover:border-[rgba(255,255,255,0.12)]"
+                        ? "border-[#3d9bd4]/50 bg-[#3d9bd4]/05"
+                        : "border-[rgba(61,155,212,0.10)] hover:border-[rgba(61,155,212,0.16)]"
                     } ${scoring ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
                   >
-                    <div className="text-xs font-medium text-[#ededed] mb-0.5">{s.label}</div>
-                    <div className="text-xs text-[#888888]">{s.description}</div>
+                    <div className="text-xs font-medium text-[#1a2f45] mb-0.5">{s.label}</div>
+                    <div className="text-xs text-[#57789a]">{s.description}</div>
                     {scenarioRunCounts[i] > 0 && (
-                      <div className="text-xs text-[#3b82f6] mt-1">{scenarioRunCounts[i]}× scored</div>
+                      <div className="text-xs text-[#3d9bd4] mt-1">{scenarioRunCounts[i]}× scored</div>
                     )}
                   </button>
                 ))}
@@ -204,8 +204,8 @@ export default function FraudDetectionDemo() {
             </div>
 
             {/* Transaction details */}
-            <div className="rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#111111] p-5">
-              <p className="text-xs text-[#888888] uppercase tracking-widest font-medium mb-3">Transaction Details</p>
+            <div className="rounded-xl border border-[rgba(61,155,212,0.14)] bg-[#ffffff] p-5">
+              <p className="text-xs text-[#57789a] uppercase tracking-widest font-medium mb-3">Transaction Details</p>
               <div className="space-y-2">
                 {[
                   { k: "Amount",       v: `$${SCENARIOS[selectedScenario].tx.amount.toFixed(2)}` },
@@ -216,8 +216,8 @@ export default function FraudDetectionDemo() {
                   { k: "Hour (UTC)",   v: `${SCENARIOS[selectedScenario].tx.hourOfDay}:00` },
                 ].map(({ k, v }) => (
                   <div key={k} className="flex justify-between items-center text-xs">
-                    <span className="text-[#888888]">{k}</span>
-                    <span className="text-[#ededed] font-mono">{v}</span>
+                    <span className="text-[#57789a]">{k}</span>
+                    <span className="text-[#1a2f45] font-mono">{v}</span>
                   </div>
                 ))}
               </div>
@@ -226,7 +226,7 @@ export default function FraudDetectionDemo() {
             <button
               onClick={runScoring}
               disabled={scoring}
-              className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#3b82f6] text-white text-sm font-medium hover:bg-[#2563eb] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#3d9bd4] text-white text-sm font-medium hover:bg-[#2880b5] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {scoring ? (
                 <>
@@ -247,9 +247,9 @@ export default function FraudDetectionDemo() {
             </button>
 
             {avgLatency !== null && (
-              <div className="text-center text-xs text-[#888888]">
-                avg scoring latency: <span className="text-[#ededed] font-mono">{avgLatency}ms</span>
-                {" · "}model: <span className="text-[#ededed] font-mono">lgbm-v4.2.1</span>
+              <div className="text-center text-xs text-[#57789a]">
+                avg scoring latency: <span className="text-[#1a2f45] font-mono">{avgLatency}ms</span>
+                {" · "}model: <span className="text-[#1a2f45] font-mono">lgbm-v4.2.1</span>
               </div>
             )}
           </div>
@@ -271,20 +271,20 @@ export default function FraudDetectionDemo() {
                     >
                       {DECISION_STYLES[latest.decision].label}
                     </span>
-                    <div className="text-xs text-[#888888] font-mono">{latest.txId}</div>
+                    <div className="text-xs text-[#57789a] font-mono">{latest.txId}</div>
                   </div>
                   <div className="text-right">
                     <div className="text-2xl font-bold font-mono" style={{ color: DECISION_STYLES[latest.decision].color }}>
                       {(latest.score * 100).toFixed(1)}
-                      <span className="text-sm font-normal text-[#888888]">%</span>
+                      <span className="text-sm font-normal text-[#57789a]">%</span>
                     </div>
-                    <div className="text-xs text-[#888888]">fraud score</div>
+                    <div className="text-xs text-[#57789a]">fraud score</div>
                   </div>
                 </div>
 
                 {/* Score bar */}
                 <div className="mb-4">
-                  <div className="h-2 rounded-full bg-[rgba(255,255,255,0.06)] overflow-hidden">
+                  <div className="h-2 rounded-full bg-[rgba(61,155,212,0.10)] overflow-hidden">
                     <div
                       className="h-full rounded-full transition-all duration-500"
                       style={{
@@ -293,7 +293,7 @@ export default function FraudDetectionDemo() {
                       }}
                     />
                   </div>
-                  <div className="flex justify-between text-xs text-[#888888] mt-1">
+                  <div className="flex justify-between text-xs text-[#57789a] mt-1">
                     <span>0 — safe</span>
                     <span className="text-[#f59e0b]">0.38 review</span>
                     <span className="text-[#ef4444]">0.72 decline</span>
@@ -303,7 +303,7 @@ export default function FraudDetectionDemo() {
                 {/* Risk factors */}
                 {latest.riskFactors.length > 0 && (
                   <div>
-                    <p className="text-xs text-[#888888] mb-2">Risk factors detected:</p>
+                    <p className="text-xs text-[#57789a] mb-2">Risk factors detected:</p>
                     <div className="flex flex-wrap gap-1.5">
                       {latest.riskFactors.map((f) => (
                         <span key={f} className="text-xs px-2 py-0.5 rounded-full border border-[#f59e0b]/25 bg-[#f59e0b]/08 text-[#f59e0b]">
@@ -315,27 +315,27 @@ export default function FraudDetectionDemo() {
                 )}
               </div>
             ) : (
-              <div className="rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#111111] p-12 text-center text-sm text-[#888888]">
+              <div className="rounded-xl border border-[rgba(61,155,212,0.14)] bg-[#ffffff] p-12 text-center text-sm text-[#57789a]">
                 Select a scenario and press{" "}
-                <span className="text-[#ededed]">Score Transaction</span> to see the model output
+                <span className="text-[#1a2f45]">Score Transaction</span> to see the model output
               </div>
             )}
 
             {/* Scoring history */}
             {results.length > 1 && (
-              <div className="rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#111111] overflow-hidden">
-                <div className="px-5 py-3 border-b border-[rgba(255,255,255,0.06)]">
-                  <div className="text-xs font-medium text-[#ededed]">Scoring History</div>
+              <div className="rounded-xl border border-[rgba(61,155,212,0.14)] bg-[#ffffff] overflow-hidden">
+                <div className="px-5 py-3 border-b border-[rgba(61,155,212,0.10)]">
+                  <div className="text-xs font-medium text-[#1a2f45]">Scoring History</div>
                 </div>
-                <div className="divide-y divide-[rgba(255,255,255,0.04)] max-h-[360px] overflow-y-auto">
+                <div className="divide-y divide-[rgba(61,155,212,0.06)] max-h-[360px] overflow-y-auto">
                   {results.slice(1).map((r) => (
-                    <div key={r.txId} className="px-5 py-2.5 flex items-center gap-3 hover:bg-[rgba(255,255,255,0.02)] transition-colors">
+                    <div key={r.txId} className="px-5 py-2.5 flex items-center gap-3 hover:bg-[rgba(61,155,212,0.04)] transition-colors">
                       <div
                         className="w-2 h-2 rounded-full flex-shrink-0"
                         style={{ backgroundColor: DECISION_STYLES[r.decision].color }}
                       />
-                      <span className="text-xs font-mono text-[#888888] w-24 flex-shrink-0">{r.txId}</span>
-                      <span className="text-xs text-[#888888] flex-1 truncate">{r.tx.merchant}</span>
+                      <span className="text-xs font-mono text-[#57789a] w-24 flex-shrink-0">{r.txId}</span>
+                      <span className="text-xs text-[#57789a] flex-1 truncate">{r.tx.merchant}</span>
                       <span className="text-xs font-mono" style={{ color: DECISION_STYLES[r.decision].color }}>
                         {(r.score * 100).toFixed(1)}%
                       </span>

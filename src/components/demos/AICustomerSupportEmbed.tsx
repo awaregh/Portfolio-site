@@ -150,7 +150,7 @@ export default function AICustomerSupportEmbed() {
   }
 
   function renderText(text: string) {
-    return text.replace(/\*\*(.+?)\*\*/g, (_, m) => `<strong class="text-[#ededed]">${m}</strong>`);
+    return text.replace(/\*\*(.+?)\*\*/g, (_, m) => `<strong class="text-[#1a2f45]">${m}</strong>`);
   }
 
   return (
@@ -162,7 +162,7 @@ export default function AICustomerSupportEmbed() {
             key={q}
             onClick={() => sendMessage(q)}
             disabled={thinking}
-            className="px-3 py-1.5 rounded-full text-xs text-[#888888] border border-[rgba(255,255,255,0.08)] hover:border-[rgba(255,255,255,0.20)] hover:text-[#ededed] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-3 py-1.5 rounded-full text-xs text-[#57789a] border border-[rgba(61,155,212,0.14)] hover:border-[rgba(61,155,212,0.28)] hover:text-[#1a2f45] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {q}
           </button>
@@ -170,18 +170,18 @@ export default function AICustomerSupportEmbed() {
       </div>
 
       {/* Chat window */}
-      <div className="rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#111111] overflow-hidden">
+      <div className="rounded-xl border border-[rgba(61,155,212,0.14)] bg-[#ffffff] overflow-hidden">
         {/* Header */}
-        <div className="px-5 py-4 border-b border-[rgba(255,255,255,0.06)] flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-[#3b82f6]/20 flex items-center justify-center flex-shrink-0">
+        <div className="px-5 py-4 border-b border-[rgba(61,155,212,0.10)] flex items-center gap-3">
+          <div className="w-8 h-8 rounded-full bg-[#3d9bd4]/20 flex items-center justify-center flex-shrink-0">
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-              <circle cx="8" cy="6" r="3" stroke="#3b82f6" strokeWidth="1.5" />
-              <path d="M2 13c0-3 2-5 6-5s6 2 6 5" stroke="#3b82f6" strokeWidth="1.5" strokeLinecap="round" />
+              <circle cx="8" cy="6" r="3" stroke="#3d9bd4" strokeWidth="1.5" />
+              <path d="M2 13c0-3 2-5 6-5s6 2 6 5" stroke="#3d9bd4" strokeWidth="1.5" strokeLinecap="round" />
             </svg>
           </div>
           <div>
-            <div className="text-sm font-semibold text-[#ededed]">Support AI</div>
-            <div className="flex items-center gap-1.5 text-xs text-[#888888]">
+            <div className="text-sm font-semibold text-[#1a2f45]">Support AI</div>
+            <div className="flex items-center gap-1.5 text-xs text-[#57789a]">
               <span className="w-1.5 h-1.5 rounded-full bg-[#22c55e]" />
               Online · RAG pipeline active
             </div>
@@ -193,31 +193,31 @@ export default function AICustomerSupportEmbed() {
           {messages.map((msg) => (
             <div key={msg.id} className={`flex gap-3 ${msg.role === "user" ? "flex-row-reverse" : ""}`}>
               <div className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-medium ${
-                msg.role === "assistant" ? "bg-[#3b82f6]/20 text-[#3b82f6]" : "bg-[rgba(255,255,255,0.08)] text-[#888888]"
+                msg.role === "assistant" ? "bg-[#3d9bd4]/20 text-[#3d9bd4]" : "bg-[rgba(61,155,212,0.14)] text-[#57789a]"
               }`}>
                 {msg.role === "assistant" ? "AI" : "U"}
               </div>
               <div className={`max-w-[80%] ${msg.role === "user" ? "items-end" : "items-start"} flex flex-col gap-1.5`}>
                 <div className={`px-4 py-3 rounded-2xl text-sm leading-relaxed ${
                   msg.role === "user"
-                    ? "bg-[#3b82f6] text-white rounded-br-sm"
-                    : "bg-[#1a1a1a] border border-[rgba(255,255,255,0.06)] text-[#c8c8c8] rounded-bl-sm"
+                    ? "bg-[#3d9bd4] text-white rounded-br-sm"
+                    : "bg-[#f8fbff] border border-[rgba(61,155,212,0.10)] text-[#c8c8c8] rounded-bl-sm"
                 }`}>
                   <span dangerouslySetInnerHTML={{ __html: renderText(msg.text) }} />
                 </div>
                 {msg.sources && msg.sources.length > 0 && (
                   <div className="flex flex-wrap gap-1.5">
                     {msg.sources.map((src) => (
-                      <span key={src} className="px-2 py-0.5 text-xs rounded bg-[rgba(255,255,255,0.04)] text-[#888888] border border-[rgba(255,255,255,0.06)] font-mono">
+                      <span key={src} className="px-2 py-0.5 text-xs rounded bg-[rgba(61,155,212,0.06)] text-[#57789a] border border-[rgba(61,155,212,0.10)] font-mono">
                         {src}
                       </span>
                     ))}
                   </div>
                 )}
                 {msg.confidence !== undefined && (
-                  <div className="flex items-center gap-1.5 text-xs text-[#888888]">
-                    <div className="w-16 h-1 rounded-full bg-[rgba(255,255,255,0.06)] overflow-hidden">
-                      <div className="h-full rounded-full bg-[#3b82f6]" style={{ width: `${msg.confidence * 100}%` }} />
+                  <div className="flex items-center gap-1.5 text-xs text-[#57789a]">
+                    <div className="w-16 h-1 rounded-full bg-[rgba(61,155,212,0.10)] overflow-hidden">
+                      <div className="h-full rounded-full bg-[#3d9bd4]" style={{ width: `${msg.confidence * 100}%` }} />
                     </div>
                     <span>{Math.round(msg.confidence * 100)}% confidence</span>
                   </div>
@@ -227,11 +227,11 @@ export default function AICustomerSupportEmbed() {
           ))}
           {thinking && (
             <div className="flex gap-3">
-              <div className="w-7 h-7 rounded-full bg-[#3b82f6]/20 flex items-center justify-center flex-shrink-0 text-xs font-medium text-[#3b82f6]">AI</div>
-              <div className="px-4 py-3 rounded-2xl rounded-bl-sm bg-[#1a1a1a] border border-[rgba(255,255,255,0.06)]">
+              <div className="w-7 h-7 rounded-full bg-[#3d9bd4]/20 flex items-center justify-center flex-shrink-0 text-xs font-medium text-[#3d9bd4]">AI</div>
+              <div className="px-4 py-3 rounded-2xl rounded-bl-sm bg-[#f8fbff] border border-[rgba(61,155,212,0.10)]">
                 <div className="flex items-center gap-1">
                   {[0, 1, 2].map((i) => (
-                    <span key={i} className="w-1.5 h-1.5 rounded-full bg-[#888888] animate-bounce" style={{ animationDelay: `${i * 0.15}s` }} />
+                    <span key={i} className="w-1.5 h-1.5 rounded-full bg-[#57789a] animate-bounce" style={{ animationDelay: `${i * 0.15}s` }} />
                   ))}
                 </div>
               </div>
@@ -241,7 +241,7 @@ export default function AICustomerSupportEmbed() {
         </div>
 
         {/* Input */}
-        <div className="px-4 py-4 border-t border-[rgba(255,255,255,0.06)]">
+        <div className="px-4 py-4 border-t border-[rgba(61,155,212,0.10)]">
           <form
             onSubmit={(e) => { e.preventDefault(); sendMessage(); }}
             className="flex items-center gap-3"
@@ -252,12 +252,12 @@ export default function AICustomerSupportEmbed() {
               onChange={(e) => setInput(e.target.value)}
               disabled={thinking}
               placeholder="Ask a support question…"
-              className="flex-1 bg-[#0a0a0a] border border-[rgba(255,255,255,0.08)] rounded-xl px-4 py-2.5 text-sm text-[#ededed] placeholder-[#444444] outline-none focus:border-[#3b82f6]/50 transition-colors disabled:opacity-50"
+              className="flex-1 bg-[#f0f7ff] border border-[rgba(61,155,212,0.14)] rounded-xl px-4 py-2.5 text-sm text-[#1a2f45] placeholder-[#57789a] outline-none focus:border-[#3d9bd4]/50 transition-colors disabled:opacity-50"
             />
             <button
               type="submit"
               disabled={!input.trim() || thinking}
-              className="w-9 h-9 rounded-xl bg-[#3b82f6] text-white flex items-center justify-center flex-shrink-0 hover:bg-[#2563eb] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-9 h-9 rounded-xl bg-[#3d9bd4] text-white flex items-center justify-center flex-shrink-0 hover:bg-[#2880b5] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
                 <path d="M2 8h12M8 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -268,27 +268,27 @@ export default function AICustomerSupportEmbed() {
       </div>
 
       {/* Pipeline Trace */}
-      <div className="mt-4 rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#111111] overflow-hidden">
+      <div className="mt-4 rounded-xl border border-[rgba(61,155,212,0.14)] bg-[#ffffff] overflow-hidden">
         <button
           onClick={() => setTraceOpen((o) => !o)}
-          className="w-full flex items-center justify-between px-5 py-3 text-left hover:bg-[rgba(255,255,255,0.02)] transition-colors"
+          className="w-full flex items-center justify-between px-5 py-3 text-left hover:bg-[rgba(61,155,212,0.04)] transition-colors"
         >
           <div className="flex items-center gap-2">
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-              <circle cx="6" cy="6" r="5" stroke="#3b82f6" strokeWidth="1.5" />
-              <path d="M6 4v2.5l1.5 1" stroke="#3b82f6" strokeWidth="1.2" strokeLinecap="round" />
+              <circle cx="6" cy="6" r="5" stroke="#3d9bd4" strokeWidth="1.5" />
+              <path d="M6 4v2.5l1.5 1" stroke="#3d9bd4" strokeWidth="1.2" strokeLinecap="round" />
             </svg>
-            <span className="text-xs font-medium text-[#888888] uppercase tracking-widest">Pipeline Trace</span>
+            <span className="text-xs font-medium text-[#57789a] uppercase tracking-widest">Pipeline Trace</span>
           </div>
           <svg
             width="12" height="12" viewBox="0 0 12 12" fill="none"
             className={`transition-transform duration-200 ${traceOpen ? "rotate-180" : ""}`}
           >
-            <path d="M2 4l4 4 4-4" stroke="#888888" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M2 4l4 4 4-4" stroke="#57789a" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </button>
         {traceOpen && (
-          <div className="px-5 pb-4 space-y-2 border-t border-[rgba(255,255,255,0.06)] pt-3">
+          <div className="px-5 pb-4 space-y-2 border-t border-[rgba(61,155,212,0.10)] pt-3">
             {traceSteps.length === 0 ? (
               <p className="text-xs text-[#444444]">Send a message to see the pipeline trace.</p>
             ) : (
@@ -300,14 +300,14 @@ export default function AICustomerSupportEmbed() {
                         <path d="M3 8l3 3 7-7" stroke="#22c55e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
                     ) : (
-                      <div className="w-3 h-3 rounded-full border border-[rgba(255,255,255,0.15)]" />
+                      <div className="w-3 h-3 rounded-full border border-[rgba(61,155,212,0.20)]" />
                     )}
                   </div>
-                  <span className={`text-xs font-mono flex-1 ${step.done ? "text-[#888888]" : "text-[#444444]"}`}>
+                  <span className={`text-xs font-mono flex-1 ${step.done ? "text-[#57789a]" : "text-[#444444]"}`}>
                     {step.label}
                   </span>
                   {step.done && (
-                    <span className="text-xs text-[#3b82f6] font-mono">{step.ms}ms</span>
+                    <span className="text-xs text-[#3d9bd4] font-mono">{step.ms}ms</span>
                   )}
                 </div>
               ))

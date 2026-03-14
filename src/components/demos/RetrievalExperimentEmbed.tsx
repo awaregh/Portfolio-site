@@ -130,11 +130,11 @@ export default function RetrievalExperimentEmbed() {
           { label: "Queries Run", value: queriesRun.toString() },
           { label: "Best Strategy", value: bestStrategy, color: "#a855f7" },
           { label: "Avg P@3", value: queriesRun > 0 ? avgP3.toFixed(2) : "—", color: "#22c55e" },
-          { label: "Avg nDCG", value: queriesRun > 0 ? avgNdcg.toFixed(2) : "—", color: "#3b82f6" },
+          { label: "Avg nDCG", value: queriesRun > 0 ? avgNdcg.toFixed(2) : "—", color: "#3d9bd4" },
         ].map((m) => (
-          <div key={m.label} className="rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#111111] p-4">
-            <div className="text-xs text-[#888888] mb-1">{m.label}</div>
-            <div className="text-lg font-semibold font-mono truncate" style={{ color: m.color || "#ededed" }}>{m.value}</div>
+          <div key={m.label} className="rounded-xl border border-[rgba(61,155,212,0.14)] bg-[#ffffff] p-4">
+            <div className="text-xs text-[#57789a] mb-1">{m.label}</div>
+            <div className="text-lg font-semibold font-mono truncate" style={{ color: m.color || "#1a2f45" }}>{m.value}</div>
           </div>
         ))}
       </div>
@@ -142,8 +142,8 @@ export default function RetrievalExperimentEmbed() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left: Query + strategies */}
         <div className="space-y-5">
-          <div className="rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#111111] p-5">
-            <p className="text-xs text-[#888888] uppercase tracking-widest font-medium mb-3">Query</p>
+          <div className="rounded-xl border border-[rgba(61,155,212,0.14)] bg-[#ffffff] p-5">
+            <p className="text-xs text-[#57789a] uppercase tracking-widest font-medium mb-3">Query</p>
             <div className="flex flex-wrap gap-2 mb-3">
               {PRESET_QUERIES.map((q) => (
                 <button
@@ -151,8 +151,8 @@ export default function RetrievalExperimentEmbed() {
                   onClick={() => { setQuery(q); setCustomQuery(""); }}
                   className={`text-xs px-2.5 py-1 rounded-lg border transition-all ${
                     query === q && !customQuery
-                      ? "border-[#3b82f6]/50 bg-[#3b82f6]/10 text-[#3b82f6]"
-                      : "border-[rgba(255,255,255,0.08)] text-[#888888] hover:text-[#ededed]"
+                      ? "border-[#3d9bd4]/50 bg-[#3d9bd4]/10 text-[#3d9bd4]"
+                      : "border-[rgba(61,155,212,0.14)] text-[#57789a] hover:text-[#1a2f45]"
                   }`}
                 >
                   {q}
@@ -164,12 +164,12 @@ export default function RetrievalExperimentEmbed() {
               placeholder="Or type a custom query…"
               value={customQuery}
               onChange={(e) => setCustomQuery(e.target.value)}
-              className="w-full bg-[#0a0a0a] border border-[rgba(255,255,255,0.08)] rounded-lg px-3 py-2 text-sm text-[#ededed] placeholder-[#444444] focus:outline-none focus:border-[#3b82f6]/50"
+              className="w-full bg-[#f0f7ff] border border-[rgba(61,155,212,0.14)] rounded-lg px-3 py-2 text-sm text-[#1a2f45] placeholder-[#57789a] focus:outline-none focus:border-[#3d9bd4]/50"
             />
           </div>
 
-          <div className="rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#111111] p-5">
-            <p className="text-xs text-[#888888] uppercase tracking-widest font-medium mb-3">Strategies</p>
+          <div className="rounded-xl border border-[rgba(61,155,212,0.14)] bg-[#ffffff] p-5">
+            <p className="text-xs text-[#57789a] uppercase tracking-widest font-medium mb-3">Strategies</p>
             <div className="space-y-2">
               {STRATEGIES.map((s) => (
                 <button
@@ -177,17 +177,17 @@ export default function RetrievalExperimentEmbed() {
                   onClick={() => toggleStrategy(s.id)}
                   className={`w-full text-left rounded-lg border p-3 transition-all ${
                     selectedStrategies.has(s.id)
-                      ? "border-[#3b82f6]/50 bg-[#3b82f6]/05"
-                      : "border-[rgba(255,255,255,0.06)] hover:border-[rgba(255,255,255,0.12)]"
+                      ? "border-[#3d9bd4]/50 bg-[#3d9bd4]/05"
+                      : "border-[rgba(61,155,212,0.10)] hover:border-[rgba(61,155,212,0.16)]"
                   }`}
                 >
                   <div className="flex items-center gap-2 mb-0.5">
-                    <div className={`w-3 h-3 rounded border flex-shrink-0 flex items-center justify-center ${selectedStrategies.has(s.id) ? "border-[#3b82f6] bg-[#3b82f6]" : "border-[rgba(255,255,255,0.2)]"}`}>
+                    <div className={`w-3 h-3 rounded border flex-shrink-0 flex items-center justify-center ${selectedStrategies.has(s.id) ? "border-[#3d9bd4] bg-[#3d9bd4]" : "border-[rgba(61,155,212,0.24)]"}`}>
                       {selectedStrategies.has(s.id) && <svg width="8" height="8" viewBox="0 0 8 8"><path d="M1 4l2 2 4-4" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none" /></svg>}
                     </div>
-                    <span className="text-xs font-semibold text-[#ededed]">{s.name}</span>
+                    <span className="text-xs font-semibold text-[#1a2f45]">{s.name}</span>
                   </div>
-                  <div className="text-xs text-[#888888] ml-5">{s.description}</div>
+                  <div className="text-xs text-[#57789a] ml-5">{s.description}</div>
                   <div className="text-xs font-mono text-[#444444] ml-5 mt-0.5">{s.params}</div>
                 </button>
               ))}
@@ -197,7 +197,7 @@ export default function RetrievalExperimentEmbed() {
           <button
             onClick={runRetrieval}
             disabled={running}
-            className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#3b82f6] text-white text-sm font-medium hover:bg-[#2563eb] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#3d9bd4] text-white text-sm font-medium hover:bg-[#2880b5] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {running ? (
               <>
@@ -213,20 +213,20 @@ export default function RetrievalExperimentEmbed() {
 
         {/* Right: Results */}
         <div className="lg:col-span-2">
-          <div className="rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#111111] overflow-hidden">
-            <div className="px-5 py-4 border-b border-[rgba(255,255,255,0.06)]">
-              <div className="text-sm font-medium text-[#ededed]">Retrieval Results</div>
-              <div className="text-xs text-[#888888] font-mono truncate mt-0.5">{activeQuery}</div>
+          <div className="rounded-xl border border-[rgba(61,155,212,0.14)] bg-[#ffffff] overflow-hidden">
+            <div className="px-5 py-4 border-b border-[rgba(61,155,212,0.10)]">
+              <div className="text-sm font-medium text-[#1a2f45]">Retrieval Results</div>
+              <div className="text-xs text-[#57789a] font-mono truncate mt-0.5">{activeQuery}</div>
             </div>
             <div className="p-5 space-y-4">
               {!results && !running && (
-                <div className="py-8 text-center text-sm text-[#888888]">
+                <div className="py-8 text-center text-sm text-[#57789a]">
                   Select strategies and run retrieval to compare results
                 </div>
               )}
               {running && (
-                <div className="py-8 text-center text-sm text-[#888888]">
-                  <svg className="animate-spin w-5 h-5 text-[#3b82f6] mx-auto mb-2" viewBox="0 0 24 24" fill="none">
+                <div className="py-8 text-center text-sm text-[#57789a]">
+                  <svg className="animate-spin w-5 h-5 text-[#3d9bd4] mx-auto mb-2" viewBox="0 0 24 24" fill="none">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                   </svg>
@@ -236,18 +236,18 @@ export default function RetrievalExperimentEmbed() {
               {results && results.map((r) => {
                 const strat = STRATEGIES.find((s) => s.id === r.strategyId)!;
                 return (
-                  <div key={r.strategyId} className="rounded-lg border border-[rgba(255,255,255,0.08)] bg-[#0a0a0a] p-4">
+                  <div key={r.strategyId} className="rounded-lg border border-[rgba(61,155,212,0.14)] bg-[#f0f7ff] p-4">
                     <div className="flex items-center justify-between mb-3">
-                      <span className="text-sm font-semibold text-[#ededed]">{strat.name}</span>
+                      <span className="text-sm font-semibold text-[#1a2f45]">{strat.name}</span>
                       <div className="flex gap-3 text-xs font-mono">
                         <span style={{ color: metricColor(r.precision3, 0.7, 0.85) }}>P@3 {r.precision3.toFixed(2)}</span>
                         <span style={{ color: metricColor(r.ndcg10, 0.7, 0.85) }}>nDCG {r.ndcg10.toFixed(2)}</span>
-                        <span className="text-[#888888]">{r.latencyMs}ms</span>
+                        <span className="text-[#57789a]">{r.latencyMs}ms</span>
                       </div>
                     </div>
                     <div className="space-y-1.5">
                       {r.chunks.map((chunk, ci) => (
-                        <div key={ci} className="text-xs text-[#888888] px-3 py-2 rounded bg-[#111111] border border-[rgba(255,255,255,0.05)] font-mono">
+                        <div key={ci} className="text-xs text-[#57789a] px-3 py-2 rounded bg-[#ffffff] border border-[rgba(61,155,212,0.08)] font-mono">
                           <span className="text-[#444444] mr-2">#{ci + 1}</span>{chunk}
                         </div>
                       ))}
