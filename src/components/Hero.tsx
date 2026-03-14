@@ -64,7 +64,7 @@ export default function Hero() {
             transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
           >
             <p className="text-sm font-mono text-[#57789a] mb-6 tracking-wide">
-              Hi, I&apos;m Aware
+              Hi, I&apos;m Ahmed
             </p>
 
             <h1 className="text-[38px] sm:text-5xl font-semibold tracking-tight text-[#1a2f45] leading-[1.1] mb-6">

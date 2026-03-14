@@ -6,18 +6,18 @@ import Footer from "@/components/Footer";
 export const metadata: Metadata = {
   title: "Ahmed Waregh — Frontend / Platform Engineer",
   description:
-    "10+ years designing and shipping frontends for complex, data-heavy systems. Latency budgets, design systems, end-to-end.",
+    "5+ years designing and shipping frontends for complex, data-heavy systems. Latency budgets, design systems, end-to-end.",
   openGraph: {
     title: "Ahmed Waregh — Frontend / Platform Engineer",
     description:
-      "10+ years designing and shipping frontends for complex, data-heavy systems. Latency budgets, design systems, end-to-end.",
+      "5+ years designing and shipping frontends for complex, data-heavy systems. Latency budgets, design systems, end-to-end.",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "Ahmed Waregh — Frontend / Platform Engineer",
     description:
-      "10+ years designing and shipping frontends for complex, data-heavy systems. Latency budgets, design systems, end-to-end.",
+      "5+ years designing and shipping frontends for complex, data-heavy systems. Latency budgets, design systems, end-to-end.",
   },
 };
 
