@@ -56,8 +56,7 @@ export default function Hero() {
       />
 
       <div className="relative max-w-5xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_420px] gap-12 lg:gap-16 items-start">
-          {/* Left: text column */}
+        <div className="max-w-3xl">
           <motion.div
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
@@ -68,16 +67,12 @@ export default function Hero() {
             </p>
 
             <h1 className="text-[38px] sm:text-5xl font-semibold tracking-tight text-[#1a2f45] leading-[1.1] mb-6">
-              I design and ship<br />
-              <span className="text-[#3d9bd4]">backends</span> for<br />
-              complex systems.
+              I build reliable <span className="text-[#3d9bd4]">backend and platform</span> systems.
             </h1>
 
-            <p className="text-base text-[#57789a] max-w-lg mb-3 leading-relaxed">
-              Software Engineer — Backend · Platform · AI Systems.
-            </p>
-            <p className="text-base text-[#57789a] max-w-lg mb-10 leading-relaxed">
-              I prototype in code; I care about latency budgets, reliability, and clean system design.
+            <p className="text-base text-[#57789a] max-w-2xl mb-10 leading-relaxed">
+              Software Engineer — Backend · Platform · AI Systems. I focus on
+              production reliability, latency budgets, and clean system design.
             </p>
 
             <div className="flex flex-wrap gap-3">
@@ -96,43 +91,6 @@ export default function Hero() {
               >
                 Email
               </a>
-            </div>
-          </motion.div>
-
-          {/* Right: code artifact (dark navy panel for contrast) */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-            className="lg:mt-16 hidden lg:block"
-          >
-            <div className="rounded-2xl overflow-hidden shadow-[0_8px_32px_rgba(61,155,212,0.18)] border border-[rgba(61,155,212,0.14)]">
-              {/* Terminal chrome */}
-              <div className="flex items-center gap-1.5 px-4 py-2.5 border-b border-[rgba(255,255,255,0.08)] bg-[#1a2f45]">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#e8a3be] opacity-80" />
-                <span className="w-2.5 h-2.5 rounded-full bg-[#cce8f9] opacity-80" />
-                <span className="w-2.5 h-2.5 rounded-full bg-[#7ec8e3] opacity-80" />
-                <span className="ml-3 text-xs font-mono text-[#7aadcc]">reconcile.ts</span>
-              </div>
-              <pre className="p-5 text-xs font-mono leading-relaxed overflow-x-auto bg-[#1f3a52]">
-                <code>
-                  <span className="text-[#5a8aaa]">{"// reconciliation view — event-sourced cache\n"}</span>
-                  <span className="text-[#7ec8e3]">{"async function"}</span>
-                  <span className="text-[#cde8f5]">{" reconcile("}</span>
-                  <span className="text-[#a8d4e8]">{"accountId: string"}</span>
-                  <span className="text-[#cde8f5]">{")"}</span>
-                  <span className="text-[#cde8f5]">{" {\n"}</span>
-                  <span className="text-[#a8d4e8]">{"  const events = "}</span>
-                  <span className="text-[#7ec8e3]">{"await"}</span>
-                  <span className="text-[#a8d4e8]">{" eventLog.since(\n"}</span>
-                  <span className="text-[#a8d4e8]">{"    lastCheckpoint(accountId)\n"}</span>
-                  <span className="text-[#a8d4e8]">{"  );\n"}</span>
-                  <span className="text-[#7ec8e3]">{"  return"}</span>
-                  <span className="text-[#a8d4e8]">{" events.reduce(applyEvent, currentState);\n"}</span>
-                  <span className="text-[#cde8f5]">{"}\n\n"}</span>
-                  <span className="text-[#e8a3be]">{"// result: p95 render -180ms, tickets -42%"}</span>
-                </code>
-              </pre>
             </div>
           </motion.div>
         </div>

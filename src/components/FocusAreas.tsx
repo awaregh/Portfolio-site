@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 const areas = [
   {
@@ -35,9 +36,11 @@ const areas = [
   },
 ];
 
-export default function FocusAreas() {
+export default function FocusAreas({ limit }: { limit?: number }) {
+  const visibleAreas = typeof limit === "number" ? areas.slice(0, limit) : areas;
+
   return (
-    <section className="py-24 px-6 border-t border-[rgba(61,155,212,0.14)]">
+    <section className="py-16 px-6 border-t border-[rgba(61,155,212,0.14)]">
       <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-[160px_1fr] gap-12">
         <div>
           <h2 className="text-sm font-mono text-[#57789a] uppercase tracking-widest">
@@ -45,7 +48,7 @@ export default function FocusAreas() {
           </h2>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-8">
-          {areas.map((area, index) => (
+          {visibleAreas.map((area, index) => (
             <motion.div
               key={area.title}
               initial={{ opacity: 0, y: 12 }}
@@ -65,9 +68,33 @@ export default function FocusAreas() {
               </p>
             </motion.div>
           ))}
+          {typeof limit === "number" && areas.length > limit && (
+            <div className="sm:col-span-2">
+              <Link
+                href="/projects"
+                className="link-underline inline-flex items-center gap-2 text-[#57789a] hover:text-[#1a2f45] text-sm transition-colors"
+              >
+                View full project archive
+                <svg
+                  width="13"
+                  height="13"
+                  viewBox="0 0 14 14"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M3 7H11M7 3L11 7L7 11"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </section>
   );
 }
-

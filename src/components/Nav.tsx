@@ -42,6 +42,14 @@ export default function Nav() {
               {label}
             </Link>
           ))}
+          <a
+            href="https://github.com/awaregh"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="link-underline text-[#57789a] hover:text-[#1a2f45] text-sm transition-colors"
+          >
+            GitHub
+          </a>
         </nav>
       </div>
     </header>

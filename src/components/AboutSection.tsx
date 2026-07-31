@@ -35,12 +35,11 @@ export default function AboutSection() {
             initial design through to observability and incident response.
           </p>
           <p className="text-sm font-mono text-[#57789a] border-l-2 border-[#3d9bd4] pl-4 leading-relaxed">
-            React + TypeScript (SSR, hydration budgets) &bull; Systems design for
-            client data flows &bull; Design systems governance.
+            Event-driven services &bull; Multi-tenant platform design &bull; AI
+            system integration with production reliability.
           </p>
         </motion.div>
       </div>
     </section>
   );
 }
-

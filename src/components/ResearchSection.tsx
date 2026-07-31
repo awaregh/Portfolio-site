@@ -4,11 +4,19 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { researchPapers } from "@/lib/researchData";
 
-export default function ResearchSection() {
+function truncateAbstract(abstract: string, maxLength = 200) {
+  if (abstract.length <= maxLength) return abstract;
+  return `${abstract.slice(0, maxLength).trimEnd()}…`;
+}
+
+export default function ResearchSection({ limit }: { limit?: number }) {
+  const visiblePapers =
+    typeof limit === "number" ? researchPapers.slice(0, limit) : researchPapers;
+
   return (
     <section
       id="research"
-      className="py-24 px-6 border-t border-[rgba(61,155,212,0.14)]"
+      className="py-16 px-6 border-t border-[rgba(61,155,212,0.14)]"
     >
       <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-[160px_1fr] gap-12">
         <div>
@@ -23,7 +31,7 @@ export default function ResearchSection() {
           </p>
 
           <div className="grid grid-cols-1 gap-4">
-            {researchPapers.map((paper, index) => (
+            {visiblePapers.map((paper, index) => (
               <motion.div
                 key={paper.title}
                 initial={{ opacity: 0, y: 12 }}
@@ -52,7 +60,7 @@ export default function ResearchSection() {
                 )}
 
                 <p className="text-[#57789a] text-sm leading-relaxed mb-3">
-                  {paper.abstract}
+                  {truncateAbstract(paper.abstract)}
                 </p>
 
                 <div className="flex flex-wrap gap-1.5">
@@ -122,4 +130,3 @@ export default function ResearchSection() {
     </section>
   );
 }
-

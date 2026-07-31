@@ -5,33 +5,40 @@ import { motion } from "framer-motion";
 const stack = [
   {
     category: "Languages & Runtimes",
-    prose: "Node.js + TypeScript (primary), Python for ML pipelines, Go for high-throughput services.",
+    items: ["TypeScript", "Node.js", "Python", "Go"],
   },
   {
     category: "Frontend",
-    prose: "React + TypeScript (SSR, hydration budgets), Next.js, design systems governance.",
+    items: ["React", "Next.js", "SSR", "Design Systems"],
   },
   {
     category: "Databases",
-    prose: "PostgreSQL as default, Redis for ephemeral state and rate-limiting, vector DBs (Pinecone, Weaviate) for similarity search.",
+    items: ["PostgreSQL", "Redis", "Pinecone", "Weaviate"],
   },
   {
     category: "Infrastructure",
-    prose: "Docker-first local dev, Kubernetes for orchestration, AWS / GCP for managed services.",
+    items: ["Docker", "Kubernetes", "AWS", "GCP"],
   },
   {
     category: "AI / ML",
-    prose: "OpenAI API integration, LangChain for RAG orchestration, embedding pipelines, hallucination mitigation patterns.",
+    items: ["OpenAI API", "LangChain", "RAG", "Embedding Pipelines"],
   },
   {
     category: "Queues & Observability",
-    prose: "BullMQ + RabbitMQ for async work, Kafka for streaming. Prometheus + Grafana for metrics; OpenTelemetry traces.",
+    items: [
+      "BullMQ",
+      "RabbitMQ",
+      "Kafka",
+      "Prometheus",
+      "Grafana",
+      "OpenTelemetry",
+    ],
   },
 ];
 
 export default function TechStackSection() {
   return (
-    <section className="py-24 px-6 border-t border-[rgba(61,155,212,0.14)]">
+    <section className="py-16 px-6 border-t border-[rgba(61,155,212,0.14)]">
       <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-[160px_1fr] gap-12">
         <div>
           <h2 className="text-sm font-mono text-[#57789a] uppercase tracking-widest">
@@ -50,9 +57,16 @@ export default function TechStackSection() {
               <p className="text-xs font-mono text-[#57789a] uppercase tracking-widest mb-2">
                 {group.category}
               </p>
-              <p className="text-sm text-[#57789a] leading-relaxed">
-                {group.prose}
-              </p>
+              <div className="flex flex-wrap gap-1.5">
+                {group.items.map((item) => (
+                  <span
+                    key={item}
+                    className="px-2 py-0.5 text-xs rounded-full font-mono bg-[#e4f2fc] text-[#3d9bd4] border border-[rgba(61,155,212,0.18)]"
+                  >
+                    {item}
+                  </span>
+                ))}
+              </div>
             </motion.div>
           ))}
         </div>
@@ -60,4 +74,3 @@ export default function TechStackSection() {
     </section>
   );
 }
-

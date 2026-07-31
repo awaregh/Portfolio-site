@@ -25,8 +25,8 @@ export default function RecruiterSummary() {
               Specializes in
             </p>
             <p className="text-[#57789a] text-sm leading-relaxed">
-              Frontend systems &bull; Design systems &bull; Distributed
-              architecture &bull; AI product UX
+              Backend platforms &bull; Distributed systems &bull; Multi-tenant
+              SaaS &bull; AI infrastructure
             </p>
           </div>
           <div>
@@ -34,7 +34,7 @@ export default function RecruiterSummary() {
               Open to
             </p>
             <p className="text-[#57789a] text-sm leading-relaxed">
-              Senior Frontend &bull; Staff Engineer &bull; Platform Engineer roles
+              Senior Backend &bull; Staff Engineer &bull; Platform Engineer roles
             </p>
           </div>
         </div>
@@ -42,4 +42,3 @@ export default function RecruiterSummary() {
     </motion.section>
   );
 }
-

@@ -1,6 +1,5 @@
 import Hero from "@/components/Hero";
 import RecruiterSummary from "@/components/RecruiterSummary";
-import PinnedRepos from "@/components/PinnedRepos";
 import ProjectCard from "@/components/ProjectCard";
 import FocusAreas from "@/components/FocusAreas";
 import AboutSection from "@/components/AboutSection";
@@ -11,42 +10,12 @@ import Link from "next/link";
 import { projects } from "@/lib/projects";
 
 export default function Home() {
+  const selectedProjects = projects.slice(0, 3);
+
   return (
     <>
       <Hero />
       <RecruiterSummary />
-      <PinnedRepos />
-
-      {/* How I work strip */}
-      <section className="py-16 px-6 border-t border-[rgba(61,155,212,0.14)]">
-        <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-[160px_1fr] gap-12">
-          <div>
-            <h2 className="text-sm font-mono text-[#57789a] uppercase tracking-widest">
-              How I work
-            </h2>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
-            <div>
-              <p className="text-[#1a2f45] text-sm font-medium mb-2">Prototype in code, not mockups</p>
-              <p className="text-[#57789a] text-sm leading-relaxed">
-                I reach for a coded prototype before a finished design. It surfaces real constraints earlier.
-              </p>
-            </div>
-            <div>
-              <p className="text-[#1a2f45] text-sm font-medium mb-2">Latency is a feature</p>
-              <p className="text-[#57789a] text-sm leading-relaxed">
-                I track render budgets and hydration cost. Perf profiling is part of the design review, not a post-launch task.
-              </p>
-            </div>
-            <div>
-              <p className="text-[#1a2f45] text-sm font-medium mb-2">Write for the next engineer</p>
-              <p className="text-[#57789a] text-sm leading-relaxed">
-                Readable code, documented trade-offs, decision logs. Systems outlive their authors.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Selected Projects */}
       <section id="projects" className="py-16 px-6 border-t border-[rgba(61,155,212,0.14)]">
@@ -58,7 +27,7 @@ export default function Home() {
           </div>
           <div>
             <div className="grid grid-cols-1 gap-4">
-              {projects.map((project) => (
+              {selectedProjects.map((project) => (
                 <ProjectCard key={project.slug} {...project} />
               ))}
             </div>
@@ -89,12 +58,11 @@ export default function Home() {
         </div>
       </section>
 
-      <FocusAreas />
-      <ResearchSection />
+      <FocusAreas limit={3} />
+      <ResearchSection limit={2} />
       <AboutSection />
       <TechStackSection />
       <ContactSection />
     </>
   );
 }
-
