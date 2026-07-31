@@ -37,6 +37,9 @@ const config: Config = {
         "3xl": "1.5rem",
         "4xl": "2rem",
       },
+      maxWidth: {
+        "5xl": "90rem",
+      },
       keyframes: {
         "cloud-float": {
           "0%, 100%": { transform: "translateY(0px)" },
